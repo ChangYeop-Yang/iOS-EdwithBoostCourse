@@ -15,30 +15,55 @@ class SignUpViewController: UIViewController {
     @IBOutlet private weak var userID: UITextField!
     @IBOutlet private weak var userTopPassword: UITextField!
     @IBOutlet private weak var userBottomPassword: UITextField!
+    @IBOutlet private weak var contents: UITextView!
+    @IBOutlet private weak var userImage: UIImageView!
     
     // MARK: - Variables
-    fileprivate var isNextStep: (first: Bool, second: Bool) = (false, false)
+    private var imagePicker: UIImagePickerController = UIImagePickerController()
+    fileprivate var isNextStep: (first: Bool, second: Bool, three: Bool, four: Bool) = (false, false, false, false)
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        setupTextField()
+        // Setup UITextField and UITextView Delegate
+        setupDelegate()
         
-        // Do any additional setup after loading the view.
+        // Setup Gesture
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(imageTapGesture(_:)))
+        self.userImage.addGestureRecognizer(gesture)
     }
     
     // MARK: - User Methods
-    private func setupTextField() {
+    private func setupDelegate() {
+        // MARK: UITextField Delegate
         self.userID.delegate = self
         self.userTopPassword.delegate = self
         self.userBottomPassword.delegate = self
+        
+        // MARK: UITextView Delegate
+        self.contents.delegate = self
+        
+        // MARK: UIImagePickerController Deleagate
+        self.imagePicker.sourceType = .photoLibrary
+    }
+    private func enableSendButton() {
+        self.sendBT.isEnabled = (self.isNextStep.first && self.isNextStep.second && self.isNextStep.three && self.isNextStep.four)
+    }
+    
+    // MARK: - Gesture Recognizer Methods
+    @objc func imageTapGesture(_ sender: UITapGestureRecognizer) {
+        switch sender.state {
+            case .ended:
+                self.present(self.imagePicker, animated: true, completion: nil)
+            
+            default: break
+        }
     }
     
     // MARK: - Action Methods
     @IBAction private func closeSignUp(_ sender: UIButton) {
         self.dismiss(animated: true, completion: nil)
     }
-    
     @IBAction private func sendSignUp(_ sender: UIButton) {
     }
 }
@@ -48,21 +73,50 @@ extension SignUpViewController: UITextFieldDelegate {
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         
-        guard let tag = TagTextField(rawValue: textField.tag) else {
+        guard let tag = TagTextField(rawValue: textField.tag), let inputText = textField.text else {
+            print("❌ Error, Not could get TagTextField and TextField Text.")
             return
         }
         
-        if let inputText = textField.text {
-            switch tag {
-                case .UserID:
-                    isNextStep.first = true
-                    UserInformation.userInstance.setUserName(inputText)
-                
-                case .UserPassword:
-                    isNextStep.second = UserInformation.userInstance.checkDuplicatePassword(self.userTopPassword.text!, self.userBottomPassword.text!)
-            }
+        switch tag {
+            case .UserID:
+                self.isNextStep.first = inputText.isEmpty ? false : true
+                if self.isNextStep.first { UserInformation.userInstance.setUserName(inputText) }
             
-            self.sendBT.isEnabled = isNextStep.first && isNextStep.second ? true : false
+            case .UserPassword:
+                self.isNextStep.second = UserInformation.userInstance.checkDuplicatePassword(self.userTopPassword.text!, self.userBottomPassword.text!)
+                if self.isNextStep.second { UserInformation.userInstance.setPassword(inputText) }
         }
+        
+        enableSendButton()
+    }
+}
+
+// MARK: - UITextViewDelegate Extension
+extension SignUpViewController: UITextViewDelegate {
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        self.isNextStep.three = textView.text.isEmpty ? false : true
+        setupDelegate()
+    }
+}
+
+// MARK: - UIImagePickerControllerDelegate Extension
+extension SignUpViewController: UIImagePickerControllerDelegate {
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        
+        guard let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage else {
+            self.isNextStep.four = false
+            return
+        }
+        
+        self.isNextStep.four = true
+        UserInformation.userInstance.setImage(image)
+        picker.dismiss(animated: true, completion: nil)
+    }
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true, completion: nil)
     }
 }

@@ -124,9 +124,11 @@
                         <viewLayoutGuide key="safeArea" id="E6d-m9-WOB"/>
                     </view>
                     <connections>
+                        <outlet property="contents" destination="rlZ-ei-doq" id="IGn-tf-3PE"/>
                         <outlet property="sendBT" destination="Hdb-m4-PaN" id="Kms-pg-am6"/>
                         <outlet property="userBottomPassword" destination="YCY-pm-D8f" id="rKa-Wy-y99"/>
                         <outlet property="userID" destination="TAY-Wc-iCh" id="xpW-xt-av0"/>
+                        <outlet property="userImage" destination="gCO-jH-CwB" id="EfG-XM-Nvk"/>
                         <outlet property="userTopPassword" destination="ooL-dz-GkV" id="mTn-yN-Yvx"/>
                     </connections>
                 </viewController>
