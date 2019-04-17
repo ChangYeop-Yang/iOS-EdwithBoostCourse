@@ -13,24 +13,30 @@ class UserInformation: NSObject {
     
     internal static let userInstance = UserInformation()
     
+    // MARK: - Struture
+    internal struct User {
+        var userName:           String?
+        var userPassword:       String?
+        var userComments:       String?
+        var userPhoneNumber:    String?
+        var userImage:          UIImage?
+        var userDate:           Date?
+    }
+    
     // MARK: - Outlet Variables
-    private var userName:           String?
-    private var userPassword:       String?
-    private var userPhoneNumber:    Int?
-    private var userImage:          UIImage?
-    private var userDate:           Date?
+    private var userInformation = User()
     
     // MARK: - Setter Methods
-    internal func setUserName(_ name: String)       { self.userName = name }
-    internal func setPassword(_ password: String)   { self.userPassword = password }
-    internal func setPhoneNumber(_ phone: Int)      { self.userPhoneNumber = phone }
-    internal func setDate(_ date: Date)             { self.userDate = date }
-    internal func setImage(_ image: UIImage)        { self.userImage = image }
+    internal func setUserInformation(_ user: User)  { self.userInformation = user }
+    internal func setUserName(_ name: String)       { self.userInformation.userName = name }
+    internal func setPassword(_ password: String)   { self.userInformation.userPassword = password }
+    internal func setPhoneNumber(_ phone: String)   { self.userInformation.userPhoneNumber = phone }
+    internal func setDate(_ date: Date)             { self.userInformation.userDate = date }
+    internal func setImage(_ image: UIImage)        { self.userInformation.userImage = image }
+    internal func setComments(_ comments: String)   { self.userInformation.userComments = comments }
     
     // MARK: - Getter Methods
-    internal func getUserName() -> String?           { return self.userName }
-    internal func getPassword() -> String?           { return self.userPassword }
-    internal func getUserImage() -> UIImage?         { return self.userImage }
+    internal func getUserInformation() -> User      { return self.userInformation }
     
     // MARK: - Check Password Method
     internal func checkDuplicatePassword(_ first: String, _ second: String) -> Bool {

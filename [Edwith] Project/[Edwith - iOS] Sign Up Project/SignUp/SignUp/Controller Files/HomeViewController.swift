@@ -11,10 +11,21 @@ import UIKit
 class HomeViewController: UIViewController {
 
     // MARK: - Outlet Variables
+    @IBOutlet private weak var userID: UITextField!
+    @IBOutlet private weak var userIMG: UIImageView!
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view.
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        let information = UserInformation.userInstance.getUserInformation()
+        guard let id = information.userName, let image = information.userImage else {
+            return
+        }
+        
+        DispatchQueue.main.async { [unowned self] in
+            self.userID.text = id
+            self.userIMG.image = image
+        }
     }
 }
 

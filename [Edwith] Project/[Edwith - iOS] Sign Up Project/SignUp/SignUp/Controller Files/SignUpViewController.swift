@@ -19,6 +19,7 @@ class SignUpViewController: UIViewController {
     @IBOutlet private weak var userImage: UIImageView!
     
     // MARK: - Variables
+    lazy private var information = UserInformation.User()
     fileprivate var isNextStep: (first: Bool, second: Bool, three: Bool, four: Bool) = (false, false, false, false)
     
     override func viewDidLoad() {
@@ -49,18 +50,24 @@ class SignUpViewController: UIViewController {
     
     // MARK: - Gesture Recognizer Methods
     @objc func showImagePickerController(sender: UIGestureRecognizer) {
-        let imagePicker = UIImagePickerController()
-        imagePicker.sourceType = .photoLibrary
-        imagePicker.delegate = self
-        self.present(imagePicker, animated: true, completion: nil)
+        
+        DispatchQueue.main.async { [unowned self] in
+            let imagePicker = UIImagePickerController()
+            imagePicker.sourceType = .photoLibrary
+            imagePicker.allowsEditing = true
+            imagePicker.delegate = self
+            
+            self.present(imagePicker, animated: true, completion: nil)
+        }
     }
 
     // MARK: - Action Methods
     @IBAction private func closeSignUp(_ sender: UIButton) {
         self.dismiss(animated: true, completion: nil)
+        UserInformation.userInstance.setUserInformation(UserInformation.User())
     }
     @IBAction private func sendSignUp(_ sender: UIButton) {
-        
+        UserInformation.userInstance.setUserInformation(self.information)
     }
 }
 
@@ -77,11 +84,11 @@ extension SignUpViewController: UITextFieldDelegate {
         switch tag {
             case .UserID:
                 self.isNextStep.first = inputText.isEmpty ? false : true
-                if self.isNextStep.first { UserInformation.userInstance.setUserName(inputText) }
+                if self.isNextStep.first { self.information.userName = inputText }
             
             case .UserPassword:
                 self.isNextStep.second = UserInformation.userInstance.checkDuplicatePassword(self.userTopPassword.text!, self.userBottomPassword.text!)
-                if self.isNextStep.second { UserInformation.userInstance.setPassword(inputText) }
+                if self.isNextStep.second { self.information.userPassword = inputText }
         }
         
         enableSendButton()
@@ -93,7 +100,9 @@ extension SignUpViewController: UITextViewDelegate {
     
     func textViewDidEndEditing(_ textView: UITextView) {
         self.isNextStep.three = textView.text.isEmpty ? false : true
-        setupDelegate()
+        if self.isNextStep.three { self.information.userComments = textView.text }
+        
+        enableSendButton()
     }
 }
 
@@ -102,14 +111,16 @@ extension SignUpViewController: UIImagePickerControllerDelegate, UINavigationCon
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         
-        guard let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage else {
+        guard let image = info[UIImagePickerController.InfoKey.editedImage] as? UIImage else {
             self.isNextStep.four = false
             return
         }
         
         self.isNextStep.four = true
         self.userImage.image = image
-        UserInformation.userInstance.setImage(image)
+        self.information.userImage = image
+        
+        enableSendButton()
         picker.dismiss(animated: true, completion: nil)
     }
     

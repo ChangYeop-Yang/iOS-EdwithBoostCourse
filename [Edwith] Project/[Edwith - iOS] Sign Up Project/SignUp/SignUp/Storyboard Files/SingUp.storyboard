@@ -40,6 +40,7 @@
                                                 <state key="normal" title="다음"/>
                                                 <connections>
                                                     <action selector="sendSignUp:" destination="YKa-ql-7M6" eventType="touchUpInside" id="4jk-Q5-g4J"/>
+                                                    <segue destination="7XF-7m-8Lc" kind="show" id="3ac-Re-L5d"/>
                                                 </connections>
                                             </button>
                                         </subviews>
@@ -53,7 +54,7 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="yes" spellCheckingType="yes"/>
                                     </textView>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="szf-hL-Df2">
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="szf-hL-Df2">
                                         <rect key="frame" x="10" y="10" width="128" height="128"/>
                                         <gestureRecognizers/>
                                         <constraints>
@@ -124,6 +125,14 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XbI-aa-O5Q" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="263.768115942029" y="121.875"/>
+        </scene>
+        <!--DetailSignUp-->
+        <scene sceneID="9o9-c8-u6a">
+            <objects>
+                <viewControllerPlaceholder storyboardIdentifier="DetailSignUp" storyboardName="DetailSignUp" id="7XF-7m-8Lc" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="05P-SV-cak" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="983" y="122"/>
         </scene>
     </scenes>
 </document>

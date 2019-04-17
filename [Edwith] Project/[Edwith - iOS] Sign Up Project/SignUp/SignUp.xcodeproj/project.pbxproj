@@ -18,6 +18,9 @@
 		0C34555D2264D89500386E49 /* SingUp.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0C34555C2264D89500386E49 /* SingUp.storyboard */; };
 		0C3455602264E24600386E49 /* TagTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C34555F2264E24600386E49 /* TagTextField.swift */; };
 		0C3455622264E3B800386E49 /* UserInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C3455612264E3B800386E49 /* UserInformation.swift */; };
+		0C3F62F4226769B9000A63CF /* DetailSignUp.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0C3F62F3226769B9000A63CF /* DetailSignUp.storyboard */; };
+		0C3F62F6226769D3000A63CF /* DetailSignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C3F62F5226769D3000A63CF /* DetailSignUpViewController.swift */; };
+		0C3F62F822676F77000A63CF /* TagButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C3F62F722676F77000A63CF /* TagButton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +58,9 @@
 		0C34555C2264D89500386E49 /* SingUp.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SingUp.storyboard; sourceTree = "<group>"; };
 		0C34555F2264E24600386E49 /* TagTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagTextField.swift; sourceTree = "<group>"; };
 		0C3455612264E3B800386E49 /* UserInformation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInformation.swift; sourceTree = "<group>"; };
+		0C3F62F3226769B9000A63CF /* DetailSignUp.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = DetailSignUp.storyboard; sourceTree = "<group>"; };
+		0C3F62F5226769D3000A63CF /* DetailSignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailSignUpViewController.swift; sourceTree = "<group>"; };
+		0C3F62F722676F77000A63CF /* TagButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -138,6 +144,7 @@
 			children = (
 				0C34552C2264CFB300386E49 /* HomeViewController.swift */,
 				0C34555A2264D82C00386E49 /* SignUpViewController.swift */,
+				0C3F62F5226769D3000A63CF /* DetailSignUpViewController.swift */,
 			);
 			path = "Controller Files";
 			sourceTree = "<group>";
@@ -147,6 +154,7 @@
 			children = (
 				0C34552E2264CFB300386E49 /* Main.storyboard */,
 				0C34555C2264D89500386E49 /* SingUp.storyboard */,
+				0C3F62F3226769B9000A63CF /* DetailSignUp.storyboard */,
 				0C3455332264CFB500386E49 /* LaunchScreen.storyboard */,
 			);
 			path = "Storyboard Files";
@@ -157,6 +165,7 @@
 			children = (
 				0C34555F2264E24600386E49 /* TagTextField.swift */,
 				0C3455612264E3B800386E49 /* UserInformation.swift */,
+				0C3F62F722676F77000A63CF /* TagButton.swift */,
 			);
 			path = "Common Files";
 			sourceTree = "<group>";
@@ -268,6 +277,7 @@
 				0C3455352264CFB500386E49 /* LaunchScreen.storyboard in Resources */,
 				0C3455322264CFB500386E49 /* Assets.xcassets in Resources */,
 				0C34555D2264D89500386E49 /* SingUp.storyboard in Resources */,
+				0C3F62F4226769B9000A63CF /* DetailSignUp.storyboard in Resources */,
 				0C3455302264CFB300386E49 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -293,11 +303,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0C3F62F6226769D3000A63CF /* DetailSignUpViewController.swift in Sources */,
 				0C3455622264E3B800386E49 /* UserInformation.swift in Sources */,
 				0C34555B2264D82C00386E49 /* SignUpViewController.swift in Sources */,
 				0C34552D2264CFB300386E49 /* HomeViewController.swift in Sources */,
 				0C3455602264E24600386E49 /* TagTextField.swift in Sources */,
 				0C34552B2264CFB300386E49 /* AppDelegate.swift in Sources */,
+				0C3F62F822676F77000A63CF /* TagButton.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
