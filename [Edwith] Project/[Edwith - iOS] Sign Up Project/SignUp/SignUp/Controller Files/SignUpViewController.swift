@@ -19,7 +19,6 @@ class SignUpViewController: UIViewController {
     @IBOutlet private weak var userImage: UIImageView!
     
     // MARK: - Variables
-    private var imagePicker: UIImagePickerController = UIImagePickerController()
     fileprivate var isNextStep: (first: Bool, second: Bool, three: Bool, four: Bool) = (false, false, false, false)
     
     override func viewDidLoad() {
@@ -28,8 +27,9 @@ class SignUpViewController: UIViewController {
         // Setup UITextField and UITextView Delegate
         setupDelegate()
         
-        // Setup Gesture
-        let gesture = UITapGestureRecognizer(target: self, action: #selector(imageTapGesture(_:)))
+        // SetUp UIImageView GestureRecognizer
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(showImagePickerController(sender:)))
+        self.userImage.isUserInteractionEnabled = true
         self.userImage.addGestureRecognizer(gesture)
     }
     
@@ -42,29 +42,25 @@ class SignUpViewController: UIViewController {
         
         // MARK: UITextView Delegate
         self.contents.delegate = self
-        
-        // MARK: UIImagePickerController Deleagate
-        self.imagePicker.sourceType = .photoLibrary
     }
     private func enableSendButton() {
         self.sendBT.isEnabled = (self.isNextStep.first && self.isNextStep.second && self.isNextStep.three && self.isNextStep.four)
     }
     
     // MARK: - Gesture Recognizer Methods
-    @objc func imageTapGesture(_ sender: UITapGestureRecognizer) {
-        switch sender.state {
-            case .ended:
-                self.present(self.imagePicker, animated: true, completion: nil)
-            
-            default: break
-        }
+    @objc func showImagePickerController(sender: UIGestureRecognizer) {
+        let imagePicker = UIImagePickerController()
+        imagePicker.sourceType = .photoLibrary
+        imagePicker.delegate = self
+        self.present(imagePicker, animated: true, completion: nil)
     }
-    
+
     // MARK: - Action Methods
     @IBAction private func closeSignUp(_ sender: UIButton) {
         self.dismiss(animated: true, completion: nil)
     }
     @IBAction private func sendSignUp(_ sender: UIButton) {
+        
     }
 }
 
@@ -102,7 +98,7 @@ extension SignUpViewController: UITextViewDelegate {
 }
 
 // MARK: - UIImagePickerControllerDelegate Extension
-extension SignUpViewController: UIImagePickerControllerDelegate {
+extension SignUpViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         
@@ -112,6 +108,7 @@ extension SignUpViewController: UIImagePickerControllerDelegate {
         }
         
         self.isNextStep.four = true
+        self.userImage.image = image
         UserInformation.userInstance.setImage(image)
         picker.dismiss(animated: true, completion: nil)
     }
