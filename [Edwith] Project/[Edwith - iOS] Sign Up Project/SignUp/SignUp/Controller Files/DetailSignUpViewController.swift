@@ -25,6 +25,7 @@ class DetailSignUpViewController: UIViewController {
 
         // Do any additional setup after loading the view.
         self.userTel.delegate = self
+        
         self.dateFormatter.dateStyle = .medium
         self.datePicker.addTarget(self, action: #selector(changeDateValue), for: .valueChanged)
     }
@@ -92,16 +93,18 @@ class DetailSignUpViewController: UIViewController {
 // MARK: - UITextFieldDelegate Extension
 extension DetailSignUpViewController: UITextFieldDelegate {
     
-    func textFieldDidEndEditing(_ textField: UITextField) {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         
         guard let inputText = textField.text else {
             self.isEnabled.first = false
-            return
+            return self.isEnabled.first
         }
         
         self.isEnabled.first = true
         UserInformation.userInstance.setPhoneNumber(inputText)
         
         enableSendButton()
+        
+        return self.isEnabled.first
     }
 }

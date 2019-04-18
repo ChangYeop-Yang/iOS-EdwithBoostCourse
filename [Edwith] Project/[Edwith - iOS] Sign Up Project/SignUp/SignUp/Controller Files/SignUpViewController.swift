@@ -67,7 +67,10 @@ class SignUpViewController: UIViewController {
         UserInformation.userInstance.setUserInformation(UserInformation.User())
     }
     @IBAction private func sendSignUp(_ sender: UIButton) {
-        UserInformation.userInstance.setUserInformation(self.information)
+        UserInformation.userInstance.setUserName(self.information.userName!)
+        UserInformation.userInstance.setPassword(self.information.userPassword!)
+        UserInformation.userInstance.setImage(self.information.userImage!)
+        UserInformation.userInstance.setComments(self.information.userComments!)
     }
 }
 
