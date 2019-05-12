@@ -11,12 +11,12 @@ import UIKit
 class SignUpViewController: UIViewController {
     
     // MARK: - Outlet Variables
-    @IBOutlet private weak var sendBT: UIButton!
-    @IBOutlet private weak var userID: UITextField!
-    @IBOutlet private weak var userTopPassword: UITextField!
-    @IBOutlet private weak var userBottomPassword: UITextField!
-    @IBOutlet private weak var contents: UITextView!
-    @IBOutlet private weak var userImage: UIImageView!
+    @IBOutlet private weak var sendBT:              UIButton!
+    @IBOutlet private weak var userID:              UITextField!
+    @IBOutlet private weak var userTopPassword:     UITextField!
+    @IBOutlet private weak var userBottomPassword:  UITextField!
+    @IBOutlet private weak var contents:            UITextView!
+    @IBOutlet private weak var userImage:           UIImageView!
     
     // MARK: - Variables
     lazy private var information = UserInformation.User()
@@ -67,10 +67,23 @@ class SignUpViewController: UIViewController {
         UserInformation.userInstance.setUserInformation(UserInformation.User())
     }
     @IBAction private func sendSignUp(_ sender: UIButton) {
-        UserInformation.userInstance.setUserName(self.information.userName!)
-        UserInformation.userInstance.setPassword(self.information.userPassword!)
-        UserInformation.userInstance.setImage(self.information.userImage!)
-        UserInformation.userInstance.setComments(self.information.userComments!)
+        
+        // MARK: UIImage
+        if let image = self.information.userImage {
+            UserInformation.userInstance.setImage(image)
+        }
+        
+        // MARK: String
+        if let name = self.information.userName, let password = self.information.userPassword, let comments = self.information.userComments {
+            UserInformation.userInstance.setUserName(name)
+            UserInformation.userInstance.setPassword(password)
+            UserInformation.userInstance.setComments(comments)
+        }
+    }
+    
+    // MARK: - Event Methods
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
     }
 }
 
@@ -87,11 +100,19 @@ extension SignUpViewController: UITextFieldDelegate {
         switch tag {
             case .UserID:
                 self.isNextStep.first = inputText.isEmpty ? false : true
-                if self.isNextStep.first { self.information.userName = inputText }
+                
+                if self.isNextStep.first {
+                    self.information.userName = inputText
+                }
             
             case .UserPassword:
-                self.isNextStep.second = UserInformation.userInstance.checkDuplicatePassword(self.userTopPassword.text!, self.userBottomPassword.text!)
-                if self.isNextStep.second { self.information.userPassword = inputText }
+                if let topPassword = self.userTopPassword.text, let bottomPassword = self.userBottomPassword.text {
+                    self.isNextStep.second = UserInformation.userInstance.checkDuplicatePassword(topPassword, bottomPassword)
+                    
+                    if self.isNextStep.second {
+                        self.information.userPassword = inputText
+                    }
+                }
         }
         
         enableSendButton()
@@ -114,6 +135,10 @@ extension SignUpViewController: UIImagePickerControllerDelegate, UINavigationCon
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         
+        /*
+            ⌘ UIImagePickerController.InfoKey.editedImage   - 사용자의 수정을 통한 이미지 처리
+            ⌘ UIImagePickerController.InfoKey.originalImage - 사용자로 부터 수정없이 이미지 원본 처리
+         */
         guard let image = info[UIImagePickerController.InfoKey.editedImage] as? UIImage else {
             self.isNextStep.four = false
             return

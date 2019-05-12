@@ -11,8 +11,8 @@ import UIKit
 class HomeViewController: UIViewController {
 
     // MARK: - Outlet Variables
-    @IBOutlet private weak var userID: UITextField!
-    @IBOutlet private weak var userIMG: UIImageView!
+    @IBOutlet private weak var userID:      UITextField!
+    @IBOutlet private weak var userIMG:     UIImageView!
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -22,7 +22,9 @@ class HomeViewController: UIViewController {
             return
         }
         
-        DispatchQueue.main.async { [unowned self] in
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            
             self.userID.text = id
             self.userIMG.image = image
         }

@@ -11,10 +11,10 @@ import UIKit
 class DetailSignUpViewController: UIViewController {
 
     // MARK: - Outlet Variables
-    @IBOutlet private weak var userDate: UILabel!
-    @IBOutlet private weak var datePicker: UIDatePicker!
-    @IBOutlet private weak var sendBT: UIButton!
-    @IBOutlet private weak var userTel: UITextField!
+    @IBOutlet private weak var userDate:        UILabel!
+    @IBOutlet private weak var datePicker:      UIDatePicker!
+    @IBOutlet private weak var sendBT:          UIButton!
+    @IBOutlet private weak var userTel:         UITextField!
     
     // MARK: - Variables
     private var dateFormatter = DateFormatter()
@@ -40,12 +40,12 @@ class DetailSignUpViewController: UIViewController {
         
         self.sendBT.isEnabled = true
         
-        DispatchQueue.main.async { [unowned self] in
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            
             self.userTel.text = tel
             self.datePicker.date = date
-            
             self.userDate.text  = self.dateFormatter.string(from: date)
-            self.userTel.text   = tel
         }
     }
     
@@ -56,7 +56,9 @@ class DetailSignUpViewController: UIViewController {
     
     @objc private func changeDateValue() {
         
-        DispatchQueue.main.async { [unowned self] in
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            
             self.isEnabled.second = true
             self.enableSendButton()
             
@@ -86,7 +88,13 @@ class DetailSignUpViewController: UIViewController {
             
             case .Sign:
                 self.present(mainVC, animated: true, completion: nil)
+                self.navigationController?.popToRootViewController(animated: false)
         }
+    }
+    
+    // MARK: - Event Methods
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
     }
 }
 
