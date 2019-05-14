@@ -11,7 +11,7 @@ import UIKit
 class DetailCountryViewController: UIViewController {
 
     // MARK: - Variables
-    private var cityInformation:        [CityType]                      = Array<CityType>()
+    private  var cityInformation:       [CityType]                      = Array<CityType>()
     internal var countryInformation:    (code: String, name: String)    = ("", "")
     
     // MARK: - Outlet Variables
@@ -40,15 +40,15 @@ class DetailCountryViewController: UIViewController {
     private func fetchCountryJSON(group: DispatchGroup) {
         
         group.enter()
-        DispatchQueue.global(qos: .userInitiated).async(group: group) { [weak self] in
+        DispatchQueue.global().async(group: group) { [weak self] in
             
-            guard let code = self?.countryInformation.code, let asset = NSDataAsset(name: code) else {
+            guard let code = self?.countryInformation.code, let dataAsset = NSDataAsset(name: code) else {
                 group.leave()
                 return
             }
             
             // MARK: Fetch Country JSON from Assets
-            guard let datas: [CityType] = try? JSONDecoder().decode([CityType].self, from: asset.data) else {
+            guard let datas: [CityType] = try? JSONDecoder().decode([CityType].self, from: dataAsset.data) else {
                 group.leave()
                 return
             }
@@ -72,7 +72,12 @@ extension DetailCountryViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "CityCell", for: indexPath)
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "CityCell", for: indexPath) as? CityDetailTableViewCell else {
+            return UITableViewCell()
+        }
+        
+        let inf = self.cityInformation[indexPath.row]
+        cell.setCityWeatherInformation(name: inf.nameCity, temputuer: inf.celsius, rainFall: inf.rainfall, icon: inf.state)
         
         return cell
     }

@@ -22,7 +22,7 @@
                                 <rect key="frame" x="0.0" y="88" width="414" height="808"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="CityCell" rowHeight="128" id="dh9-ih-vcM">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="CityCell" rowHeight="128" id="dh9-ih-vcM" customClass="CityDetailTableViewCell" customModule="WeatherToday" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="414" height="128"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="dh9-ih-vcM" id="UwZ-FQ-Z6O">
@@ -81,6 +81,12 @@
                                                 <constraint firstItem="Yap-yI-StP" firstAttribute="top" secondItem="UwZ-FQ-Z6O" secondAttribute="top" id="spQ-X9-NLi"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="nameCityLabel" destination="rRc-C3-OAs" id="aR0-so-xgd"/>
+                                            <outlet property="rainfallCityLabel" destination="179-xt-iHg" id="LBM-AE-1Le"/>
+                                            <outlet property="tempCityLabel" destination="I0S-rD-vRg" id="aKB-ax-dv2"/>
+                                            <outlet property="weatherImageView" destination="IEs-s9-kQd" id="Jwm-na-4Wt"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>

@@ -13,7 +13,7 @@ internal struct CountryType: Decodable {
     var nameKorean:     String
     var nameAssert:     String
     
-    // MARK: - CodingKey
+    // MARK: - CountryType CodingKey
     private enum CodingKeys: String, CodingKey {
         case nameKorean = "korean_name"
         case nameAssert = "asset_name"
@@ -23,14 +23,14 @@ internal struct CountryType: Decodable {
 internal struct CityType: Decodable {
     
     var nameCity:       String
-    var stat:           String
-    var celsius:        Double
+    var state:          Int
+    var celsius:        Float32
     var rainfall:       Int
     
-    // MARK: - CodingKey
+    // MARK: - CityType CodingKey
     private enum CodingKeys: String, CodingKey {
         case nameCity = "city_name"
-        case stat
+        case state
         case celsius
         case rainfall = "rainfall_probability"
     }
