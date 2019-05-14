@@ -36,6 +36,19 @@ class DetailCountryViewController: UIViewController {
         self.navigationItem.title = self.countryInformation.name
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        guard let nextViewController = segue.destination as? DetailCityViewController else {
+            return
+        }
+        
+        guard let indexPath = self.cityWeatherTableView.indexPathForSelectedRow else {
+            return
+        }
+        
+        nextViewController.cityInformation = self.cityInformation[indexPath.row]
+    }
+    
     // MARK: - User Method
     private func fetchCountryJSON(group: DispatchGroup) {
         

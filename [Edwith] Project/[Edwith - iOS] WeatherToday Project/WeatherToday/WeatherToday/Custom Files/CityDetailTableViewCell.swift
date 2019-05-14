@@ -15,25 +15,19 @@ class CityDetailTableViewCell: UITableViewCell {
     @IBOutlet private weak var rainfallCityLabel:   UILabel!
     @IBOutlet private weak var tempCityLabel:       UILabel!
     @IBOutlet private weak var weatherImageView:    UIImageView!
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
-    }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
-    }
 
     // MARK: - User Method
     internal func setCityWeatherInformation(name: String, temputuer: Float32, rainFall: Int, icon: Int) {
         
         DispatchQueue.main.async { [weak self] in
-            self?.nameCityLabel.text        = name
-            self?.rainfallCityLabel.text    = "강수확률 \(rainFall) %"
-            self?.tempCityLabel.text        = "\(temputuer)"
+            self?.nameCityLabel.text            = name
+            
+            self?.rainfallCityLabel.text        = "강수확률 \(rainFall) %"
+            self?.rainfallCityLabel.textColor   = (rainFall < 60 ? UIColor.black : UIColor.orange)
+            
+            let fahrenheit                      = (temputuer * 9/5) + 32
+            self?.tempCityLabel.text            = String(format: "섭씨 %.1f도 / 화씨 %.1f도", temputuer, fahrenheit)
+            self?.tempCityLabel.textColor       = (temputuer > 10 ? UIColor.black : UIColor.blue)
             
             // MARK: Set Weather Image to UIImageView
             if let tag = WeatherImage(rawValue: icon) {
@@ -46,6 +40,5 @@ class CityDetailTableViewCell: UITableViewCell {
                 }
             }
         }
-        
     }
 }

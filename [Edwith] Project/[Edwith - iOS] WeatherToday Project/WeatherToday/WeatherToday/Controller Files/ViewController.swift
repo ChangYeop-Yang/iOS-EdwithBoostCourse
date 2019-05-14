@@ -22,11 +22,14 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view.
         
         // MARK: Set UITabelView DataSource and Delegate
-        self.countryWeatherTableView.delegate   = self
         self.countryWeatherTableView.dataSource = self
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         
         // MARK: Fetch Country JSON
-        fetchCountryJSON(group: DispatchGroup())
+        fetchCountryJSON()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -44,35 +47,23 @@ class ViewController: UIViewController {
     }
     
     // MARK: - User Method
-    private func fetchCountryJSON(group: DispatchGroup) {
+    private func fetchCountryJSON() {
         
-        group.enter()
-        DispatchQueue.global().async(group: group) { [weak self] in
+        OperationQueue.main.addOperation { [weak self] in
             
             guard let dataAsset: NSDataAsset = NSDataAsset(name: DataAssetName.Country.rawValue) else {
-                group.leave()
                 return
             }
             
             // MARK: Fetch Country JSON from Assets
             guard let datas: [CountryType] = try? JSONDecoder().decode([CountryType].self, from: dataAsset.data) else {
-                group.leave()
                 return
             }
             
             self?.countryInformation = datas
-            group.leave()
-        }
-        
-        group.notify(queue: .main) { [weak self] in
             self?.countryWeatherTableView.reloadData()
         }
     }
-}
-
-// MARK: - Extension UITableViewDelegate
-extension ViewController: UITableViewDelegate {
-    
 }
 
 // MARK: - Extension UITableViewDataSource
@@ -87,10 +78,8 @@ extension ViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: self.CELL_IDENTIFIER, for: indexPath)
         cell.textLabel?.text = self.countryInformation[indexPath.row].nameKorean
         
-        DispatchQueue.main.async {
-            let imageFileName = "flag_\(self.countryInformation[indexPath.row].nameAssert)"
-            cell.imageView?.image = UIImage(named: imageFileName)
-        }
+        let imageFileName = "flag_\(self.countryInformation[indexPath.row].nameAssert)"
+        cell.imageView?.image = UIImage(named: imageFileName)
         
         return cell
     }
