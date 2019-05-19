@@ -9,10 +9,10 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Collection View Controller-->
+        <!--Detail Album View Controller-->
         <scene sceneID="QdF-cg-VXa">
             <objects>
-                <collectionViewController id="zH2-f1-Jw4" sceneMemberID="viewController">
+                <collectionViewController storyboardIdentifier="DetailAlbumVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="zH2-f1-Jw4" customClass="DetailAlbumViewController" customModule="MyAlbum" customModuleProvider="target" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="2he-jy-8Uq">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -31,7 +31,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="150" height="150"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="MG0-s6-oY1">
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="MG0-s6-oY1" customClass="RoundImageView" customModule="MyAlbum" customModuleProvider="target">
                                             <rect key="frame" x="0.0" y="0.0" width="150" height="150"/>
                                         </imageView>
                                     </subviews>
@@ -69,6 +69,7 @@
         <!--Navigation Controller-->
         <scene sceneID="WTP-Aj-aKl">
             <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="l2J-2H-crZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" toolbarHidden="NO" id="xti-Yn-mvP" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="nre-qa-del">
@@ -84,7 +85,6 @@
                         <segue destination="zH2-f1-Jw4" kind="relationship" relationship="rootViewController" id="TnZ-1l-VEG"/>
                     </connections>
                 </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="l2J-2H-crZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="100.00000000000001" y="96.428571428571431"/>
         </scene>

@@ -38,20 +38,20 @@
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="B7P-ow-cCy">
                                                     <rect key="frame" x="0.0" y="0.0" width="200" height="200"/>
                                                     <subviews>
-                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PxB-Pd-0tg">
+                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PxB-Pd-0tg" customClass="RoundImageView" customModule="MyAlbum" customModuleProvider="target">
                                                             <rect key="frame" x="0.0" y="0.0" width="200" height="140"/>
                                                         </imageView>
-                                                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="rNw-bn-uPW">
+                                                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="rNw-bn-uPW">
                                                             <rect key="frame" x="0.0" y="150" width="200" height="50"/>
                                                             <subviews>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xsq-4t-jdE">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="200" height="22.5"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="200" height="23.5"/>
                                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                                                                     <nil key="textColor"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fp9-0d-DCa">
-                                                                    <rect key="frame" x="0.0" y="27.5" width="200" height="22.5"/>
+                                                                    <rect key="frame" x="0.0" y="26.5" width="200" height="23.5"/>
                                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
                                                                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                     <nil key="highlightedColor"/>
@@ -110,10 +110,10 @@
             </objects>
             <point key="canvasLocation" x="1237.68115942029" y="756.69642857142856"/>
         </scene>
-        <!--Storyboard Reference-->
+        <!--DetailAlbumVC-->
         <scene sceneID="71M-IP-1aP">
             <objects>
-                <viewControllerPlaceholder id="GDV-Sz-LKG" sceneMemberID="viewController"/>
+                <viewControllerPlaceholder storyboardIdentifier="DetailAlbumVC" storyboardName="DetailAlbum" referencedIdentifier="DetailAlbumVC" id="GDV-Sz-LKG" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hVp-Zl-bpS" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2046" y="757"/>

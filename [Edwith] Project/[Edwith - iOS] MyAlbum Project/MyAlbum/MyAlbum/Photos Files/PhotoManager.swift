@@ -32,29 +32,23 @@ class PhotoManager: NSObject {
     internal func getAurhorizationPhotosState(parent: UIViewController) -> Bool {
         
         var isAurhorization = false
-        let photoState      = PHPhotoLibrary.authorizationStatus()
         
-        // MARK: 애플리케이션 처음 진입 시 사진 라이브러리 접근권한이 없다면 사진 라이브러리에 접근 허용 여부를 묻습니다.
-        switch photoState {
-            case .authorized:                           isAurhorization = true
-            case .notDetermined, .restricted, .denied:  isAurhorization = false
-            @unknown default:                           isAurhorization = false
-        }
-        
-        // MARK: Not Permission Photos Action
-        if isAurhorization == false {
-            
-            let alert = UIAlertController(title: "Error Not Permission Photos", message: "MyAlbum 애플리케이션을 사용하시기 위해서는 Album 권한이 필요합니다.", preferredStyle: .alert)
-            
-            let confirmAction = UIAlertAction(title: "확인", style: .default) { _ in
-                PHPhotoLibrary.requestAuthorization { status in
-                    isAurhorization = (status == .authorized ? true : false)
-                }
+        PHPhotoLibrary.requestAuthorization { status in
+            // MARK: 애플리케이션 처음 진입 시 사진 라이브러리 접근권한이 없다면 사진 라이브러리에 접근 허용 여부를 묻습니다.
+            switch status {
+                case .authorized:                           isAurhorization = true
+                case .restricted, .denied:                  isAurhorization = false
+                case .notDetermined:
+                    PHPhotoLibrary.requestAuthorization { status in
+                        isAurhorization = (status == .authorized ? true : false)
+                    }
+                @unknown default:                           isAurhorization = false
             }
-            
-            alert.addAction(confirmAction)
-            parent.present(alert, animated: true, completion: nil)
         }
+        
+        //let photoState      = PHPhotoLibrary.authorizationStatus()
+        
+        
         
         return isAurhorization
     }

@@ -25,9 +25,27 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view.
         
         // MARK: UICollectionView DataSource
-        self.userAlbumCollectionView.dataSource = self
-        self.userAlbumCollectionView.delegate = self
         setCollectionView()
+        
+        PHPhotoLibrary.requestAuthorization { status in
+            if status == .authorized { self.requestPhotoCollection() }
+        }
+        
+//        // MARK: Check Photos Aurhorization
+//        if PhotoManager.photoInstance.getAurhorizationPhotosState(parent: self) {
+//            requestPhotoCollection()
+//        }
+        
+        // MARK: Set Notification (https://stackoverflow.com/questions/5277940/why-does-viewwillappear-not-get-called-when-an-app-comes-back-from-the-backgroun)
+        NotificationCenter.default.addObserver(self, selector: #selector(willEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+    }
+    
+    // MARK: - Notification Method
+    @objc func willEnterForeground() {
         
         // MARK: Check Photos Aurhorization
         if PhotoManager.photoInstance.getAurhorizationPhotosState(parent: self) {
@@ -37,6 +55,9 @@ class ViewController: UIViewController {
     
     // MARK: - User Method
     private func requestPhotoCollection() {
+        
+        // MARK: Delete All Objects
+        self.fetchAlbumResult.removeAll()
         
         // MARK: Camera Album 사진 콜렉션을 가져온다.
         let fetchOption = PhotoManager.photoInstance.getImageFetchOptions(sortingKey: "creationDate", ascending: true)
@@ -60,23 +81,20 @@ class ViewController: UIViewController {
             self?.userAlbumCollectionView.reloadData()
         }
     }
-    
     private func setCollectionView() {
+        
+        // MARK: CollectionView DataSource and Delegate
+        self.userAlbumCollectionView.delegate = self
+        self.userAlbumCollectionView.dataSource = self
         
         // MARK: Set Flowlayout
         let flowlayout = UICollectionViewFlowLayout()
         flowlayout.sectionInset = UIEdgeInsets.init(top: 20, left: 10, bottom: 20, right: 10)
-        //flowlayout.minimumInteritemSpacing = 10
-        //lowlayout.minimumLineSpacing = 10
-        
-        //let halfWidth = UIScreen.main.bounds.width
-        //flowlayout.estimatedItemSize = CGSize(width: halfWidth, height: 90)
-        
         self.userAlbumCollectionView.collectionViewLayout = flowlayout
     }
 }
 
-// MARK: - UICollectionViewDataSource Extension
+// MARK: - Extension UICollectionViewDataSource
 extension ViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -106,12 +124,16 @@ extension ViewController: UICollectionViewDataSource {
     
 }
 
+// MARK: - Extension UICollectionViewDelegateFlowLayout
 extension ViewController: UICollectionViewDelegateFlowLayout {
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-        let padding: CGFloat =  50
+        let padding: CGFloat =  35
         let collectionViewSize = collectionView.frame.size.width - padding
         
-        return CGSize(width: collectionViewSize/2, height: collectionViewSize/2)
+        // MARK: https://stackoverflow.com/questions/38394810/display-just-two-columns-with-multiple-rows-in-a-collectionview-using-storyboar
+        return CGSize(width: collectionViewSize / 2, height: collectionViewSize / 2)
     }
+    
 }

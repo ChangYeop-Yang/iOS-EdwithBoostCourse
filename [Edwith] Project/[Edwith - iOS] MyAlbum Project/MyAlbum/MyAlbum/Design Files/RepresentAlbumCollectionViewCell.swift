@@ -17,12 +17,9 @@ class RepresentAlbumCollectionViewCell: UICollectionViewCell {
     
     // MARK: - User Method
     internal func setRepresentPhotoOutlets(image: UIImage, title: String, count: Int) {
-        
-        //DispatchQueue.main.async { [weak self] in
             representPhotoImageView.image = image
             representPhotoTitleLabel.text = title
             representPhotoCountLabel.text = String.init(format: "%d", count)
-        //}
     }
     internal func getImageViewSize() -> CGSize {
         return CGSize(width: self.representPhotoImageView.frame.width, height: self.representPhotoImageView.frame.height)
