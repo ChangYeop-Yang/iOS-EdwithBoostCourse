@@ -7,14 +7,111 @@
 //
 
 import UIKit
+import Photos
 
 class ViewController: UIViewController {
-
+    
+    // MARK: - Typealias
+    fileprivate typealias PHResult = (title: String, asset: PHFetchResult<PHAsset>)
+    
+    // MARK: - Outlet Variables
+    @IBOutlet private weak var userAlbumCollectionView: UICollectionView!
+    
+    // MARK: - Object Variables
+    fileprivate var fetchAlbumResult: [PHResult] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        
+        // MARK: UICollectionView DataSource
+        self.userAlbumCollectionView.dataSource = self
+        self.userAlbumCollectionView.delegate = self
+        setCollectionView()
+        
+        // MARK: Check Photos Aurhorization
+        if PhotoManager.photoInstance.getAurhorizationPhotosState(parent: self) {
+            requestPhotoCollection()
+        }
     }
-
-
+    
+    // MARK: - User Method
+    private func requestPhotoCollection() {
+        
+        // MARK: Camera Album 사진 콜렉션을 가져온다.
+        let fetchOption = PhotoManager.photoInstance.getImageFetchOptions(sortingKey: "creationDate", ascending: true)
+        let cameraRoll: PHFetchResult<PHAssetCollection> = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .any, options: nil)
+        
+        cameraRoll.enumerateObjects { [weak self] collection, _, _ in
+            
+            let photoInAlbum = PHAsset.fetchAssets(in: collection, options: fetchOption)
+            
+            // MARK: Album에 포함 된 사진의 수가 1장 이상인 경우에만 추가한다.
+            if photoInAlbum.count > 0 {
+                if let title = collection.localizedTitle {
+                    let fetch = PHResult(title, photoInAlbum)
+                    self?.fetchAlbumResult.append(fetch)
+                }
+            }
+            
+        }
+        
+        OperationQueue.main.addOperation { [weak self] in
+            self?.userAlbumCollectionView.reloadData()
+        }
+    }
+    
+    private func setCollectionView() {
+        
+        // MARK: Set Flowlayout
+        let flowlayout = UICollectionViewFlowLayout()
+        flowlayout.sectionInset = UIEdgeInsets.init(top: 20, left: 10, bottom: 20, right: 10)
+        //flowlayout.minimumInteritemSpacing = 10
+        //lowlayout.minimumLineSpacing = 10
+        
+        //let halfWidth = UIScreen.main.bounds.width
+        //flowlayout.estimatedItemSize = CGSize(width: halfWidth, height: 90)
+        
+        self.userAlbumCollectionView.collectionViewLayout = flowlayout
+    }
 }
 
+// MARK: - UICollectionViewDataSource Extension
+extension ViewController: UICollectionViewDataSource {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return self.fetchAlbumResult.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: IndentifierCell.repersentAlbumCell.rawValue, for: indexPath) as? RepresentAlbumCollectionViewCell else {
+            return UICollectionViewCell()
+        }
+        
+        // MARK: Get Represent Album Image
+        let fetchResult = self.fetchAlbumResult[indexPath.row].asset
+        
+        if let representImage = fetchResult.firstObject {
+            PhotoManager.photoInstance.getImageManager()
+                .requestImage(for: representImage, targetSize: cell.getImageViewSize(), contentMode: .aspectFill, options: nil) { [weak self] image, _ in
+                
+                guard let photoAsset = image, let photoTitle = self?.fetchAlbumResult[indexPath.row].title else { return }
+                cell.setRepresentPhotoOutlets(image: photoAsset, title: photoTitle, count: fetchResult.count)
+            }
+        }
+        
+        return cell
+    }
+    
+}
+
+extension ViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+        let padding: CGFloat =  50
+        let collectionViewSize = collectionView.frame.size.width - padding
+        
+        return CGSize(width: collectionViewSize/2, height: collectionViewSize/2)
+    }
+}

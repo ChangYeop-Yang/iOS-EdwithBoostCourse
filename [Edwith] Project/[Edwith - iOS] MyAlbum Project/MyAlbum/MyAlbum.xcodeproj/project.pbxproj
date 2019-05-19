@@ -14,9 +14,11 @@
 		0C2B98E3228FDCD5004D944E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0C2B98E1228FDCD5004D944E /* LaunchScreen.storyboard */; };
 		0C2B98EE228FDCD5004D944E /* MyAlbumTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C2B98ED228FDCD5004D944E /* MyAlbumTests.swift */; };
 		0C2B98F9228FDCD5004D944E /* MyAlbumUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C2B98F8228FDCD5004D944E /* MyAlbumUITests.swift */; };
+		0CEF3156229127BA003C50BA /* PhotoManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CEF3155229127BA003C50BA /* PhotoManager.swift */; };
 		0CEFF05C22904094009E9E25 /* IdentifierCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CEFF05B22904094009E9E25 /* IdentifierCell.swift */; };
 		0CEFF05E22904408009E9E25 /* DetailPhoto.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0CEFF05D22904408009E9E25 /* DetailPhoto.storyboard */; };
 		0CEFF0602290458F009E9E25 /* DetailAlbum.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0CEFF05F2290458F009E9E25 /* DetailAlbum.storyboard */; };
+		0CEFF06222906D76009E9E25 /* RepresentAlbumCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CEFF06122906D76009E9E25 /* RepresentAlbumCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,9 +52,11 @@
 		0C2B98F4228FDCD5004D944E /* MyAlbumUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MyAlbumUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0C2B98F8228FDCD5004D944E /* MyAlbumUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyAlbumUITests.swift; sourceTree = "<group>"; };
 		0C2B98FA228FDCD5004D944E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0CEF3155229127BA003C50BA /* PhotoManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoManager.swift; sourceTree = "<group>"; };
 		0CEFF05B22904094009E9E25 /* IdentifierCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentifierCell.swift; sourceTree = "<group>"; };
 		0CEFF05D22904408009E9E25 /* DetailPhoto.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = DetailPhoto.storyboard; sourceTree = "<group>"; };
 		0CEFF05F2290458F009E9E25 /* DetailAlbum.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = DetailAlbum.storyboard; sourceTree = "<group>"; };
+		0CEFF06122906D76009E9E25 /* RepresentAlbumCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepresentAlbumCollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +107,7 @@
 		0C2B98D7228FDCD3004D944E /* MyAlbum */ = {
 			isa = PBXGroup;
 			children = (
+				0CEF31542291279B003C50BA /* Photos Files */,
 				0CEFF05A2290405D009E9E25 /* Design Files */,
 				0CEFF05922903C5B009E9E25 /* Support Files */,
 				0CEFF05822903C47009E9E25 /* StoryBoard Files */,
@@ -129,6 +134,14 @@
 				0C2B98FA228FDCD5004D944E /* Info.plist */,
 			);
 			path = MyAlbumUITests;
+			sourceTree = "<group>";
+		};
+		0CEF31542291279B003C50BA /* Photos Files */ = {
+			isa = PBXGroup;
+			children = (
+				0CEF3155229127BA003C50BA /* PhotoManager.swift */,
+			);
+			path = "Photos Files";
 			sourceTree = "<group>";
 		};
 		0CEFF05722903C3C009E9E25 /* Controller Files */ = {
@@ -162,6 +175,7 @@
 			isa = PBXGroup;
 			children = (
 				0CEFF05B22904094009E9E25 /* IdentifierCell.swift */,
+				0CEFF06122906D76009E9E25 /* RepresentAlbumCollectionViewCell.swift */,
 			);
 			path = "Design Files";
 			sourceTree = "<group>";
@@ -300,7 +314,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				0C2B98DB228FDCD3004D944E /* ViewController.swift in Sources */,
+				0CEFF06222906D76009E9E25 /* RepresentAlbumCollectionViewCell.swift in Sources */,
 				0CEFF05C22904094009E9E25 /* IdentifierCell.swift in Sources */,
+				0CEF3156229127BA003C50BA /* PhotoManager.swift in Sources */,
 				0C2B98D9228FDCD3004D944E /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -28,7 +28,7 @@
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="RepresentAlbumCell" id="9bi-FX-JtO">
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="RepresentAlbumCell" id="9bi-FX-JtO" customClass="RepresentAlbumCollectionViewCell" customModule="MyAlbum" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="200" height="200"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
@@ -83,6 +83,9 @@
                                         </constraints>
                                         <size key="customSize" width="200" height="200"/>
                                         <connections>
+                                            <outlet property="representPhotoCountLabel" destination="Fp9-0d-DCa" id="LLq-nj-tWZ"/>
+                                            <outlet property="representPhotoImageView" destination="PxB-Pd-0tg" id="nKV-Sp-P8A"/>
+                                            <outlet property="representPhotoTitleLabel" destination="xsq-4t-jdE" id="HJR-Ws-ZO9"/>
                                             <segue destination="GDV-Sz-LKG" kind="show" id="Gh1-6N-9NC"/>
                                         </connections>
                                     </collectionViewCell>
@@ -99,6 +102,9 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <navigationItem key="navigationItem" title="앨범" id="iW6-yG-l0e"/>
+                    <connections>
+                        <outlet property="userAlbumCollectionView" destination="A6R-O0-b4k" id="Y71-30-hsd"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
