@@ -30,7 +30,9 @@ class DetailAlbumViewController: UIViewController {
         super.viewDidLoad()
 
         // MARK: UICollectionView Delegate and Datasource
-        setCollectionView()
+        self.albumPhotoCollectionView.delegate   = self
+        self.albumPhotoCollectionView.dataSource = self
+        setFlowLayoutCollectionView(self.albumPhotoCollectionView)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -52,16 +54,6 @@ class DetailAlbumViewController: UIViewController {
     }
     
     // MARK: - User Method
-    private func setCollectionView() {
-        
-        self.albumPhotoCollectionView.delegate   = self
-        self.albumPhotoCollectionView.dataSource = self
-        
-        // MARK: Set Flowlayout
-        let flowlayout = UICollectionViewFlowLayout()
-        flowlayout.sectionInset = UIEdgeInsets.init(top: 20, left: 10, bottom: 20, right: 10)
-        self.albumPhotoCollectionView.collectionViewLayout = flowlayout
-    }
     private func fetchAlbumPhoto(fetch: PHAssetCollection, order: Bool) {
         
         self.fetchPhotos.removeAll()
@@ -94,15 +86,25 @@ class DetailAlbumViewController: UIViewController {
             case .share: break
                 //showActivityViewController(image: <#T##UIImage#>)
             case .order:
-                if let fetch = self.receiveFetchPhoto, let title = sender.title {
-                    let order: Bool = (title == "최신순" ? true : false)
-                    sender.title    = (title == "최신순" ? "과거순" : "최신순")
-                    
-                    fetchAlbumPhoto(fetch: fetch, order: order)
-                    self.albumPhotoCollectionView.reloadData()
-                }
+                guard let fetch = self.receiveFetchPhoto, let title = sender.title else { return }
+            
+                let order: Bool = (title == "최신순" ? true : false)
+                sender.title    = (title == "최신순" ? "과거순" : "최신순")
+                
+                fetchAlbumPhoto(fetch: fetch, order: order)
+                self.albumPhotoCollectionView.reloadData()
             case .trash: break
-            case .select: break
+            case .select:
+                guard let title = sender.title else { return }
+            
+                // MARK: https://stackoverflow.com/questions/19032940/how-can-i-get-the-ios-7-default-blue-color-programmatically/19033326
+                if title == "선택" {
+                    sender.title        = "취소"
+                    sender.tintColor    = UIColor.red
+                } else {
+                    sender.title        = "선택"
+                    sender.tintColor    = UIButton(type: .system).tintColor
+                }
         }
     }
 }
@@ -110,7 +112,6 @@ class DetailAlbumViewController: UIViewController {
 // MARK: - Extension UICollectionView DataSource
 extension DetailAlbumViewController: UICollectionViewDataSource {
     
-    // MARK: - UICollectionView Datasource
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return self.fetchPhotos.count
     }
@@ -125,6 +126,11 @@ extension DetailAlbumViewController: UICollectionViewDataSource {
         
         return cell
     }
+}
+
+// MARK: - Extension UICollectionViewDelegate
+extension DetailAlbumViewController: UICollectionViewDelegate {
+    
 }
 
 // MARK: - Extension UICollectionView Delegate FlowLayout

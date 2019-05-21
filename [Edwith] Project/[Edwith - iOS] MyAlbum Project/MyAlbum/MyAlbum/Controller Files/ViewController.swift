@@ -22,8 +22,10 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
-        // MARK: UICollectionView DataSource
-        setCollectionView()
+        // MARK: CollectionView DataSource and Delegate
+        self.userAlbumCollectionView.delegate   = self
+        self.userAlbumCollectionView.dataSource = self
+        setFlowLayoutCollectionView(self.userAlbumCollectionView)
         
         // MARK: Request Photos Autorization
         askPhotosAuthorization()
@@ -86,17 +88,6 @@ class ViewController: UIViewController {
         OperationQueue.main.addOperation { [weak self] in
             self?.userAlbumCollectionView.reloadData()
         }
-    }
-    private func setCollectionView() {
-        
-        // MARK: CollectionView DataSource and Delegate
-        self.userAlbumCollectionView.delegate   = self
-        self.userAlbumCollectionView.dataSource = self
-        
-        // MARK: Set Flowlayout
-        let flowlayout = UICollectionViewFlowLayout()
-        flowlayout.sectionInset = UIEdgeInsets.init(top: 20, left: 10, bottom: 20, right: 10)
-        self.userAlbumCollectionView.collectionViewLayout = flowlayout
     }
     private func askPhotosAuthorization() {
         
