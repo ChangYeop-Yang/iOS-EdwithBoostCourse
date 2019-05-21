@@ -9,6 +9,11 @@
 import UIKit
 
 class DetailAlbumViewController: UICollectionViewController {
+    
+    // MARK: - Outlet Variables
+    
+    // MARK: - Object Variables
+    internal var receiveFetchPhoto: PHResult?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -16,6 +21,11 @@ class DetailAlbumViewController: UICollectionViewController {
         // Do any additional setup after loading the view.
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        print(self.receiveFetchPhoto!)
+    }
 
     /*
     // MARK: - Navigation

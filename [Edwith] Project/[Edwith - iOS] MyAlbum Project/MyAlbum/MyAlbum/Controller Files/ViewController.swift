@@ -11,9 +11,6 @@ import Photos
 
 class ViewController: UIViewController {
     
-    // MARK: - Typealias
-    fileprivate typealias PHResult = (title: String, asset: PHFetchResult<PHAsset>)
-    
     // MARK: - Outlet Variables
     @IBOutlet private weak var userAlbumCollectionView: UICollectionView!
     
@@ -27,30 +24,31 @@ class ViewController: UIViewController {
         // MARK: UICollectionView DataSource
         setCollectionView()
         
-        PHPhotoLibrary.requestAuthorization { status in
-            if status == .authorized { self.requestPhotoCollection() }
-        }
+        // MARK: Request Photos Autorization
+        askPhotosAuthorization()
         
-//        // MARK: Check Photos Aurhorization
-//        if PhotoManager.photoInstance.getAurhorizationPhotosState(parent: self) {
-//            requestPhotoCollection()
-//        }
-        
-        // MARK: Set Notification (https://stackoverflow.com/questions/5277940/why-does-viewwillappear-not-get-called-when-an-app-comes-back-from-the-backgroun)
+        // MARK: https://stackoverflow.com/questions/5277940/why-does-viewwillappear-not-get-called-when-an-app-comes-back-from-the-backgroun
         NotificationCenter.default.addObserver(self, selector: #selector(willEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
+        // MARK: https://stackoverflow.com/questions/31914213/how-to-make-prepareforsegue-with-uicollectionview
+        guard let detailAlbumVC = segue.destination as? DetailAlbumViewController
+            , let cell = sender as? RepresentAlbumCollectionViewCell else {
+            return
+        }
+        
+        if let selectedCellRow = self.userAlbumCollectionView.indexPath(for: cell)?.row {
+            detailAlbumVC.receiveFetchPhoto = self.fetchAlbumResult[selectedCellRow]
+        }
     }
     
     // MARK: - Notification Method
-    @objc func willEnterForeground() {
+    @objc private func willEnterForeground() {
         
         // MARK: Check Photos Aurhorization
-        if PhotoManager.photoInstance.getAurhorizationPhotosState(parent: self) {
-            requestPhotoCollection()
-        }
+        askPhotosAuthorization()
     }
     
     // MARK: - User Method
@@ -91,6 +89,36 @@ class ViewController: UIViewController {
         let flowlayout = UICollectionViewFlowLayout()
         flowlayout.sectionInset = UIEdgeInsets.init(top: 20, left: 10, bottom: 20, right: 10)
         self.userAlbumCollectionView.collectionViewLayout = flowlayout
+    }
+    private func askPhotosAuthorization() {
+        
+        let title = "‼️ Error, Disabled Photos Permission"
+        let message = "MyAlbum 애플리케이션을 사용하기 위해서는 Photos 사용 권한이 필요합니다."
+        
+        // MARK: 애플리케이션 처음 진입 시 사진 라이브러리 접근권한이 없다면 사진 라이브러리에 접근 허용 여부를 묻습니다.
+        PHPhotoLibrary.requestAuthorization { [weak self] status in
+            switch status {
+                case .authorized:
+                    self?.requestPhotoCollection()
+                case .denied, .restricted:
+                    self?.showAlert(title: title, message: message, style: .alert)
+                default: break
+            }
+        }
+        
+    }
+    private func showAlert(title: String, message: String, style: UIAlertController.Style) {
+        
+        DispatchQueue.main.async { [weak self] in
+            
+            let alertController = UIAlertController(title: title, message: message, preferredStyle: style)
+            
+            let confirmAction = UIAlertAction(title: "확인", style: .default, handler: nil)
+            alertController.addAction(confirmAction)
+            
+            self?.present(alertController, animated: true, completion: nil)
+            
+        }
     }
 }
 

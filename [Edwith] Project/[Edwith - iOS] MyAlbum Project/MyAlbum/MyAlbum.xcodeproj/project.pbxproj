@@ -21,6 +21,7 @@
 		0CEFF05E22904408009E9E25 /* DetailPhoto.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0CEFF05D22904408009E9E25 /* DetailPhoto.storyboard */; };
 		0CEFF0602290458F009E9E25 /* DetailAlbum.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0CEFF05F2290458F009E9E25 /* DetailAlbum.storyboard */; };
 		0CEFF06222906D76009E9E25 /* RepresentAlbumCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CEFF06122906D76009E9E25 /* RepresentAlbumCollectionViewCell.swift */; };
+		0CF4BABE2293D5A100C5060B /* PhotoType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CF4BABD2293D5A100C5060B /* PhotoType.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,6 +62,7 @@
 		0CEFF05D22904408009E9E25 /* DetailPhoto.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = DetailPhoto.storyboard; sourceTree = "<group>"; };
 		0CEFF05F2290458F009E9E25 /* DetailAlbum.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = DetailAlbum.storyboard; sourceTree = "<group>"; };
 		0CEFF06122906D76009E9E25 /* RepresentAlbumCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepresentAlbumCollectionViewCell.swift; sourceTree = "<group>"; };
+		0CF4BABD2293D5A100C5060B /* PhotoType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoType.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -144,6 +146,7 @@
 			isa = PBXGroup;
 			children = (
 				0CEF3155229127BA003C50BA /* PhotoManager.swift */,
+				0CF4BABD2293D5A100C5060B /* PhotoType.swift */,
 			);
 			path = "Photos Files";
 			sourceTree = "<group>";
@@ -325,6 +328,7 @@
 				0CEFF05C22904094009E9E25 /* IdentifierCell.swift in Sources */,
 				0CEF3156229127BA003C50BA /* PhotoManager.swift in Sources */,
 				0C2B98D9228FDCD3004D944E /* AppDelegate.swift in Sources */,
+				0CF4BABE2293D5A100C5060B /* PhotoType.swift in Sources */,
 				0CEF7DDA229199BD000B7D03 /* RoundImageView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
