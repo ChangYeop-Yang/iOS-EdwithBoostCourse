@@ -24,14 +24,14 @@
                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         </collectionViewFlowLayout>
                         <cells>
-                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="DetailAlbumCell" id="31c-f7-68h">
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" restorationIdentifier="DetailAlbumCell" reuseIdentifier="DetailAlbumCell" id="31c-f7-68h" customClass="DetailAlbumCollectionViewCell" customModule="MyAlbum" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="150" height="150"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
                                     <rect key="frame" x="0.0" y="0.0" width="150" height="150"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="MG0-s6-oY1" customClass="RoundImageView" customModule="MyAlbum" customModuleProvider="target">
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MG0-s6-oY1" customClass="RoundImageView" customModule="MyAlbum" customModuleProvider="target">
                                             <rect key="frame" x="0.0" y="0.0" width="150" height="150"/>
                                         </imageView>
                                     </subviews>
@@ -43,6 +43,9 @@
                                     <constraint firstAttribute="trailing" secondItem="MG0-s6-oY1" secondAttribute="trailing" id="rQK-eS-wJT"/>
                                 </constraints>
                                 <size key="customSize" width="150" height="150"/>
+                                <connections>
+                                    <outlet property="detailAlbumImageView" destination="MG0-s6-oY1" id="BcY-Fx-v4P"/>
+                                </connections>
                             </collectionViewCell>
                         </cells>
                         <connections>
@@ -61,6 +64,9 @@
                         <barButtonItem key="rightBarButtonItem" title="선택" id="Lfq-0x-0rB"/>
                     </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="albumPhotoCollectionView" destination="2he-jy-8Uq" id="8rt-qW-qAa"/>
+                    </connections>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iR0-dA-waV" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -69,7 +75,6 @@
         <!--Navigation Controller-->
         <scene sceneID="WTP-Aj-aKl">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="l2J-2H-crZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" toolbarHidden="NO" id="xti-Yn-mvP" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="nre-qa-del">
@@ -85,6 +90,7 @@
                         <segue destination="zH2-f1-Jw4" kind="relationship" relationship="rootViewController" id="TnZ-1l-VEG"/>
                     </connections>
                 </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="l2J-2H-crZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="100.00000000000001" y="96.428571428571431"/>
         </scene>

@@ -15,7 +15,8 @@ class ViewController: UIViewController {
     @IBOutlet private weak var userAlbumCollectionView: UICollectionView!
     
     // MARK: - Object Variables
-    fileprivate var fetchAlbumResult: [PHResult] = []
+    fileprivate var fetchAlbumResult:       [PHResult]                  = []
+    fileprivate var fetchCollectionResult:  [PHAssetCollection]         = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,6 +32,12 @@ class ViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(willEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.navigationController?.isToolbarHidden = true
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         // MARK: https://stackoverflow.com/questions/31914213/how-to-make-prepareforsegue-with-uicollectionview
@@ -40,7 +47,7 @@ class ViewController: UIViewController {
         }
         
         if let selectedCellRow = self.userAlbumCollectionView.indexPath(for: cell)?.row {
-            detailAlbumVC.receiveFetchPhoto = self.fetchAlbumResult[selectedCellRow]
+            detailAlbumVC.receiveFetchPhoto = self.fetchCollectionResult[selectedCellRow]
         }
     }
     
@@ -70,6 +77,7 @@ class ViewController: UIViewController {
                 if let title = collection.localizedTitle {
                     let fetch = PHResult(title, photoInAlbum)
                     self?.fetchAlbumResult.append(fetch)
+                    self?.fetchCollectionResult.append(collection)
                 }
             }
             
@@ -82,7 +90,7 @@ class ViewController: UIViewController {
     private func setCollectionView() {
         
         // MARK: CollectionView DataSource and Delegate
-        self.userAlbumCollectionView.delegate = self
+        self.userAlbumCollectionView.delegate   = self
         self.userAlbumCollectionView.dataSource = self
         
         // MARK: Set Flowlayout
