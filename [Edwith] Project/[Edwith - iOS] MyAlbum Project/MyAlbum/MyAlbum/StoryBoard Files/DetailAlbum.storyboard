@@ -54,14 +54,30 @@
                         </connections>
                     </collectionView>
                     <toolbarItems>
-                        <barButtonItem systemItem="action" id="HUy-kv-e3q"/>
+                        <barButtonItem tag="100" enabled="NO" systemItem="action" id="HUy-kv-e3q">
+                            <connections>
+                                <action selector="actionToolBarItem:" destination="zH2-f1-Jw4" id="WKD-Et-ku5"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="Io3-Yq-zPe"/>
-                        <barButtonItem title="최신순" id="iO9-OO-eyV"/>
+                        <barButtonItem tag="200" title="최신순" id="iO9-OO-eyV">
+                            <connections>
+                                <action selector="actionToolBarItem:" destination="zH2-f1-Jw4" id="6aF-1X-JtU"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="MZ6-Ze-ROU"/>
-                        <barButtonItem systemItem="trash" id="v8m-W4-Wf9"/>
+                        <barButtonItem tag="300" enabled="NO" systemItem="trash" id="v8m-W4-Wf9">
+                            <connections>
+                                <action selector="actionToolBarItem:" destination="zH2-f1-Jw4" id="kZW-s1-lE5"/>
+                            </connections>
+                        </barButtonItem>
                     </toolbarItems>
                     <navigationItem key="navigationItem" id="lom-PO-Vwh">
-                        <barButtonItem key="rightBarButtonItem" title="선택" id="Lfq-0x-0rB"/>
+                        <barButtonItem key="rightBarButtonItem" tag="400" title="선택" id="Lfq-0x-0rB">
+                            <connections>
+                                <action selector="actionToolBarItem:" destination="zH2-f1-Jw4" id="EQM-nQ-Cll"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>

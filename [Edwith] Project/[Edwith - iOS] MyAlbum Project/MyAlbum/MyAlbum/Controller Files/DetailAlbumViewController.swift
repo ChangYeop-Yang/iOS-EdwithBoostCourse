@@ -9,7 +9,7 @@
 import UIKit
 import Photos
 
-class DetailAlbumViewController: UICollectionViewController {
+class DetailAlbumViewController: UIViewController {
     
     // MARK: - Enum
     private enum ToolbarItemTag: Int {
@@ -38,7 +38,7 @@ class DetailAlbumViewController: UICollectionViewController {
         
         // MARK: Fetch Album Photos.
         if let asset = self.receiveFetchPhoto {
-            fetchAlbumPhoto(fetch: asset, order: true)
+            fetchAlbumPhoto(fetch: asset, order: false)
         }
         
         // MARK: Set Navigation Title and Toolbar
@@ -65,6 +65,7 @@ class DetailAlbumViewController: UICollectionViewController {
     private func fetchAlbumPhoto(fetch: PHAssetCollection, order: Bool) {
         
         self.fetchPhotos.removeAll()
+        self.albumPhotoCollectionView.reloadData()
         
         let option      = PhotoManager.photoInstance.getImageFetchOptions(sortingKey: "creationDate", ascending: order)
         let fetchAsset  = PHAsset.fetchAssets(in: fetch, options: option)
@@ -77,13 +78,44 @@ class DetailAlbumViewController: UICollectionViewController {
             }
         }
     }
+    private func showActivityViewController(images: [UIImage]) {
+        
+        let activityVC = UIActivityViewController(activityItems: [images], applicationActivities: nil)
+        self.present(activityVC, animated: true, completion: nil)
+        
+    }
+    
+    // MARK: - Action Method
+    @IBAction func actionToolBarItem(_ sender: UIBarButtonItem) {
+        
+        guard let toolbarTag = ToolbarItemTag(rawValue: sender.tag) else { return }
+        
+        switch toolbarTag {
+            case .share: break
+                //showActivityViewController(image: <#T##UIImage#>)
+            case .order:
+                if let fetch = self.receiveFetchPhoto, let title = sender.title {
+                    let order: Bool = (title == "최신순" ? true : false)
+                    sender.title    = (title == "최신순" ? "과거순" : "최신순")
+                    
+                    fetchAlbumPhoto(fetch: fetch, order: order)
+                    self.albumPhotoCollectionView.reloadData()
+                }
+            case .trash: break
+            case .select: break
+        }
+    }
+}
+
+// MARK: - Extension UICollectionView DataSource
+extension DetailAlbumViewController: UICollectionViewDataSource {
     
     // MARK: - UICollectionView Datasource
-    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return self.fetchPhotos.count
     }
     
-    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: IndentifierCell.detailAlbumCell.rawValue, for: indexPath) as? DetailAlbumCollectionViewCell else {
             return UICollectionViewCell()
@@ -93,11 +125,11 @@ class DetailAlbumViewController: UICollectionViewController {
         
         return cell
     }
-
 }
 
-// MARK: - Extension UICollectionViewDelegateFlowLayout
+// MARK: - Extension UICollectionView Delegate FlowLayout
 extension DetailAlbumViewController: UICollectionViewDelegateFlowLayout {
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
         let padding: CGFloat    = 45
