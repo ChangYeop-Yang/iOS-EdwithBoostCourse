@@ -30,8 +30,8 @@ class ViewController: UIViewController {
         // MARK: Request Photos Autorization
         askPhotosAuthorization()
         
-        // MARK: https://stackoverflow.com/questions/5277940/why-does-viewwillappear-not-get-called-when-an-app-comes-back-from-the-backgroun
-        NotificationCenter.default.addObserver(self, selector: #selector(willEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
+        // MARK: PHPhotoLibraryChangeObserver
+        PHPhotoLibrary.shared().register(self)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -51,13 +51,6 @@ class ViewController: UIViewController {
         if let selectedCellRow = self.userAlbumCollectionView.indexPath(for: cell)?.row {
             detailAlbumVC.receiveFetchPhoto = self.fetchCollectionResult[selectedCellRow]
         }
-    }
-    
-    // MARK: - Notification Method
-    @objc private func willEnterForeground() {
-        
-        // MARK: Check Photos Aurhorization
-        askPhotosAuthorization()
     }
     
     // MARK: - User Method
@@ -163,4 +156,14 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
         return CGSize(width: collectionViewSize / 2, height: collectionViewSize / 2)
     }
     
+}
+
+// MARK: - Extension PHPhotoLibraryChangeObserver
+extension ViewController: PHPhotoLibraryChangeObserver {
+    
+    func photoLibraryDidChange(_ changeInstance: PHChange) {
+        OperationQueue.main.addOperation { [weak self] in
+            self?.askPhotosAuthorization()
+        }
+    }
 }

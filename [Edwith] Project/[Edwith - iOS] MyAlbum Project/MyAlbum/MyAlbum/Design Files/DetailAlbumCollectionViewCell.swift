@@ -17,4 +17,7 @@ class DetailAlbumCollectionViewCell: UICollectionViewCell {
     internal func setImageView(image: UIImage) {
         self.detailAlbumImageView.image = image
     }
+    internal func getImages() -> UIImage? {
+        return self.detailAlbumImageView.image
+    }
 }

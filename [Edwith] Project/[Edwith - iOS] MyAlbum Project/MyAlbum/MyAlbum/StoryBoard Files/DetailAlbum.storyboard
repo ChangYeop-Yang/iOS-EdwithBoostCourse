@@ -82,6 +82,8 @@
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="albumPhotoCollectionView" destination="2he-jy-8Uq" id="8rt-qW-qAa"/>
+                        <outlet property="shareToolbarItem" destination="HUy-kv-e3q" id="IWx-x5-fmp"/>
+                        <outlet property="trashToolbarItem" destination="v8m-W4-Wf9" id="5Pv-cQ-60b"/>
                     </connections>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iR0-dA-waV" userLabel="First Responder" sceneMemberID="firstResponder"/>
