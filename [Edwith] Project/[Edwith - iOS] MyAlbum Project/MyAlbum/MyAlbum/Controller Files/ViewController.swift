@@ -123,7 +123,7 @@ extension ViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: IndentifierCell.repersentAlbumCell.rawValue, for: indexPath) as? RepresentAlbumCollectionViewCell else {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: IdentifierCell.repersentAlbumCell.rawValue, for: indexPath) as? RepresentAlbumCollectionViewCell else {
             return UICollectionViewCell()
         }
         

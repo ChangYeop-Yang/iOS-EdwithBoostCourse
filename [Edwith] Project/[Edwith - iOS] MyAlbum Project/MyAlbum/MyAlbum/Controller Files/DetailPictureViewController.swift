@@ -34,18 +34,19 @@ class DetailPictureViewController: UIViewController {
         super.viewWillAppear(animated)
         
         DispatchQueue.main.async { [weak self] in
-            guard let self = self, let asset = self.photoAsset else { return }
+            guard let self = self, let asset = self.photoAsset, let date = asset.creationDate else { return }
             
             if let image = PhotoManager.photoInstance.fetchImagefromPhotoAsset(asset: asset) {
                 self.detailPhotoimageView.image = image
             }
-        
-            let formatter = DateFormatter()
-            formatter.locale = Locale(identifier: "ko_KR")
-            formatter.dateFormat = "yyyy-MM-dd"
             
-            self.title = formatter.string(from: asset.creationDate!)
-            print(formatter.string(from: asset.creationDate!))
+            let formatter = DateFormatter()
+            formatter.dateFormat = "yyyy-MM-dd"
+            self.navigationController?.navigationBar.topItem?.title = formatter.string(from: date)
+
+            // MARK: https://stackoverflow.com/questions/31469172/show-am-pm-in-capitals-in-swift
+            formatter.dateFormat = "a hh:mm:ss"
+            self.navigationController?.navigationItem.title = formatter.string(from: date)
         }
     }
     

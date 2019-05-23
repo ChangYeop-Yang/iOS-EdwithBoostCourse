@@ -15,3 +15,8 @@ internal enum IdentifierStoryboard: String {
 internal enum IdentifierViewController: String {
     case detailPhoto = "DetailPhotoVC"
 }
+
+internal enum IdentifierCell: String {
+    case detailAlbumCell    = "DetailAlbumCell"
+    case repersentAlbumCell = "RepresentAlbumCell"
+}
