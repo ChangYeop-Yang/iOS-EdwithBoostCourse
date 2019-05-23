@@ -24,6 +24,7 @@ class DetailAlbumViewController: UIViewController {
     @IBOutlet private weak var shareToolbarItem:            UIBarButtonItem!
     @IBOutlet private weak var trashToolbarItem:            UIBarButtonItem!
     @IBOutlet private weak var selectRightBarItem:          UIBarButtonItem!
+    @IBOutlet private weak var orderToolbarItem:            UIBarButtonItem!
     
     // MARK: - Object Variables
     private var fetchPHAsset:                       [PHAsset]                                       = []
@@ -121,13 +122,14 @@ class DetailAlbumViewController: UIViewController {
             guard let self = self else { return }
             
             if title == "선택" {
-                sender.title        = "취소"
-                sender.tintColor    = UIColor.red
-                self.isSelectedItem = true
+                sender.title                    = "취소"
+                sender.tintColor                = UIColor.red
+                self.isSelectedItem             = true
+                self.orderToolbarItem.isEnabled = false
             } else {
-                sender.title        = "선택"
-                sender.tintColor    = UIButton(type: .system).tintColor
-                self.isSelectedItem = false
+                sender.title                    = "선택"
+                sender.tintColor                = UIButton(type: .system).tintColor
+                self.isSelectedItem             = false
                 
                 // MARK: '취소' 버튼을 누르면 선택된 사진이 해제되고 초기 상태로 되돌아갑니다.
                 for cell in self.selectedCollectionViewCell {
@@ -135,7 +137,12 @@ class DetailAlbumViewController: UIViewController {
                 }
                 
                 self.selectedCollectionViewCell.removeAll()
-                self.navigationItem.title = self.receiveFetchPhoto?.localizedTitle
+                self.navigationItem.title       = self.receiveFetchPhoto?.localizedTitle
+                
+                // MARK: Set Enabled Toolbar and Navigationbar Buttons
+                self.orderToolbarItem.isEnabled = true
+                self.shareToolbarItem.isEnabled = false
+                self.trashToolbarItem.isEnabled = false
             }
         }
     }

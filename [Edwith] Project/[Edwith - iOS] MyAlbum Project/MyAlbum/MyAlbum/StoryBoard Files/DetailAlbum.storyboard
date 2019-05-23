@@ -90,6 +90,7 @@
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="albumPhotoCollectionView" destination="2he-jy-8Uq" id="8rt-qW-qAa"/>
+                        <outlet property="orderToolbarItem" destination="iO9-OO-eyV" id="D3J-sp-MrX"/>
                         <outlet property="selectRightBarItem" destination="Lfq-0x-0rB" id="OGJ-9x-7MP"/>
                         <outlet property="shareToolbarItem" destination="HUy-kv-e3q" id="IWx-x5-fmp"/>
                         <outlet property="trashToolbarItem" destination="v8m-W4-Wf9" id="5Pv-cQ-60b"/>
