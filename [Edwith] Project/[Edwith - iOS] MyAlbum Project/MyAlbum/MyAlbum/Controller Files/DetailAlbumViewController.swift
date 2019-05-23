@@ -25,10 +25,11 @@ class DetailAlbumViewController: UIViewController {
     @IBOutlet private weak var trashToolbarItem:            UIBarButtonItem!
     
     // MARK: - Object Variables
-    private var fetchPhotos:                    [UIImage]                           = []
-    fileprivate var isSelectedItem:             Bool                                = false
-    fileprivate var selectedCollectionViewCell: Set<DetailAlbumCollectionViewCell>  = []
-    internal var receiveFetchPhoto:             PHAssetCollection?
+    private var fetchPHAsset:                       [PHAsset]                                       = []
+    fileprivate var isSelectedItem:                 Bool                                            = false
+    fileprivate var isImageOrder:                   Bool                                            = false
+    fileprivate var selectedCollectionViewCell:     Set<DetailAlbumCollectionViewCell>              = []
+    internal var receiveFetchPhoto:                 PHAssetCollection?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,6 +51,9 @@ class DetailAlbumViewController: UIViewController {
         // MARK: Set Navigation Title and Toolbar
         self.title = self.receiveFetchPhoto?.localizedTitle
         self.navigationController?.isToolbarHidden = false
+        
+        // MARK: PHPhotoLibraryChangeObserver
+        PHPhotoLibrary.shared().register(self)
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -60,26 +64,27 @@ class DetailAlbumViewController: UIViewController {
     // MARK: - User Method
     private func fetchAlbumPhoto(fetch: PHAssetCollection, order: Bool) {
         
-        self.fetchPhotos.removeAll()
-        self.albumPhotoCollectionView.reloadData()
+        self.fetchPHAsset.removeAll()
         
         let option      = PhotoManager.photoInstance.getImageFetchOptions(sortingKey: "creationDate", ascending: order)
         let fetchAsset  = PHAsset.fetchAssets(in: fetch, options: option)
         
         for index in 0..<fetchAsset.count {
-            PhotoManager.photoInstance.getImageManager().requestImage(for: fetchAsset[index], targetSize: CGSize(width: 150, height: 150), contentMode: .aspectFill, options: nil) { [weak self] image, _ in
-                
-                guard let fetchImage: UIImage = image else { return }
-                self?.fetchPhotos.append(fetchImage)
-            }
+            self.fetchPHAsset.append(fetchAsset[index])
         }
     }
     private func showActivityViewController(cells: Set<DetailAlbumCollectionViewCell>) {
         
-        let images = cells.map { $0.getImages() }
+        var images: [UIImage] = []
+        for cell in cells {
+            guard let image = cell.getImages() else { continue }
+            images.append(image)
+        }
         
-        let activityVC = UIActivityViewController(activityItems: [images], applicationActivities: nil)
-        self.present(activityVC, animated: true, completion: nil)
+        DispatchQueue.main.async { [weak self] in
+            let activityVC = UIActivityViewController(activityItems: images as [Any], applicationActivities: nil)
+            self?.present(activityVC, animated: true, completion: nil)
+        }
         
     }
     private func drawBorderCell(cell: UICollectionViewCell, color: UIColor, width: CGFloat) {
@@ -88,7 +93,29 @@ class DetailAlbumViewController: UIViewController {
             cell.layer.borderWidth = width
             cell.layer.borderColor = color.cgColor
         }
+    }
+    private func fetchImagefromPhotoAsset(asset: PHAsset, size: CGSize) -> UIImage? {
         
+        var image: UIImage?
+        PhotoManager.photoInstance.getImageManager()
+            .requestImage(for: asset, targetSize: size, contentMode: .aspectFill, options: nil) { img, _ in
+                
+                guard let fetchImage: UIImage = img else { return }
+                image = fetchImage
+        }
+        
+        return image
+    }
+    private func deleteAlbumPhoto() {
+        
+        let assets = self.selectedCollectionViewCell.map { $0.getFetchAsset() }
+        self.selectedCollectionViewCell.removeAll()
+        
+        DispatchQueue.main.async {
+            PHPhotoLibrary.shared().performChanges({
+                PHAssetChangeRequest.deleteAssets(assets as NSArray)
+            }, completionHandler: nil)
+        }
     }
     
     // MARK: - Action Method
@@ -104,14 +131,19 @@ class DetailAlbumViewController: UIViewController {
             
             case .order:
                 guard let fetch = self.receiveFetchPhoto, let title = sender.title else { return }
-            
-                let order: Bool = (title == "최신순" ? true : false)
-                sender.title    = (title == "최신순" ? "과거순" : "최신순")
                 
-                fetchAlbumPhoto(fetch: fetch, order: order)
-                self.albumPhotoCollectionView.reloadData()
+                sender.title      = (title == "최신순" ? "과거순" : "최신순")
+                self.isImageOrder = !self.isImageOrder
+                
+                OperationQueue.main.addOperation { [weak self] in
+                    guard let self = self else { return }
+                    
+                    self.fetchAlbumPhoto(fetch: fetch, order: self.isImageOrder)
+                    self.albumPhotoCollectionView.reloadData()
+                }
             
-            case .trash: break
+            case .trash:
+                deleteAlbumPhoto()
             
             case .select:
                 guard let title = sender.title else { return }
@@ -142,7 +174,7 @@ class DetailAlbumViewController: UIViewController {
 extension DetailAlbumViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.fetchPhotos.count
+        return self.fetchPHAsset.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -151,7 +183,10 @@ extension DetailAlbumViewController: UICollectionViewDataSource {
             return UICollectionViewCell()
         }
         
-        cell.setImageView(image: self.fetchPhotos[indexPath.row])
+        if let image = fetchImagefromPhotoAsset(asset: self.fetchPHAsset[indexPath.row], size: CGSize(width: 150, height: 150)) {
+            cell.setImageView(image: image)
+            cell.setFetchAsset(asset: self.fetchPHAsset[indexPath.row])
+        }
         
         return cell
     }
@@ -185,7 +220,6 @@ extension DetailAlbumViewController: UICollectionViewDelegate {
             self.shareToolbarItem.isEnabled = isEnabled
             self.trashToolbarItem.isEnabled = isEnabled
         }
-        
     }
     
 }
@@ -207,8 +241,13 @@ extension DetailAlbumViewController: UICollectionViewDelegateFlowLayout {
 extension DetailAlbumViewController: PHPhotoLibraryChangeObserver {
     
     func photoLibraryDidChange(_ changeInstance: PHChange) {
+        
         OperationQueue.main.addOperation { [weak self] in
             
+            guard let self = self, let fetch = self.receiveFetchPhoto else { return }
+            
+            self.fetchAlbumPhoto(fetch: fetch, order: self.isImageOrder)
+            self.albumPhotoCollectionView.reloadData()
         }
     }
 }
