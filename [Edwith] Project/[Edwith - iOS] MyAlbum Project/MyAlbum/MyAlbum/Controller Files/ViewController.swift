@@ -128,14 +128,13 @@ extension ViewController: UICollectionViewDataSource {
         }
         
         // MARK: Get Represent Album Image
-        let fetchResult = self.fetchAlbumResult[indexPath.row].asset
-        
-        if let representImage = fetchResult.firstObject {
-            PhotoManager.photoInstance.getImageManager()
-                .requestImage(for: representImage, targetSize: cell.getImageViewSize(), contentMode: .aspectFill, options: nil) { [weak self] image, _ in
-                
-                guard let photoAsset = image, let photoTitle = self?.fetchAlbumResult[indexPath.row].title else { return }
-                cell.setRepresentPhotoOutlets(image: photoAsset, title: photoTitle, count: fetchResult.count)
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            
+            let fetchResult = self.fetchAlbumResult[indexPath.row].asset
+            if let asset = fetchResult.firstObject, let image = PhotoManager.photoInstance.fetchImagefromPhotoAsset(asset: asset) {
+                let title = self.fetchAlbumResult[indexPath.row].title
+                cell.setRepresentPhotoOutlets(image: image, title: title, count: fetchResult.count)
             }
         }
         

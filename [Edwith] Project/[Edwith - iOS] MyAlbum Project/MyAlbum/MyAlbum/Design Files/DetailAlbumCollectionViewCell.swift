@@ -20,7 +20,11 @@ class DetailAlbumCollectionViewCell: UICollectionViewCell {
     
     // MARK: - User Method
     internal func setImageView(image: UIImage) {
-        self.detailAlbumImageView.image = image
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            
+            self.detailAlbumImageView.image = image
+        }
     }
     internal func setFetchAsset(asset: PHAsset) {
         self.fetchAsset = asset
@@ -30,9 +34,6 @@ class DetailAlbumCollectionViewCell: UICollectionViewCell {
     }
     internal func getFetchAsset() -> PHAsset? {
         return self.fetchAsset
-    }
-    internal func getImageViewSize() -> CGSize {
-        return self.detailAlbumImageView.frame.size
     }
     internal func getFrontCoverView() -> UIView {
         return self.frontCoverView

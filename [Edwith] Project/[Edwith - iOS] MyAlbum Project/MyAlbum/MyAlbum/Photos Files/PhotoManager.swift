@@ -52,4 +52,16 @@ class PhotoManager: NSObject {
         
         return isAurhorization
     }
+    internal func fetchImagefromPhotoAsset(asset: PHAsset) -> UIImage? {
+        
+        var image: UIImage?
+        let size: CGSize = CGSize(width: asset.pixelWidth, height: asset.pixelHeight)
+        
+        PhotoManager.photoInstance.getImageManager()
+            .requestImage(for: asset, targetSize: size, contentMode: .aspectFill, options: nil) { img, _ in
+                image = img ?? nil
+        }
+        
+        return image
+    }
 }

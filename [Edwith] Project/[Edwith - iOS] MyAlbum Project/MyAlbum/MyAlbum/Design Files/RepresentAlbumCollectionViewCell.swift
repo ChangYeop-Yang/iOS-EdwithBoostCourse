@@ -21,7 +21,4 @@ class RepresentAlbumCollectionViewCell: UICollectionViewCell {
             representPhotoTitleLabel.text = title
             representPhotoCountLabel.text = String.init(format: "%d", count)
     }
-    internal func getImageViewSize() -> CGSize {
-        return CGSize(width: self.representPhotoImageView.frame.width, height: self.representPhotoImageView.frame.height)
-    }
 }

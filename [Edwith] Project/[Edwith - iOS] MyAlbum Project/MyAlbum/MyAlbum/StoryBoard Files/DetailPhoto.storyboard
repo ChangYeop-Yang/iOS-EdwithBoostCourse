@@ -10,25 +10,56 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--Detail Picture View Controller-->
         <scene sceneID="dOw-kn-Jmn">
             <objects>
-                <viewController id="hvw-zf-b4o" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="DetailPhotoVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="hvw-zf-b4o" customClass="DetailPictureViewController" customModule="MyAlbum" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Fmm-PA-uCD">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FQS-iP-mfI">
+                                <rect key="frame" x="0.0" y="88" width="414" height="725"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="0Rl-Xs-Gw5">
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="725"/>
+                                    </imageView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="0Rl-Xs-Gw5" firstAttribute="height" secondItem="FQS-iP-mfI" secondAttribute="height" id="0Gy-OY-ZHY"/>
+                                    <constraint firstItem="0Rl-Xs-Gw5" firstAttribute="leading" secondItem="FQS-iP-mfI" secondAttribute="leading" id="Pvq-9q-VJg"/>
+                                    <constraint firstAttribute="bottom" secondItem="0Rl-Xs-Gw5" secondAttribute="bottom" id="Wfs-zC-eUj"/>
+                                    <constraint firstItem="0Rl-Xs-Gw5" firstAttribute="width" secondItem="FQS-iP-mfI" secondAttribute="width" id="Wpk-ku-HaJ"/>
+                                    <constraint firstAttribute="trailing" secondItem="0Rl-Xs-Gw5" secondAttribute="trailing" id="eXy-Sk-2gb"/>
+                                    <constraint firstItem="0Rl-Xs-Gw5" firstAttribute="top" secondItem="FQS-iP-mfI" secondAttribute="top" id="epV-7P-A5c"/>
+                                </constraints>
+                            </scrollView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="FQS-iP-mfI" firstAttribute="bottom" secondItem="gQy-BN-1r8" secondAttribute="bottom" id="0i4-3Q-vap"/>
+                            <constraint firstAttribute="trailing" secondItem="FQS-iP-mfI" secondAttribute="trailing" id="28H-xI-86q"/>
+                            <constraint firstItem="FQS-iP-mfI" firstAttribute="top" secondItem="gQy-BN-1r8" secondAttribute="top" id="A9R-ec-dWr"/>
+                            <constraint firstItem="FQS-iP-mfI" firstAttribute="leading" secondItem="Fmm-PA-uCD" secondAttribute="leading" id="EWJ-dj-Jue"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="gQy-BN-1r8"/>
                     </view>
                     <toolbarItems>
-                        <barButtonItem systemItem="action" id="LIq-v7-xIs"/>
+                        <barButtonItem tag="100" systemItem="action" id="LIq-v7-xIs">
+                            <connections>
+                                <action selector="actionToolbarItems:" destination="hvw-zf-b4o" id="hqF-50-D6h"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="NG4-gP-pTy"/>
-                        <barButtonItem title="🖤" id="sIJ-e8-55q"/>
+                        <barButtonItem tag="200" title="🖤" id="sIJ-e8-55q"/>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="cOZ-Ti-QC7"/>
-                        <barButtonItem systemItem="trash" id="pUl-e7-DjJ"/>
+                        <barButtonItem tag="300" systemItem="trash" id="pUl-e7-DjJ"/>
                     </toolbarItems>
                     <navigationItem key="navigationItem" id="fSa-Dw-mct"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="detailPhotoimageView" destination="0Rl-Xs-Gw5" id="NMD-r6-PIg"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Kjy-4n-XNZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -37,7 +68,7 @@
         <!--Navigation Controller-->
         <scene sceneID="zHT-8c-I0J">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" toolbarHidden="NO" id="ARN-lF-PvE" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" toolbarHidden="NO" id="ARN-lF-PvE" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="SUE-Us-mxi">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>

@@ -57,11 +57,6 @@ class DetailAlbumViewController: UIViewController {
         // MARK: PHPhotoLibraryChangeObserver
         PHPhotoLibrary.shared().register(self)
     }
-
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
     
     // MARK: - User Method
     private func fetchAlbumPhoto(fetch: PHAssetCollection, order: Bool) {
@@ -82,18 +77,6 @@ class DetailAlbumViewController: UIViewController {
             // MARK: borderColor == White -> Clear / borderColor == Gray -> LightGray
             cell.getFrontCoverView().backgroundColor = (color == UIColor.white ? UIColor.clear : UIColor.init(white: 0.5, alpha: 0.3))
         }
-    }
-    private func fetchImagefromPhotoAsset(asset: PHAsset, size: CGSize) -> UIImage? {
-        
-        var image: UIImage?
-        PhotoManager.photoInstance.getImageManager()
-            .requestImage(for: asset, targetSize: size, contentMode: .aspectFill, options: nil) { img, _ in
-                
-                guard let fetchImage: UIImage = img else { return }
-                image = fetchImage
-        }
-        
-        return image
     }
     private func deleteAlbumPhoto(sender: UIBarButtonItem) {
         
@@ -180,6 +163,27 @@ class DetailAlbumViewController: UIViewController {
             }
         }
     }
+    private func showStoryboard(indexPath: IndexPath, group: DispatchGroup) {
+        
+        var controller: UIViewController?
+        
+        group.enter()
+        DispatchQueue.global(qos: .userInitiated).async(group: group) {
+            // MARK: https://stackoverflow.com/questions/39929592/how-to-push-and-present-to-uiviewcontroller-programmatically-without-segue-in-io
+            let storyboard = UIStoryboard(name: IdentifierStoryboard.detailPhoto.rawValue, bundle: nil)
+            controller = storyboard.instantiateViewController(withIdentifier: IdentifierViewController.detailPhoto.rawValue)
+            group.leave()
+        }
+        
+        group.notify(queue: .main) { [weak self] in
+            guard let self = self, let detailPhotoVC = controller as? DetailPictureViewController else {
+                return
+            }
+            
+            detailPhotoVC.photoAsset = self.fetchPHAsset[indexPath.row]
+            self.navigationController?.pushViewController(detailPhotoVC, animated: true)
+        }
+    }
     
     // MARK: - Action Method
     @IBAction func actionToolBarItem(_ sender: UIBarButtonItem) {
@@ -215,7 +219,7 @@ extension DetailAlbumViewController: UICollectionViewDataSource {
             return UICollectionViewCell()
         }
         
-        if let image = fetchImagefromPhotoAsset(asset: self.fetchPHAsset[indexPath.row], size: cell.getImageViewSize()) {
+        if let image = PhotoManager.photoInstance.fetchImagefromPhotoAsset(asset: self.fetchPHAsset[indexPath.row]) {
             cell.setImageView(image: image)
             cell.setFetchAsset(asset: self.fetchPHAsset[indexPath.row])
         }
@@ -251,9 +255,11 @@ extension DetailAlbumViewController: UICollectionViewDelegate {
             let isEnabled = self.selectedCollectionViewCell.count > 0 ? true : false
             self.shareToolbarItem.isEnabled = isEnabled
             self.trashToolbarItem.isEnabled = isEnabled
+        } else {
+            // MARK: 선택 모드가 아닌 경우 상세한 사진으로 이동한다.
+            showStoryboard(indexPath: indexPath, group: DispatchGroup())
         }
     }
-    
 }
 
 // MARK: - Extension UICollectionView Delegate FlowLayout
