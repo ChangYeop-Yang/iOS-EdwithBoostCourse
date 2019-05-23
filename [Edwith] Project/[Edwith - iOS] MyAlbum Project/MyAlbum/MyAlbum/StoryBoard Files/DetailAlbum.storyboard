@@ -34,17 +34,25 @@
                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MG0-s6-oY1" customClass="RoundImageView" customModule="MyAlbum" customModuleProvider="target">
                                             <rect key="frame" x="0.0" y="0.0" width="150" height="150"/>
                                         </imageView>
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1Ad-gD-nqK">
+                                            <rect key="frame" x="0.0" y="0.0" width="150" height="150"/>
+                                        </view>
                                     </subviews>
                                 </view>
                                 <constraints>
-                                    <constraint firstItem="MG0-s6-oY1" firstAttribute="leading" secondItem="31c-f7-68h" secondAttribute="leading" id="D9T-vE-kXy"/>
-                                    <constraint firstAttribute="bottom" secondItem="MG0-s6-oY1" secondAttribute="bottom" id="HVw-Rd-RzN"/>
-                                    <constraint firstItem="MG0-s6-oY1" firstAttribute="top" secondItem="31c-f7-68h" secondAttribute="top" id="r7H-AK-Ibs"/>
-                                    <constraint firstAttribute="trailing" secondItem="MG0-s6-oY1" secondAttribute="trailing" id="rQK-eS-wJT"/>
+                                    <constraint firstAttribute="bottom" secondItem="MG0-s6-oY1" secondAttribute="bottom" id="7kp-mr-O0x"/>
+                                    <constraint firstAttribute="trailing" secondItem="1Ad-gD-nqK" secondAttribute="trailing" id="9y0-Ie-a8A"/>
+                                    <constraint firstAttribute="trailing" secondItem="MG0-s6-oY1" secondAttribute="trailing" id="BfY-Rf-90h"/>
+                                    <constraint firstItem="MG0-s6-oY1" firstAttribute="leading" secondItem="31c-f7-68h" secondAttribute="leading" id="Ux1-HT-BFs"/>
+                                    <constraint firstItem="1Ad-gD-nqK" firstAttribute="leading" secondItem="31c-f7-68h" secondAttribute="leading" id="jvV-7b-fcq"/>
+                                    <constraint firstItem="1Ad-gD-nqK" firstAttribute="top" secondItem="31c-f7-68h" secondAttribute="top" id="l8i-7z-75A"/>
+                                    <constraint firstAttribute="bottom" secondItem="1Ad-gD-nqK" secondAttribute="bottom" id="lOf-yf-NQG"/>
+                                    <constraint firstItem="MG0-s6-oY1" firstAttribute="top" secondItem="31c-f7-68h" secondAttribute="top" id="qEA-ax-2h7"/>
                                 </constraints>
                                 <size key="customSize" width="150" height="150"/>
                                 <connections>
                                     <outlet property="detailAlbumImageView" destination="MG0-s6-oY1" id="BcY-Fx-v4P"/>
+                                    <outlet property="frontCoverView" destination="1Ad-gD-nqK" id="uiV-Sd-eaq"/>
                                 </connections>
                             </collectionViewCell>
                         </cells>
@@ -82,6 +90,7 @@
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="albumPhotoCollectionView" destination="2he-jy-8Uq" id="8rt-qW-qAa"/>
+                        <outlet property="selectRightBarItem" destination="Lfq-0x-0rB" id="OGJ-9x-7MP"/>
                         <outlet property="shareToolbarItem" destination="HUy-kv-e3q" id="IWx-x5-fmp"/>
                         <outlet property="trashToolbarItem" destination="v8m-W4-Wf9" id="5Pv-cQ-60b"/>
                     </connections>

@@ -12,7 +12,8 @@ import Photos
 class DetailAlbumCollectionViewCell: UICollectionViewCell {
     
     // MARK: - Outlet Variables
-    @IBOutlet private weak var detailAlbumImageView: RoundImageView!
+    @IBOutlet private weak var detailAlbumImageView:    RoundImageView!
+    @IBOutlet private weak var frontCoverView:          UIView!
     
     // MARK: - Variables
     private var fetchAsset: PHAsset?
@@ -29,5 +30,11 @@ class DetailAlbumCollectionViewCell: UICollectionViewCell {
     }
     internal func getFetchAsset() -> PHAsset? {
         return self.fetchAsset
+    }
+    internal func getImageViewSize() -> CGSize {
+        return self.detailAlbumImageView.frame.size
+    }
+    internal func getFrontCoverView() -> UIView {
+        return self.frontCoverView
     }
 }

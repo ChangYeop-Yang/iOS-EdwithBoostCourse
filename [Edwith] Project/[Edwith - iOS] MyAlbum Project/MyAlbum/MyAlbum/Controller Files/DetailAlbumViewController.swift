@@ -23,6 +23,7 @@ class DetailAlbumViewController: UIViewController {
     @IBOutlet private weak var albumPhotoCollectionView:    UICollectionView!
     @IBOutlet private weak var shareToolbarItem:            UIBarButtonItem!
     @IBOutlet private weak var trashToolbarItem:            UIBarButtonItem!
+    @IBOutlet private weak var selectRightBarItem:          UIBarButtonItem!
     
     // MARK: - Object Variables
     private var fetchPHAsset:                       [PHAsset]                                       = []
@@ -73,25 +74,12 @@ class DetailAlbumViewController: UIViewController {
             self.fetchPHAsset.append(fetchAsset[index])
         }
     }
-    private func showActivityViewController(cells: Set<DetailAlbumCollectionViewCell>) {
-        
-        var images: [UIImage] = []
-        for cell in cells {
-            guard let image = cell.getImages() else { continue }
-            images.append(image)
-        }
-        
-        DispatchQueue.main.async { [weak self] in
-            let activityVC = UIActivityViewController(activityItems: images as [Any], applicationActivities: nil)
-            self?.present(activityVC, animated: true, completion: nil)
-        }
-        
-    }
-    private func drawBorderCell(cell: UICollectionViewCell, color: UIColor, width: CGFloat) {
-        
+    private func drawBorderCell(cell: DetailAlbumCollectionViewCell, color: UIColor, width: CGFloat) {
         DispatchQueue.main.async {
             cell.layer.borderWidth = width
             cell.layer.borderColor = color.cgColor
+            // MARK: borderColor == White -> Clear / borderColor == Gray -> LightGray
+            cell.getFrontCoverView().backgroundColor = (color == UIColor.white ? UIColor.clear : UIColor.init(white: 0.5, alpha: 0.3))
         }
     }
     private func fetchImagefromPhotoAsset(asset: PHAsset, size: CGSize) -> UIImage? {
@@ -106,15 +94,83 @@ class DetailAlbumViewController: UIViewController {
         
         return image
     }
-    private func deleteAlbumPhoto() {
+    private func deleteAlbumPhoto(sender: UIBarButtonItem) {
         
         let assets = self.selectedCollectionViewCell.map { $0.getFetchAsset() }
-        self.selectedCollectionViewCell.removeAll()
         
-        DispatchQueue.main.async {
-            PHPhotoLibrary.shared().performChanges({
-                PHAssetChangeRequest.deleteAssets(assets as NSArray)
-            }, completionHandler: nil)
+        PHPhotoLibrary.shared().performChanges({
+            PHAssetChangeRequest.deleteAssets(assets as NSArray)
+        }, completionHandler: { [weak self] _, _ in
+            
+            guard let self = self else { return }
+            
+            self.selectAlbumPhoto(sender: sender)
+            
+            DispatchQueue.main.async { [weak self] in
+                self?.shareToolbarItem.isEnabled = false
+                self?.trashToolbarItem.isEnabled = false
+            }
+        })
+    }
+    private func selectAlbumPhoto(sender: UIBarButtonItem) {
+        
+        guard let title = sender.title else { return }
+        
+        // MARK: https://stackoverflow.com/questions/19032940/how-can-i-get-the-ios-7-default-blue-color-programmatically/19033326
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            
+            if title == "선택" {
+                sender.title        = "취소"
+                sender.tintColor    = UIColor.red
+                self.isSelectedItem = true
+            } else {
+                sender.title        = "선택"
+                sender.tintColor    = UIButton(type: .system).tintColor
+                self.isSelectedItem = false
+                
+                // MARK: '취소' 버튼을 누르면 선택된 사진이 해제되고 초기 상태로 되돌아갑니다.
+                for cell in self.selectedCollectionViewCell {
+                    self.drawBorderCell(cell: cell, color: UIColor.white, width: 0)
+                }
+                
+                self.selectedCollectionViewCell.removeAll()
+                self.navigationItem.title = self.receiveFetchPhoto?.localizedTitle
+            }
+        }
+    }
+    private func orderAlbumPhoto(sender: UIBarButtonItem) {
+        
+        guard let fetch = self.receiveFetchPhoto, let title = sender.title else { return }
+        
+        sender.title      = (title == "최신순" ? "과거순" : "최신순")
+        self.isImageOrder = !self.isImageOrder
+        
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            
+            self.fetchAlbumPhoto(fetch: fetch, order: self.isImageOrder)
+            self.albumPhotoCollectionView.reloadData()
+        }
+    }
+    private func shareAlbumPhoto() {
+        
+        if #available(iOS 6, *) {
+            let images = self.selectedCollectionViewCell.map { $0.getImages() }
+            DispatchQueue.main.async { [weak self] in
+                let activityVC = UIActivityViewController(activityItems: images as [Any], applicationActivities: nil)
+                self?.present(activityVC, animated: true, completion: nil)
+            }
+        } else {
+            DispatchQueue.main.async { [weak self] in
+                
+                let alertVC = UIAlertController(title: "Error, Not Support iOS Version", message: "iOS 6.0 이하 버전은 해당 기능을 사용할 수 없습니다.", preferredStyle: .alert)
+                
+                let confirm = UIAlertAction(title: "확인", style: .default, handler: nil)
+                alertVC.addAction(confirm)
+                
+                self?.present(alertVC, animated: true, completion: nil)
+            }
         }
     }
     
@@ -125,47 +181,16 @@ class DetailAlbumViewController: UIViewController {
         
         switch toolbarTag {
             case .share:
-                if #available(iOS 6, *) {
-                    showActivityViewController(cells: self.selectedCollectionViewCell)
-                }
+                shareAlbumPhoto()
             
             case .order:
-                guard let fetch = self.receiveFetchPhoto, let title = sender.title else { return }
-                
-                sender.title      = (title == "최신순" ? "과거순" : "최신순")
-                self.isImageOrder = !self.isImageOrder
-                
-                OperationQueue.main.addOperation { [weak self] in
-                    guard let self = self else { return }
-                    
-                    self.fetchAlbumPhoto(fetch: fetch, order: self.isImageOrder)
-                    self.albumPhotoCollectionView.reloadData()
-                }
+                orderAlbumPhoto(sender: sender)
             
             case .trash:
-                deleteAlbumPhoto()
+                deleteAlbumPhoto(sender: self.selectRightBarItem)
             
             case .select:
-                guard let title = sender.title else { return }
-            
-                // MARK: https://stackoverflow.com/questions/19032940/how-can-i-get-the-ios-7-default-blue-color-programmatically/19033326
-                if title == "선택" {
-                    sender.title        = "취소"
-                    sender.tintColor    = UIColor.red
-                    self.isSelectedItem = true
-                } else {
-                    sender.title        = "선택"
-                    sender.tintColor    = UIButton(type: .system).tintColor
-                    self.isSelectedItem = false
-                    
-                    // MARK: '취소' 버튼을 누르면 선택된 사진이 해제되고 초기 상태로 되돌아갑니다.
-                    for cell in self.selectedCollectionViewCell {
-                        drawBorderCell(cell: cell, color: UIColor.white, width: 0)
-                    }
-                    
-                    self.selectedCollectionViewCell.removeAll()
-                    self.navigationItem.title = self.receiveFetchPhoto?.localizedTitle
-                }
+                selectAlbumPhoto(sender: sender)
         }
     }
 }
@@ -183,7 +208,7 @@ extension DetailAlbumViewController: UICollectionViewDataSource {
             return UICollectionViewCell()
         }
         
-        if let image = fetchImagefromPhotoAsset(asset: self.fetchPHAsset[indexPath.row], size: CGSize(width: 150, height: 150)) {
+        if let image = fetchImagefromPhotoAsset(asset: self.fetchPHAsset[indexPath.row], size: cell.getImageViewSize()) {
             cell.setImageView(image: image)
             cell.setFetchAsset(asset: self.fetchPHAsset[indexPath.row])
         }
