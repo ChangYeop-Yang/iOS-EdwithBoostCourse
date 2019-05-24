@@ -219,7 +219,7 @@ extension DetailAlbumViewController: UICollectionViewDataSource {
             return UICollectionViewCell()
         }
         
-        if let image = PhotoManager.photoInstance.fetchImagefromPhotoAsset(asset: self.fetchPHAsset[indexPath.row]) {
+        if let image = PhotoManager.photoInstance.fetchImagefromPhotoAsset(asset: self.fetchPHAsset[indexPath.row], mode: .aspectFit) {
             cell.setImageView(image: image)
             cell.setFetchAsset(asset: self.fetchPHAsset[indexPath.row])
         }

@@ -132,7 +132,7 @@ extension ViewController: UICollectionViewDataSource {
             guard let self = self else { return }
             
             let fetchResult = self.fetchAlbumResult[indexPath.row].asset
-            if let asset = fetchResult.firstObject, let image = PhotoManager.photoInstance.fetchImagefromPhotoAsset(asset: asset) {
+            if let asset = fetchResult.firstObject, let image = PhotoManager.photoInstance.fetchImagefromPhotoAsset(asset: asset, mode: .aspectFit) {
                 let title = self.fetchAlbumResult[indexPath.row].title
                 cell.setRepresentPhotoOutlets(image: image, title: title, count: fetchResult.count)
             }
