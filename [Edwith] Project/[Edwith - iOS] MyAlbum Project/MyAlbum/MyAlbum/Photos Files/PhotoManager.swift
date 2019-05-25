@@ -46,10 +46,6 @@ class PhotoManager: NSObject {
             }
         }
         
-        //let photoState      = PHPhotoLibrary.authorizationStatus()
-        
-        
-        
         return isAurhorization
     }
     internal func fetchImagefromPhotoAsset(asset: PHAsset, mode: PHImageContentMode) -> UIImage? {

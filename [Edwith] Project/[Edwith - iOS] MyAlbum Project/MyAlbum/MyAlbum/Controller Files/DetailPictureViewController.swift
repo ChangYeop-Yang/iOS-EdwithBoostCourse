@@ -50,7 +50,7 @@ class DetailPictureViewController: UIViewController {
         setNavigationDate(current: currentDate)
         changeFavoriteTitle(isFavorite: asset.isFavorite)
         
-        self.detailPhotoimageView.image = PhotoManager.photoInstance.fetchImagefromPhotoAsset(asset: asset, mode: .aspectFill)
+        self.detailPhotoimageView.image = PhotoManager.photoInstance.fetchImagefromPhotoAsset(asset: asset, mode: .aspectFit)
     }
     
     // MARK: - User Method
@@ -121,10 +121,9 @@ class DetailPictureViewController: UIViewController {
            
             let request = PHAssetChangeRequest(for: asset)
             request.isFavorite = !asset.isFavorite
-            }, completionHandler: { success, error in
+            }, completionHandler: { success, _ in
                 
                 guard success, let asset = self.photoAsset else {
-                    print(error?.localizedDescription as Any)
                     return
                 }
                 
@@ -204,6 +203,7 @@ extension DetailPictureViewController: PHPhotoLibraryChangeObserver {
         
         guard let asset = self.photoAsset, let changeAsset = changeInstance.changeDetails(for: asset)?.objectAfterChanges else { return }
         // MARK: https://medium.com/@macka/observing-photo-album-changes-ios-swift-23a4c2e741ff
+        self.photoAsset = changeAsset
         self.changeFavoriteTitle(isFavorite: changeAsset.isFavorite)
     }
 }

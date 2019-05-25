@@ -47,7 +47,7 @@ class DetailAlbumViewController: UIViewController {
         
         // MARK: Fetch Album Photos.
         if let asset = self.receiveFetchPhoto {
-            fetchAlbumPhoto(fetch: asset, order: false)
+            fetchAlbumPhoto(fetch: asset, order: self.isImageOrder)
         }
         
         // MARK: Set Navigation Title and Toolbar
@@ -105,10 +105,13 @@ class DetailAlbumViewController: UIViewController {
             guard let self = self else { return }
             
             if title == "선택" {
+                self.title                      = "항목 선택"
                 sender.title                    = "취소"
                 sender.tintColor                = UIColor.red
+                
                 self.isSelectedItem             = true
                 self.orderToolbarItem.isEnabled = false
+                self.navigationItem.setHidesBackButton(true, animated: true)
             } else {
                 sender.title                    = "선택"
                 sender.tintColor                = UIButton(type: .system).tintColor
@@ -126,6 +129,7 @@ class DetailAlbumViewController: UIViewController {
                 self.orderToolbarItem.isEnabled = true
                 self.shareToolbarItem.isEnabled = false
                 self.trashToolbarItem.isEnabled = false
+                self.navigationItem.setHidesBackButton(false, animated: true)
             }
         }
     }
@@ -144,7 +148,7 @@ class DetailAlbumViewController: UIViewController {
         }
     }
     private func shareAlbumPhoto() {
-        
+        // MARK: https://developer.apple.com/documentation/uikit/uiactivityviewcontroller
         if #available(iOS 6, *) {
             let images = self.selectedCollectionViewCell.map { $0.getImages() }
             DispatchQueue.main.async { [weak self] in

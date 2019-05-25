@@ -58,14 +58,26 @@ class ViewController: UIViewController {
         
         // MARK: Delete All Objects
         self.fetchAlbumResult.removeAll()
+        self.fetchCollectionResult.removeAll()
         
         // MARK: Camera Album 사진 콜렉션을 가져온다.
-        let fetchOption = PhotoManager.photoInstance.getImageFetchOptions(sortingKey: "creationDate", ascending: true)
-        let cameraRoll: PHFetchResult<PHAssetCollection> = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .any, options: nil)
+        let fetchOption = PhotoManager.photoInstance.getImageFetchOptions(sortingKey: "creationDate", ascending: false)
         
-        cameraRoll.enumerateObjects { [weak self] collection, _, _ in
+        let smartAlbumCollection = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .any, options: nil)
+        let userAlbumCollection = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .any, options: nil)
+        
+        enumeratePhotoAsset(collection: userAlbumCollection, options: fetchOption)
+        enumeratePhotoAsset(collection: smartAlbumCollection, options: fetchOption)
+
+        OperationQueue.main.addOperation { [weak self] in
+            self?.userAlbumCollectionView.reloadData()
+        }
+    }
+    private func enumeratePhotoAsset(collection: PHFetchResult<PHAssetCollection>, options: PHFetchOptions) {
+        
+        collection.enumerateObjects { [weak self] collection, _, _ in
             
-            let photoInAlbum = PHAsset.fetchAssets(in: collection, options: fetchOption)
+            let photoInAlbum = PHAsset.fetchAssets(in: collection, options: options)
             
             // MARK: Album에 포함 된 사진의 수가 1장 이상인 경우에만 추가한다.
             if photoInAlbum.count > 0 {
@@ -75,11 +87,6 @@ class ViewController: UIViewController {
                     self?.fetchCollectionResult.append(collection)
                 }
             }
-            
-        }
-        
-        OperationQueue.main.addOperation { [weak self] in
-            self?.userAlbumCollectionView.reloadData()
         }
     }
     private func askPhotosAuthorization() {
@@ -132,7 +139,7 @@ extension ViewController: UICollectionViewDataSource {
             guard let self = self else { return }
             
             let fetchResult = self.fetchAlbumResult[indexPath.row].asset
-            if let asset = fetchResult.firstObject, let image = PhotoManager.photoInstance.fetchImagefromPhotoAsset(asset: asset, mode: .aspectFit) {
+            if let asset = fetchResult.firstObject, let image = PhotoManager.photoInstance.fetchImagefromPhotoAsset(asset: asset, mode: .aspectFill) {
                 let title = self.fetchAlbumResult[indexPath.row].title
                 cell.setRepresentPhotoOutlets(image: image, title: title, count: fetchResult.count)
             }
