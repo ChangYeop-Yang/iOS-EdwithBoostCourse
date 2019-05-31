@@ -42,4 +42,4 @@
 
 ###### :rocket: [Project Description URL](https://www.edwith.org/boostcourse-ios/project/24/content/22)
 
-###### :rocket: [Project Source Code URL]()
+###### :rocket: [Project Source Code URL](https://github.com/ChangYeop-Yang/IOS-EdwithBoostCourse/tree/master/%5BEdwith%5D%20Project/%5BEdwith%20-%20iOS%5D%20BoxOffice%20Project)
