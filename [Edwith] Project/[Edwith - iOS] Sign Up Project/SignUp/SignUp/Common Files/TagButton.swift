@@ -9,7 +9,7 @@
 import Foundation
 
 internal enum TagButton: Int {
-    case Cancel = 100
-    case Privious = 200
-    case Sign = 300
+    case Cancel     = 100
+    case Privious   = 200
+    case Sign       = 300
 }

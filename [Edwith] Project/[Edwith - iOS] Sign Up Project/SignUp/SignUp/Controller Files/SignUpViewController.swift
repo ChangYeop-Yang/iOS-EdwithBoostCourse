@@ -19,7 +19,7 @@ class SignUpViewController: UIViewController {
     @IBOutlet private weak var userImage:           UIImageView!
     
     // MARK: - Variables
-    lazy private var information = UserInformation.User()
+    private var information = UserInformation.User()
     fileprivate var isNextStep: (first: Bool, second: Bool, three: Bool, four: Bool) = (false, false, false, false)
     
     override func viewDidLoad() {
@@ -37,12 +37,12 @@ class SignUpViewController: UIViewController {
     // MARK: - User Methods
     private func setupDelegate() {
         // MARK: UITextField Delegate
-        self.userID.delegate = self
-        self.userTopPassword.delegate = self
-        self.userBottomPassword.delegate = self
+        self.userID.delegate                = self
+        self.userTopPassword.delegate       = self
+        self.userBottomPassword.delegate    = self
         
         // MARK: UITextView Delegate
-        self.contents.delegate = self
+        self.contents.delegate              = self
     }
     private func enableSendButton() {
         self.sendBT.isEnabled = (self.isNextStep.first && self.isNextStep.second && self.isNextStep.three && self.isNextStep.four)
@@ -51,11 +51,13 @@ class SignUpViewController: UIViewController {
     // MARK: - Gesture Recognizer Methods
     @objc func showImagePickerController(sender: UIGestureRecognizer) {
         
-        DispatchQueue.main.async { [unowned self] in
-            let imagePicker = UIImagePickerController()
-            imagePicker.sourceType = .photoLibrary
-            imagePicker.allowsEditing = true
-            imagePicker.delegate = self
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            
+            let imagePicker             = UIImagePickerController()
+            imagePicker.sourceType      = .photoLibrary
+            imagePicker.allowsEditing   = true
+            imagePicker.delegate        = self
             
             self.present(imagePicker, animated: true, completion: nil)
         }
@@ -74,7 +76,9 @@ class SignUpViewController: UIViewController {
         }
         
         // MARK: String
-        if let name = self.information.userName, let password = self.information.userPassword, let comments = self.information.userComments {
+        if let name = self.information.userName
+            , let password = self.information.userPassword
+            , let comments = self.information.userComments {
             UserInformation.userInstance.setUserName(name)
             UserInformation.userInstance.setPassword(password)
             UserInformation.userInstance.setComments(comments)
@@ -144,9 +148,9 @@ extension SignUpViewController: UIImagePickerControllerDelegate, UINavigationCon
             return
         }
         
-        self.isNextStep.four = true
-        self.userImage.image = image
-        self.information.userImage = image
+        self.isNextStep.four        = true
+        self.userImage.image        = image
+        self.information.userImage  = image
         
         enableSendButton()
         picker.dismiss(animated: true, completion: nil)

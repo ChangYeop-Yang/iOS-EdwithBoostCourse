@@ -17,8 +17,8 @@ class DetailSignUpViewController: UIViewController {
     @IBOutlet private weak var userTel:         UITextField!
     
     // MARK: - Variables
-    private var dateFormatter = DateFormatter()
-    private var isEnabled: (first: Bool, second: Bool) = (false, false)
+    private var dateFormatter                           = DateFormatter()
+    private var isEnabled: (first: Bool, second: Bool)  = (false, false)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,9 +43,9 @@ class DetailSignUpViewController: UIViewController {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             
-            self.userTel.text = tel
-            self.datePicker.date = date
-            self.userDate.text  = self.dateFormatter.string(from: date)
+            self.userTel.text       = tel
+            self.datePicker.date    = date
+            self.userDate.text      = self.dateFormatter.string(from: date)
         }
     }
     

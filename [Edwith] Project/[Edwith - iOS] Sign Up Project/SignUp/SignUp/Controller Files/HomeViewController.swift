@@ -25,8 +25,8 @@ class HomeViewController: UIViewController {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             
-            self.userID.text = id
-            self.userIMG.image = image
+            self.userID.text    = id
+            self.userIMG.image  = image
         }
     }
     
