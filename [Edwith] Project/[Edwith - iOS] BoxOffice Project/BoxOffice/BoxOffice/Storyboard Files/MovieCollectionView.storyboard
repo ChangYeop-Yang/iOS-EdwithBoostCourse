@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BrX-vP-LPP">
+    <device id="retina6_1" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Collection-->
+        <scene sceneID="olA-fM-owU">
+            <objects>
+                <viewController storyboardIdentifier="MovieCollectionViewVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="VIj-Z1-sGb" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="bf6-qJ-lut">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9yt-xe-UHy">
+                                <rect key="frame" x="0.0" y="88" width="414" height="725"/>
+                                <subviews>
+                                    <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="255-ZS-maU">
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="725"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="mcC-rz-OuW">
+                                            <size key="itemSize" width="50" height="50"/>
+                                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                        </collectionViewFlowLayout>
+                                        <cells>
+                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="e4k-ID-qyy">
+                                                <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                                                    <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                </view>
+                                            </collectionViewCell>
+                                        </cells>
+                                    </collectionView>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="255-ZS-maU" secondAttribute="bottom" id="3Ug-Z6-Luv"/>
+                                    <constraint firstItem="255-ZS-maU" firstAttribute="top" secondItem="9yt-xe-UHy" secondAttribute="top" id="BB9-dk-Oia"/>
+                                    <constraint firstItem="255-ZS-maU" firstAttribute="leading" secondItem="9yt-xe-UHy" secondAttribute="leading" id="WCI-3b-0Du"/>
+                                    <constraint firstAttribute="trailing" secondItem="255-ZS-maU" secondAttribute="trailing" id="cS7-qx-zDi"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="wvG-Os-xp5" firstAttribute="bottom" secondItem="9yt-xe-UHy" secondAttribute="bottom" id="ACc-GG-Nmr"/>
+                            <constraint firstItem="wvG-Os-xp5" firstAttribute="trailing" secondItem="9yt-xe-UHy" secondAttribute="trailing" id="OPl-3p-LrA"/>
+                            <constraint firstItem="9yt-xe-UHy" firstAttribute="top" secondItem="wvG-Os-xp5" secondAttribute="top" id="YLX-tX-kpa"/>
+                            <constraint firstItem="9yt-xe-UHy" firstAttribute="leading" secondItem="wvG-Os-xp5" secondAttribute="leading" id="YgW-50-YxZ"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="wvG-Os-xp5"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Collection" image="ic_collection" id="2tQ-4z-PMx"/>
+                    <navigationItem key="navigationItem" id="Fcx-GK-znj">
+                        <barButtonItem key="rightBarButtonItem" image="ic_settings" id="0Ur-d0-AnJ"/>
+                    </navigationItem>
+                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="fxG-zA-Gyj" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1442.0289855072465" y="-252.45535714285714"/>
+        </scene>
+        <!--Collection-->
+        <scene sceneID="wIm-G3-lvb">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="BrX-vP-LPP" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Collection" image="ic_collection" id="Jxr-d0-TCZ"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="pRK-dr-lJV">
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="VIj-Z1-sGb" kind="relationship" relationship="rootViewController" id="ePR-Mu-IMl"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="VgT-EC-1Tb" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="531.8840579710145" y="-252.45535714285714"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="ic_collection" width="25" height="25"/>
+        <image name="ic_settings" width="24" height="24"/>
+    </resources>
+</document>

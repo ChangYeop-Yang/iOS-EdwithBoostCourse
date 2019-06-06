@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0C50DC4C22A7E25300E3D72B /* MovieTableView.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0C50DC4B22A7E25300E3D72B /* MovieTableView.storyboard */; };
+		0C50DC4E22A7E27200E3D72B /* MovieCollectionView.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0C50DC4D22A7E27200E3D72B /* MovieCollectionView.storyboard */; };
 		0CF9CE5F22A16FE6004DF5AA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CF9CE5E22A16FE6004DF5AA /* AppDelegate.swift */; };
 		0CF9CE6122A16FE6004DF5AA /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CF9CE6022A16FE6004DF5AA /* ViewController.swift */; };
 		0CF9CE6422A16FE6004DF5AA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0CF9CE6222A16FE6004DF5AA /* Main.storyboard */; };
@@ -34,6 +36,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0C50DC4B22A7E25300E3D72B /* MovieTableView.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = MovieTableView.storyboard; sourceTree = "<group>"; };
+		0C50DC4D22A7E27200E3D72B /* MovieCollectionView.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = MovieCollectionView.storyboard; sourceTree = "<group>"; };
 		0CF9CE5B22A16FE6004DF5AA /* BoxOffice.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BoxOffice.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0CF9CE5E22A16FE6004DF5AA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0CF9CE6022A16FE6004DF5AA /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -136,6 +140,8 @@
 			isa = PBXGroup;
 			children = (
 				0CF9CE6222A16FE6004DF5AA /* Main.storyboard */,
+				0C50DC4B22A7E25300E3D72B /* MovieTableView.storyboard */,
+				0C50DC4D22A7E27200E3D72B /* MovieCollectionView.storyboard */,
 			);
 			path = "Storyboard Files";
 			sourceTree = "<group>";
@@ -256,6 +262,8 @@
 				0CF9CE6922A16FE9004DF5AA /* LaunchScreen.storyboard in Resources */,
 				0CF9CE6622A16FE9004DF5AA /* Assets.xcassets in Resources */,
 				0CF9CE6422A16FE6004DF5AA /* Main.storyboard in Resources */,
+				0C50DC4C22A7E25300E3D72B /* MovieTableView.storyboard in Resources */,
+				0C50DC4E22A7E27200E3D72B /* MovieCollectionView.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
