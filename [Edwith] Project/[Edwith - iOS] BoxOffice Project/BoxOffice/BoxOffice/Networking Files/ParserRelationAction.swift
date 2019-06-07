@@ -19,6 +19,7 @@ internal var MOVIE_TYPE: Int = 0 // 예매율 (default) = 0, 1: 큐레이션, 2:
 internal func showMovieTypeActionSheet(_ controller: UIViewController) {
     
     DispatchQueue.main.async {
+        
         let actionSheet = UIAlertController(title: "정렬방식 선택", message: "영화를 어떤 순서로 정렬할까요?", preferredStyle: .actionSheet)
         
         let handler: (UIAlertAction) -> Void = { alert in
