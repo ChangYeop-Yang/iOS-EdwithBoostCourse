@@ -21,7 +21,8 @@ class MovieTableViewController: UIViewController {
 
         setNavigationBar()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(didReciveMovieDatasNotification), name: Notification.Name("didReciveMovieDatasNotification"), object: nil)
+        // MARK: Register NotificationCenter
+        NotificationCenter.default.addObserver(self, selector: #selector(didReciveMovieDatasNotification), name: NotificationName.listMovies.name, object: nil)
         
         // MARK: Setting TableView DataSource
         self.movieListTableView.dataSource = self
@@ -30,8 +31,11 @@ class MovieTableViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
+        self.fetchMovieDatas.removeAll()
+        self.movieListTableView.reloadData()
+        
         // MARK: Fetch Movie List Datas from Server
-        ParserMovieJSON.shared.fetchMovieDataParser(type: ParserMovieJSON.MovieParserType.movies.rawValue, subURI: ParserMovieJSON.SubURI.movies.rawValue, parameter: "order_type=0")
+        ParserMovieJSON.shared.fetchMovieDataParser(type: ParserMovieJSON.MovieParserType.movies.rawValue, subURI: ParserMovieJSON.SubURI.movies.rawValue, parameter: "order_type=\(MOVIE_TYPE)")
     }
     
     // MARK: - User Method
@@ -46,7 +50,7 @@ class MovieTableViewController: UIViewController {
     }
     @objc private func didReciveMovieDatasNotification(_ noti: Notification) {
         
-        guard let result = noti.userInfo!["A"] as? [MovieList] else { return }
+        guard let result = noti.userInfo![GET_KEY] as? [MovieList] else { return }
         
         self.fetchMovieDatas = result
         

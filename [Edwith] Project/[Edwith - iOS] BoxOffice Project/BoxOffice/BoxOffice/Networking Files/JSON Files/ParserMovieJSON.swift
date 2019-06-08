@@ -24,7 +24,6 @@ class ParserMovieJSON: NSObject {
     
     // MARK: - Object Variables
     internal static let shared: ParserMovieJSON = ParserMovieJSON()
-    internal let DidReceiveMovieDatasNotification: Notification.Name = Notification.Name("didReciveMovieDatasNotification")
     private let BASE_SERVER_URL: String = "http://connect-boxoffice.run.goorm.io"
     
     private override init() {}
@@ -58,7 +57,7 @@ class ParserMovieJSON: NSObject {
                     switch type {
                         case .movies:
                             let result = try JSONDecoder().decode(Movies.self, from: data)
-                            NotificationCenter.default.post(name: self.DidReceiveMovieDatasNotification, object: nil, userInfo: ["A":result.movies])
+                            NotificationCenter.default.post(name: NotificationName.listMovies.name, object: nil, userInfo: [GET_KEY: result.movies])
                     }
                     
                 } catch let error { print(error.localizedDescription) }
