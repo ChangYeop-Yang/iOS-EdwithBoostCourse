@@ -8,6 +8,10 @@
 
 import Foundation
 
+internal struct Movies: Decodable {
+    var movies: [MovieList]
+}
+
 internal struct MovieList: Decodable {
     
     var grade:              Int

@@ -11,6 +11,7 @@ import UIKit
 class MovieTableViewController: UIViewController {
     
     // MARK: - Outlet Variables
+    @IBOutlet private weak var movieListTableView: UITableView!
     
     // MARK: - Object Variables
     private var fetchMovieDatas: [MovieList] = []
@@ -19,6 +20,18 @@ class MovieTableViewController: UIViewController {
         super.viewDidLoad()
 
         setNavigationBar()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(didReciveMovieDatasNotification), name: Notification.Name("didReciveMovieDatasNotification"), object: nil)
+        
+        // MARK: Setting TableView DataSource
+        self.movieListTableView.dataSource = self
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        // MARK: Fetch Movie List Datas from Server
+        ParserMovieJSON.shared.fetchMovieDataParser(type: ParserMovieJSON.MovieParserType.movies.rawValue, subURI: ParserMovieJSON.SubURI.movies.rawValue, parameter: "order_type=0")
     }
     
     // MARK: - User Method
@@ -31,6 +44,17 @@ class MovieTableViewController: UIViewController {
         // MARK: http://swiftdeveloperblog.com/code-examples/uibarbuttonitem-with-image/
         self.parent?.navigationItem.rightBarButtonItem = UIBarButtonItem(image: icon, style: .plain, target: self, action: #selector(showMovieTypeMenu))
     }
+    @objc private func didReciveMovieDatasNotification(_ noti: Notification) {
+        
+        guard let result = noti.userInfo!["A"] as? [MovieList] else { return }
+        
+        self.fetchMovieDatas = result
+        
+        DispatchQueue.main.async {
+            self.movieListTableView.reloadData()
+        }
+    }
+    
     @objc private func showMovieTypeMenu() {
         showMovieTypeActionSheet(self)
     }

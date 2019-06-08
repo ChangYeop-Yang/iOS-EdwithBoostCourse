@@ -25,7 +25,7 @@
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="769"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <prototypes>
-                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="MovieTableViewCell" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="150" id="1fR-8x-hnd" customClass="MovieTableViewCell" customModule="BoxOffice" customModuleProvider="target">
+                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="MovieTableViewCell" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="MovieTableViewCell" rowHeight="150" id="1fR-8x-hnd" customClass="MovieTableViewCell" customModule="BoxOffice" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="28" width="414" height="150"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="1fR-8x-hnd" id="POy-qr-FHu">
@@ -136,6 +136,9 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="Table" image="ic_table" id="b9i-9v-sez"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="movieListTableView" destination="Ke7-7g-Jyc" id="SKy-Jd-p7d"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="TGx-qq-ium" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
