@@ -13,11 +13,12 @@
 		0CF21B0A22A8DD4E005B595D /* MovieTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CF21B0922A8DD4E005B595D /* MovieTableViewController.swift */; };
 		0CF21B0C22A8DD59005B595D /* MovieCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CF21B0B22A8DD59005B595D /* MovieCollectionViewController.swift */; };
 		0CF21B1022A8DE74005B595D /* MovieJsonDecode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CF21B0F22A8DE74005B595D /* MovieJsonDecode.swift */; };
+		0CF54BED22AC007C00AEC0AA /* IdentifyOrderType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CF54BEC22AC007C00AEC0AA /* IdentifyOrderType.swift */; };
 		0CF7DAE922A9340C005EBCDF /* MovieTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CF7DAE822A9340C005EBCDF /* MovieTableViewCell.swift */; };
 		0CF7DAEB22A9341D005EBCDF /* MovieCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CF7DAEA22A9341D005EBCDF /* MovieCollectionViewCell.swift */; };
 		0CF7DAED22A93957005EBCDF /* IdentifyID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CF7DAEC22A93957005EBCDF /* IdentifyID.swift */; };
 		0CF7DAF022A93DAB005EBCDF /* ParserMovieJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CF7DAEF22A93DAB005EBCDF /* ParserMovieJSON.swift */; };
-		0CF7DAF222A93E3B005EBCDF /* ParserRelationAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CF7DAF122A93E3B005EBCDF /* ParserRelationAction.swift */; };
+		0CF7DAF222A93E3B005EBCDF /* TargetAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CF7DAF122A93E3B005EBCDF /* TargetAction.swift */; };
 		0CF9CE5F22A16FE6004DF5AA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CF9CE5E22A16FE6004DF5AA /* AppDelegate.swift */; };
 		0CF9CE6422A16FE6004DF5AA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0CF9CE6222A16FE6004DF5AA /* Main.storyboard */; };
 		0CF9CE6622A16FE9004DF5AA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0CF9CE6522A16FE9004DF5AA /* Assets.xcassets */; };
@@ -50,11 +51,12 @@
 		0CF21B0922A8DD4E005B595D /* MovieTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieTableViewController.swift; sourceTree = "<group>"; };
 		0CF21B0B22A8DD59005B595D /* MovieCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieCollectionViewController.swift; sourceTree = "<group>"; };
 		0CF21B0F22A8DE74005B595D /* MovieJsonDecode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieJsonDecode.swift; sourceTree = "<group>"; };
+		0CF54BEC22AC007C00AEC0AA /* IdentifyOrderType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentifyOrderType.swift; sourceTree = "<group>"; };
 		0CF7DAE822A9340C005EBCDF /* MovieTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieTableViewCell.swift; sourceTree = "<group>"; };
 		0CF7DAEA22A9341D005EBCDF /* MovieCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieCollectionViewCell.swift; sourceTree = "<group>"; };
 		0CF7DAEC22A93957005EBCDF /* IdentifyID.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentifyID.swift; sourceTree = "<group>"; };
 		0CF7DAEF22A93DAB005EBCDF /* ParserMovieJSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParserMovieJSON.swift; sourceTree = "<group>"; };
-		0CF7DAF122A93E3B005EBCDF /* ParserRelationAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParserRelationAction.swift; sourceTree = "<group>"; };
+		0CF7DAF122A93E3B005EBCDF /* TargetAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TargetAction.swift; sourceTree = "<group>"; };
 		0CF9CE5B22A16FE6004DF5AA /* BoxOffice.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BoxOffice.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0CF9CE5E22A16FE6004DF5AA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0CF9CE6322A16FE6004DF5AA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -98,7 +100,6 @@
 			isa = PBXGroup;
 			children = (
 				0CF21B0E22A8DE4F005B595D /* JSON Files */,
-				0CF7DAF122A93E3B005EBCDF /* ParserRelationAction.swift */,
 				0CA1CBB022ABCFEB00EEE625 /* NotifyNotification.swift */,
 			);
 			path = "Networking Files";
@@ -111,6 +112,15 @@
 				0CF7DAEF22A93DAB005EBCDF /* ParserMovieJSON.swift */,
 			);
 			path = "JSON Files";
+			sourceTree = "<group>";
+		};
+		0CF54BEB22ABFFFB00AEC0AA /* Action Files */ = {
+			isa = PBXGroup;
+			children = (
+				0CF7DAF122A93E3B005EBCDF /* TargetAction.swift */,
+				0CF54BEC22AC007C00AEC0AA /* IdentifyOrderType.swift */,
+			);
+			path = "Action Files";
 			sourceTree = "<group>";
 		};
 		0CF7DAE722A933E7005EBCDF /* CustomView Files */ = {
@@ -146,6 +156,7 @@
 		0CF9CE5D22A16FE6004DF5AA /* BoxOffice */ = {
 			isa = PBXGroup;
 			children = (
+				0CF54BEB22ABFFFB00AEC0AA /* Action Files */,
 				0CF7DAE722A933E7005EBCDF /* CustomView Files */,
 				0CF21B0D22A8DE2D005B595D /* Networking Files */,
 				0CF9CE8E22A17028004DF5AA /* Supporting Files */,
@@ -339,13 +350,14 @@
 				0CF7DAE922A9340C005EBCDF /* MovieTableViewCell.swift in Sources */,
 				0CF21B1022A8DE74005B595D /* MovieJsonDecode.swift in Sources */,
 				0CF21B0C22A8DD59005B595D /* MovieCollectionViewController.swift in Sources */,
+				0CF54BED22AC007C00AEC0AA /* IdentifyOrderType.swift in Sources */,
 				0CF7DAED22A93957005EBCDF /* IdentifyID.swift in Sources */,
 				0CF7DAEB22A9341D005EBCDF /* MovieCollectionViewCell.swift in Sources */,
 				0CF9CE5F22A16FE6004DF5AA /* AppDelegate.swift in Sources */,
 				0CF21B0A22A8DD4E005B595D /* MovieTableViewController.swift in Sources */,
 				0CA1CBB122ABCFEB00EEE625 /* NotifyNotification.swift in Sources */,
 				0CF7DAF022A93DAB005EBCDF /* ParserMovieJSON.swift in Sources */,
-				0CF7DAF222A93E3B005EBCDF /* ParserRelationAction.swift in Sources */,
+				0CF7DAF222A93E3B005EBCDF /* TargetAction.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

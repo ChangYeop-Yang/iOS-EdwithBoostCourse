@@ -47,7 +47,10 @@ class MovieTableViewCell: UITableViewCell {
         group.enter()
         DispatchQueue.global(qos: .userInitiated).async(group: group) {
             
-            guard let imageURL: URL = URL(string: url) else { return }
+            guard let imageURL: URL = URL(string: url) else {
+                group.leave()
+                return
+            }
             
             let session: URLSession = URLSession(configuration: .default)
             let dataTask: URLSessionDataTask = session.dataTask(with: imageURL) { data, response, error in

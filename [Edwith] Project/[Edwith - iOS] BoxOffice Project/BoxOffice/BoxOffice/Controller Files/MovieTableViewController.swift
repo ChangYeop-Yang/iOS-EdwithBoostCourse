@@ -19,7 +19,11 @@ class MovieTableViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        // MARK: Setting NavigationBar
         setNavigationBar()
+        
+        // MARK: Change Movie Type Observer Delegate
+        TargetAction.shared.delegate = self
         
         // MARK: Register NotificationCenter
         NotificationCenter.default.addObserver(self, selector: #selector(didReciveMovieDatasNotification), name: NotificationName.listMovies.name, object: nil)
@@ -31,11 +35,8 @@ class MovieTableViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        self.fetchMovieDatas.removeAll()
-        self.movieListTableView.reloadData()
-        
-        // MARK: Fetch Movie List Datas from Server
-        ParserMovieJSON.shared.fetchMovieDataParser(type: ParserMovieJSON.MovieParserType.movies.rawValue, subURI: ParserMovieJSON.SubURI.movies.rawValue, parameter: "order_type=\(MOVIE_TYPE)")
+        // MARK: Fetch Movie List From JSON Server
+        fetchMovieList(type: MOVIE_TYPE)
     }
     
     // MARK: - User Method
@@ -48,6 +49,15 @@ class MovieTableViewController: UIViewController {
         // MARK: http://swiftdeveloperblog.com/code-examples/uibarbuttonitem-with-image/
         self.parent?.navigationItem.rightBarButtonItem = UIBarButtonItem(image: icon, style: .plain, target: self, action: #selector(showMovieTypeMenu))
     }
+    private func fetchMovieList(type: Int) {
+        
+        self.fetchMovieDatas.removeAll()
+        self.movieListTableView.reloadData()
+        
+        // MARK: Fetch Movie List Datas from Server
+        ParserMovieJSON.shared.fetchMovieDataParser(type: ParserMovieJSON.MovieParserType.movies.rawValue, subURI: ParserMovieJSON.SubURI.movies.rawValue, parameter: "order_type=\(type)")
+        
+    }
     @objc private func didReciveMovieDatasNotification(_ noti: Notification) {
         
         guard let result = noti.userInfo![GET_KEY] as? [MovieList] else { return }
@@ -58,9 +68,8 @@ class MovieTableViewController: UIViewController {
             self.movieListTableView.reloadData()
         }
     }
-    
     @objc private func showMovieTypeMenu() {
-        showMovieTypeActionSheet(self)
+        TargetAction.shared.showMovieTypeActionSheet(self, view: self.movieListTableView as Any, type: true)
     }
 }
 
@@ -82,4 +91,14 @@ extension MovieTableViewController: UITableViewDataSource {
         return cell
     }
     
+}
+
+// MARK: - Extension MovieTypeDelegate
+extension MovieTableViewController: MovieTypeDelegate {
+    
+    func changeMovieTypeEvent() {
+        
+        // MARK: Fetch Movie List From JSON Server
+        fetchMovieList(type: MOVIE_TYPE)
+    }
 }
