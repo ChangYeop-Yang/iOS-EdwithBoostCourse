@@ -12,8 +12,7 @@ internal let GET_KEY: String = "GET_KEY"
 
 // MARK: https://stackoverflow.com/questions/38889125/swift-3-how-to-use-enum-raw-value-as-nsnotification-name
 internal enum NotificationName: String {
-    case listMovies = "didReciveMovieListNotification"
-    case showMovies = "didReciveShowMovieTypeNotification"
+    case moviesListNoti        = "didReciveMovieListNotification"
     
     var name: Notification.Name {
         return Notification.Name(self.rawValue)

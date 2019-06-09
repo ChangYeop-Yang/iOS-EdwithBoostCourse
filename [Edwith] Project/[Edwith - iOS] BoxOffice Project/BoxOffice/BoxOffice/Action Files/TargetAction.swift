@@ -17,7 +17,7 @@ class TargetAction: NSObject {
     private override init() {}
     
     // MARK: - User Methods
-    internal func showMovieTypeActionSheet(_ controller: UIViewController, view: Any, type: Bool) {
+    internal func showMovieTypeActionSheet(_ controller: UIViewController) {
         
         DispatchQueue.main.async {
             
@@ -39,7 +39,7 @@ class TargetAction: NSObject {
                             MOVIE_TYPE                  = 2
                             controller.parent?.title    = MovieFetchType.launch.rawValue
                     }
-                    
+
                     self.delegate?.changeMovieTypeEvent()
                 }
             }

@@ -20,7 +20,7 @@ class MovieCollectionViewController: UIViewController {
         super.viewDidLoad()
         
         // MARK: Register NotificationCenter
-        NotificationCenter.default.addObserver(self, selector: #selector(didReciveMovieDatasNotification), name: NotificationName.listMovies.name, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(didReciveMovieDatasNotification), name: NotificationName.moviesListNoti.name, object: nil)
 
         // MARK: Setting UICollectionView Datasouce
         self.movieCollectionView.dataSource = self
@@ -35,17 +35,18 @@ class MovieCollectionViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        fetchMovieList(type: MOVIE_TYPE)
+        fetchMovieCollectionList(type: MOVIE_TYPE)
     }
     
-    private func fetchMovieList(type: Int) {
+    private func fetchMovieCollectionList(type: Int) {
         
         self.fetchMovieDatas.removeAll()
         self.movieCollectionView.reloadData()
+        ShowIndicator.shared.showLoadIndicator(self)
         
         // MARK: Fetch Movie List Datas from Server
         DispatchQueue.global(qos: .unspecified).async {
-            ParserMovieJSON.shared.fetchMovieDataParser(type: ParserMovieJSON.MovieParserType.movies.rawValue, subURI: ParserMovieJSON.SubURI.movies.rawValue, parameter: "order_type=\(type)")
+            ParserMovieJSON.shared.fetchMovieDataParser(type: ParserMovieJSON.MovieParserType.movies.rawValue, subURI: ParserMovieJSON.SubURI.movies.rawValue, parameter: "order_type=\(type)", false)
         }
     }
     @objc private func didReciveMovieDatasNotification(_ noti: Notification) {
@@ -84,11 +85,11 @@ extension MovieCollectionViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
 
-        let padding: CGFloat = 35
+        let padding: CGFloat = 50
         let collectionViewSize = collectionView.frame.size.width - padding
 
         // MARK: https://stackoverflow.com/questions/38394810/display-just-two-columns-with-multiple-rows-in-a-collectionview-using-storyboar
-        return CGSize(width: collectionViewSize / 2, height: collectionViewSize / 1.3)
+        return CGSize(width: collectionViewSize / 2, height: collectionViewSize / 1.2)
     }
 
 }

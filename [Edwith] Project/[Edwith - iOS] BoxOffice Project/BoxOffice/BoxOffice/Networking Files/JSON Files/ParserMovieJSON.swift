@@ -29,7 +29,7 @@ class ParserMovieJSON: NSObject {
     private override init() {}
     
     // MARK: - User Method
-    internal func fetchMovieDataParser(type: Int, subURI: String, parameter: String) {
+    internal func fetchMovieDataParser(type: Int, subURI: String, parameter: String, _ viewType: Bool) {
         
         let parserAddress = "\(BASE_SERVER_URL)\(subURI)?\(parameter)"
         
@@ -56,10 +56,12 @@ class ParserMovieJSON: NSObject {
                     
                     switch type {
                         case .movies:
-                            let result = try JSONDecoder().decode(Movies.self, from: data)
-                            NotificationCenter.default.post(name: NotificationName.listMovies.name, object: nil, userInfo: [GET_KEY: result.movies])
+                            let result  = try JSONDecoder().decode(Movies.self, from: data)
+                            NotificationCenter.default.post(name: NotificationName.moviesListNoti.name, object: nil, userInfo: [GET_KEY: result.movies])
                     }
                     
+                    // MARK: Hide Indicator
+                    ShowIndicator.shared.hideLoadIndicator()
                 } catch let error { print(error.localizedDescription) }
             }
         }
