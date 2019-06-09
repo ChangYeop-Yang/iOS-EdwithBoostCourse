@@ -55,8 +55,9 @@ class MovieTableViewController: UIViewController {
         self.movieListTableView.reloadData()
         
         // MARK: Fetch Movie List Datas from Server
-        ParserMovieJSON.shared.fetchMovieDataParser(type: ParserMovieJSON.MovieParserType.movies.rawValue, subURI: ParserMovieJSON.SubURI.movies.rawValue, parameter: "order_type=\(type)")
-        
+        DispatchQueue.global(qos: .userInitiated).async {
+            ParserMovieJSON.shared.fetchMovieDataParser(type: ParserMovieJSON.MovieParserType.movies.rawValue, subURI: ParserMovieJSON.SubURI.movies.rawValue, parameter: "order_type=\(type)")
+        }
     }
     @objc private func didReciveMovieDatasNotification(_ noti: Notification) {
         

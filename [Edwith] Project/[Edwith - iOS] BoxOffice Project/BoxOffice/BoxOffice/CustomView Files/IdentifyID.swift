@@ -9,5 +9,6 @@
 import Foundation
 
 internal enum IdentifyCell: String {
-    case movieCell = "MovieTableViewCell"
+    case movieCell          = "MovieTableViewCell"
+    case movieCollecionCell = "MovieCollectionViewCell"
 }
