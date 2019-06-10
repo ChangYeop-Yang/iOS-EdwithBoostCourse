@@ -14,6 +14,7 @@ class MovieTableViewController: UIViewController {
     @IBOutlet private weak var movieListTableView: UITableView!
     
     // MARK: - Object Variables
+    private var refreshControl: UIRefreshControl = UIRefreshControl()
     private var fetchMovieDatas: [MovieList] = []
     
     override func viewDidLoad() {
@@ -28,8 +29,8 @@ class MovieTableViewController: UIViewController {
         // MARK: Register NotificationCenter
         NotificationCenter.default.addObserver(self, selector: #selector(didReciveMovieDatasNotification), name: NotificationName.moviesListNoti.name, object: nil)
         
-        // MARK: Setting TableView DataSource
-        self.movieListTableView.dataSource = self
+        // MARK: Setting TableView
+        setTableView()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -40,6 +41,24 @@ class MovieTableViewController: UIViewController {
     }
     
     // MARK: - User Method
+    private func setTableView() {
+        
+        // MARK: Setting TableView DataSource
+        self.movieListTableView.dataSource = self
+        
+        // MARK: https://developer.apple.com/documentation/uikit/uirefreshcontrol
+        if #available(iOS 6.0, *) {
+            self.movieListTableView.refreshControl = self.refreshControl
+        } else {
+            self.movieListTableView.addSubview(self.refreshControl)
+        }
+        
+        // MARK: https://cocoacasts.com/how-to-add-pull-to-refresh-to-a-table-view-or-collection-view
+        self.refreshControl.tintColor = .systemColor
+        self.refreshControl.attributedTitle = NSAttributedString(string: "Just a moment...", attributes: [NSAttributedString.Key.foregroundColor: UIColor.systemColor])
+        
+        refreshControl.addTarget(self, action: #selector(refreshTableViewDatas), for: .valueChanged)
+    }
     private func setNavigationBar() {
         
         self.parent?.title = MovieFetchType.reservation.rawValue
@@ -59,6 +78,16 @@ class MovieTableViewController: UIViewController {
         // MARK: Fetch Movie List Datas from Server
         DispatchQueue.global(qos: .userInitiated).async {
             ParserMovieJSON.shared.fetchMovieDataParser(type: ParserMovieJSON.MovieParserType.movies.rawValue, subURI: ParserMovieJSON.SubURI.movies.rawValue, parameter: "order_type=\(type)", true)
+        }
+    }
+    @objc private func refreshTableViewDatas() {
+        
+        fetchTableMovieList(type: MOVIE_TYPE)
+        
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            
+            self.refreshControl.endRefreshing()
         }
     }
     @objc private func didReciveMovieDatasNotification(_ noti: Notification) {
