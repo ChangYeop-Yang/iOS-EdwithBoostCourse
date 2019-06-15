@@ -25,14 +25,6 @@ class MovieCollectionViewController: UIViewController {
 
         // MARK: Setting UICollectionView
         setCollectionView()
-//        
-//        let flowlaaout = UICollectionViewFlowLayout()
-//        flowlaaout.scrollDirection = .vertical
-//        flowlaaout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 0, right: 5)
-//        flowlaaout.minimumInteritemSpacing = 10
-//        flowlaaout.minimumLineSpacing = 10
-//        
-//        self.movieCollectionView.setCollectionViewLayout(flowlaaout, animated: true)
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -44,7 +36,6 @@ class MovieCollectionViewController: UIViewController {
         
         // MARK: Setting UICollectionView Datasouce
         self.movieCollectionView.dataSource = self
-        self.movieCollectionView.delegate   = self
         
         self.movieCollectionView.alwaysBounceVertical = true
         
@@ -60,6 +51,14 @@ class MovieCollectionViewController: UIViewController {
         self.refreshControl.attributedTitle = NSAttributedString(string: "Just a moment...", attributes: [NSAttributedString.Key.foregroundColor: UIColor.orange])
         
         self.refreshControl.addTarget(self, action: #selector(refreshCollectionView), for: .valueChanged)
+        
+        // MARK: Setting Flowlayout 
+        if let layout = self.movieCollectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+            let value: (divide: CGFloat, span: CGFloat, revision: CGFloat) = (2, 20, 100)
+            let width: CGFloat = (self.view.frame.width - value.span) / value.divide
+            
+            layout.itemSize = CGSize(width: width, height: width + value.revision)
+        }
     }
     private func fetchMovieCollectionList(type: Int) {
         
@@ -69,7 +68,7 @@ class MovieCollectionViewController: UIViewController {
         
         // MARK: Fetch Movie List Datas from Server
         DispatchQueue.global(qos: .unspecified).async {
-            ParserMovieJSON.shared.fetchMovieDataParser(type: ParserMovieJSON.MovieParserType.movies.rawValue, subURI: ParserMovieJSON.SubURI.movies.rawValue, parameter: "order_type=\(type)", false)
+            ParserMovieJSON.shared.fetchMovieDataParser(type: ParserMovieJSON.MovieParserType.movies.rawValue, subURI: ParserMovieJSON.SubURI.movies.rawValue, parameter: "order_type=\(type)")
         }
     }
     @objc private func refreshCollectionView() {
@@ -111,16 +110,4 @@ extension MovieCollectionViewController: UICollectionViewDataSource {
         
         return cell
     }
-}
-
-// MARK: - Extension UICollectionViewDelegateFlowLayout
-extension MovieCollectionViewController: UICollectionViewDelegateFlowLayout {
-
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-
-        let width = UIScreen.main.bounds.size.width / 2.5
-        let height = UIScreen.main.bounds.size.height
-        return CGSize(width: width, height: height)
-    }
-
 }

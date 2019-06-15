@@ -40,6 +40,20 @@ class MovieTableViewController: UIViewController {
         fetchTableMovieList(type: MOVIE_TYPE)
     }
     
+    // MARK: - System Method
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        guard let controller = segue.destination as? DetailMovieViewController else {
+            return
+        }
+        
+        guard let indexPath = self.movieListTableView.indexPathForSelectedRow else {
+            return
+        }
+        
+        controller.movieID = self.fetchMovieDatas[indexPath.row].id
+    }
+    
     // MARK: - User Method
     private func setTableView() {
         
@@ -77,7 +91,7 @@ class MovieTableViewController: UIViewController {
         
         // MARK: Fetch Movie List Datas from Server
         DispatchQueue.global(qos: .userInitiated).async {
-            ParserMovieJSON.shared.fetchMovieDataParser(type: ParserMovieJSON.MovieParserType.movies.rawValue, subURI: ParserMovieJSON.SubURI.movies.rawValue, parameter: "order_type=\(type)", true)
+            ParserMovieJSON.shared.fetchMovieDataParser(type: ParserMovieJSON.MovieParserType.movies.rawValue, subURI: ParserMovieJSON.SubURI.movies.rawValue, parameter: "order_type=\(type)")
         }
     }
     @objc private func refreshTableViewDatas() {

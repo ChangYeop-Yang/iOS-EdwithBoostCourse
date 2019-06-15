@@ -168,10 +168,10 @@
             </objects>
             <point key="canvasLocation" x="4837.68115942029" y="148.66071428571428"/>
         </scene>
-        <!--Storyboard Reference-->
+        <!--DetailMovieVC-->
         <scene sceneID="eYE-n9-U6F">
             <objects>
-                <viewControllerPlaceholder id="brr-3Y-gTJ" sceneMemberID="viewController"/>
+                <viewControllerPlaceholder storyboardIdentifier="DetailMovieVC" storyboardName="DetailMovie" referencedIdentifier="DetailMovieVC" id="brr-3Y-gTJ" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eMO-C5-XBV" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="5667.3913043478269" y="148.66071428571428"/>

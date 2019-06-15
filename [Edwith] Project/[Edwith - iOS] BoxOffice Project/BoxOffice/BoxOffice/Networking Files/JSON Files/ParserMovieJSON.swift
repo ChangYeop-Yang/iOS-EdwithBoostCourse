@@ -13,6 +13,7 @@ class ParserMovieJSON: NSObject {
     // MARK: - Enum
     internal enum SubURI: String {
         case movies = "/movies"
+        case movie  = "/movie"
     }
     private enum HttpMethodType: String {
         case GET    = "GET"
@@ -20,6 +21,7 @@ class ParserMovieJSON: NSObject {
     }
     internal enum MovieParserType: Int {
         case movies = 0
+        case movie  = 1
     }
     
     // MARK: - Object Variables
@@ -29,7 +31,7 @@ class ParserMovieJSON: NSObject {
     private override init() {}
     
     // MARK: - User Method
-    internal func fetchMovieDataParser(type: Int, subURI: String, parameter: String, _ viewType: Bool) {
+    internal func fetchMovieDataParser(type: Int, subURI: String, parameter: String) {
         
         let parserAddress = "\(BASE_SERVER_URL)\(subURI)?\(parameter)"
         
@@ -58,6 +60,9 @@ class ParserMovieJSON: NSObject {
                         case .movies:
                             let result  = try JSONDecoder().decode(Movies.self, from: data)
                             NotificationCenter.default.post(name: NotificationName.moviesListNoti.name, object: nil, userInfo: [GET_KEY: result.movies])
+                        case .movie:
+                            let result  = try JSONDecoder().decode(MovieDetailInformation.self, from: data)
+                            NotificationCenter.default.post(name: NotificationName.movieDetailNoti.name, object: nil, userInfo: [GET_KEY: result])
                     }
                     
                     // MARK: Hide Indicator
