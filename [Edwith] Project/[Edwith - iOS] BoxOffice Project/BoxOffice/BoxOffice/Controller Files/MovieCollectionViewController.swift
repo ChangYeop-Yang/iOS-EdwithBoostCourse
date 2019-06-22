@@ -14,8 +14,8 @@ class MovieCollectionViewController: UIViewController {
     @IBOutlet private weak var movieCollectionView: UICollectionView!
     
     // MARK: - Object Variables
-    private var fetchMovieDatas: [MovieList] = []
-    private var refreshControl: UIRefreshControl = UIRefreshControl()
+    private var fetchMovieDatas:    [MovieList]         = []
+    private var refreshControl:     UIRefreshControl    = UIRefreshControl()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,6 +26,7 @@ class MovieCollectionViewController: UIViewController {
         // MARK: Setting UICollectionView
         setCollectionView()
     }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
@@ -64,10 +65,11 @@ class MovieCollectionViewController: UIViewController {
         
         self.fetchMovieDatas.removeAll()
         self.movieCollectionView.reloadData()
+        
         ShowIndicator.shared.showLoadIndicator(self)
         
         // MARK: Fetch Movie List Datas from Server
-        DispatchQueue.global(qos: .unspecified).async {
+        DispatchQueue.global(qos: .userInitiated).async {
             ParserMovieJSON.shared.fetchMovieDataParser(type: ParserMovieJSON.MovieParserType.movies.rawValue, subURI: ParserMovieJSON.SubURI.movies.rawValue, parameter: "order_type=\(type)")
         }
     }
@@ -87,7 +89,11 @@ class MovieCollectionViewController: UIViewController {
         
         self.fetchMovieDatas = result
         
-        DispatchQueue.main.async {
+        ShowIndicator.shared.hideLoadIndicator()
+        
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            
             self.movieCollectionView.reloadData()
         }
     }

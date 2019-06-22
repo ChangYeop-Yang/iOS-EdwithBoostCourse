@@ -14,8 +14,8 @@ class MovieTableViewController: UIViewController {
     @IBOutlet private weak var movieListTableView: UITableView!
     
     // MARK: - Object Variables
-    private var refreshControl: UIRefreshControl = UIRefreshControl()
-    private var fetchMovieDatas: [MovieList] = []
+    private var refreshControl:     UIRefreshControl    = UIRefreshControl()
+    private var fetchMovieDatas:    [MovieList]         = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -87,6 +87,7 @@ class MovieTableViewController: UIViewController {
         // MARK: Remove All Datas
         self.fetchMovieDatas.removeAll()
         self.movieListTableView.reloadData()
+        
         ShowIndicator.shared.showLoadIndicator(self)
         
         // MARK: Fetch Movie List Datas from Server
@@ -109,6 +110,7 @@ class MovieTableViewController: UIViewController {
         guard let result = noti.userInfo![GET_KEY] as? [MovieList] else { return }
         
         self.fetchMovieDatas = result
+        ShowIndicator.shared.hideLoadIndicator()
         
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
@@ -145,7 +147,6 @@ extension MovieTableViewController: UITableViewDataSource {
 extension MovieTableViewController: MovieTypeDelegate {
     
     func changeMovieTypeEvent() {
-        
         // MARK: Fetch Movie List From JSON Server
         fetchTableMovieList(type: MOVIE_TYPE)
     }

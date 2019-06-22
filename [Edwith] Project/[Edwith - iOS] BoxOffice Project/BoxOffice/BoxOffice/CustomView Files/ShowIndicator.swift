@@ -45,9 +45,7 @@ class ShowIndicator: NSObject {
     }
     internal func hideLoadIndicator() {
         
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            
+        DispatchQueue.main.async {
             self.loadingAlert?.dismiss(animated: true, completion: nil)
             UIApplication.shared.isNetworkActivityIndicatorVisible = false
         }

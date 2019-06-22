@@ -33,7 +33,7 @@ class RatingStarBar: UIStackView {
         
         // Load Button Images
         let bundle          = Bundle(for: type(of: self))
-        let fullStarImage   = UIImage(named: "ic_star_large_full", in: bundle, compatibleWith: self.traitCollection)
+        let fullStarImage   = UIImage(named: "ic_star_label", in: bundle, compatibleWith: self.traitCollection)
         let emptyStarImage  = UIImage(named: "ic_star_large", in: bundle, compatibleWith: self.traitCollection)
         let halfStarImage   = UIImage(named: "ic_star_large_half", in: bundle, compatibleWith: self.traitCollection)
         

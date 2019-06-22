@@ -57,6 +57,7 @@ class ParserMovieJSON: NSObject {
                 guard let type = MovieParserType(rawValue: type) else { return }
                 
                 do {
+                    
                     switch type {
                         case .movies:
                             let result  = try JSONDecoder().decode(Movies.self, from: data)
@@ -71,10 +72,11 @@ class ParserMovieJSON: NSObject {
                             NotificationCenter.default.post(name: NotificationName.movieUserComment.name, object: nil, userInfo: [GET_KEY: result])
                     }
                     
-                    // MARK: Hide Indicator
-                    ShowIndicator.shared.hideLoadIndicator()
-                } catch let error { print(error.localizedDescription) }
+                } catch let error {
+                    print(error.localizedDescription)
+                }
             }
+
         }
         
         dataTask.resume()
