@@ -48,6 +48,8 @@ class DetailMovieViewController: UIViewController {
         
         // MARK: Setting TableView Delegate and Datasource
         self.movieUserCommentTableView.dataSource = self
+        self.movieUserCommentTableView.delegate = self
+        self.movieUserCommentTableView.estimatedRowHeight = 80
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -124,26 +126,26 @@ class DetailMovieViewController: UIViewController {
         self.userCommentData = result.comments
         
         ShowIndicator.shared.hideLoadIndicator()
-        
-        let cellsOfHeight: CGFloat = CGFloat(result.comments.count) * 100
+                
+        let cellsOfHeight: CGFloat = CGFloat(result.comments.count) * 80
         
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
 
             self.movieUserCommentTableView.reloadData()
-            self.movieUserCommentTableView.layoutIfNeeded()
-            
+            print("QWEQWEQEWQWEQWEQW")
+            print(self.movieUserCommentTableView.rowHeight)
             let frame = CGRect(x: self.movieUserCommentTableView.frame.origin.x
-                , y: self.movieUserCommentTableView.frame.origin.y
-                , width: self.movieUserCommentTableView.frame.size.width
-                , height: self.movieUserCommentTableView.contentSize.height + cellsOfHeight)
+                , y:        self.movieUserCommentTableView.frame.origin.y
+                , width:    self.movieUserCommentTableView.frame.size.width
+                , height:   self.movieUserCommentTableView.contentSize.height + cellsOfHeight)
 
             self.movieUserCommentTableView.frame = frame
             
-            
             // MARK: - Setting Dynamic TableView Height
             self.movieContentsScrollView.contentSize = CGSize(width: self.view.frame.width, height: self.movieContentsScrollView.contentSize.height + cellsOfHeight)
-//            self.movieContentsScrollView.sizeToFit()
+            self.movieUserCommentTableView.sizeToFit()
+            self.movieContentsScrollView.sizeToFit()
         }
     }
     private func setNumberFormatter(number: Int) -> String? {
@@ -175,4 +177,11 @@ extension DetailMovieViewController: UITableViewDataSource {
         return cell
     }
     
+}
+
+// MARK: - E
+extension DetailMovieViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 80;
+    }
 }

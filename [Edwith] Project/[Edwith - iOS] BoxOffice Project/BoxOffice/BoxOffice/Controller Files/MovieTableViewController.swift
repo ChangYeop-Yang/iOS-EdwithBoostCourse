@@ -57,8 +57,12 @@ class MovieTableViewController: UIViewController {
     // MARK: - User Method
     private func setTableView() {
         
-        // MARK: Setting TableView DataSource
-        self.movieListTableView.dataSource = self
+        // MARK: Setting TableView DataSource and Delegate
+        self.movieListTableView.delegate    = self
+        self.movieListTableView.dataSource  = self
+                
+        self.movieListTableView.estimatedRowHeight = 110
+        self.movieListTableView.rowHeight = UITableView.automaticDimension
         
         // MARK: https://developer.apple.com/documentation/uikit/uirefreshcontrol
         if #available(iOS 6.0, *) {
@@ -141,6 +145,14 @@ extension MovieTableViewController: UITableViewDataSource {
         return cell
     }
     
+}
+
+// MARK: - Extension UITableViewDelegate
+extension MovieTableViewController: UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 115;
+    }
 }
 
 // MARK: - Extension MovieTypeDelegate
