@@ -110,7 +110,9 @@ class MovieTableViewController: UIViewController {
         
         self.fetchMovieDatas = result
         
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            
             self.movieListTableView.reloadData()
         }
     }

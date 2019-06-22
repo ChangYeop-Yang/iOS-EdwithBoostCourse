@@ -12,6 +12,19 @@ internal struct Movies: Decodable {
     var movies: [MovieList]
 }
 
+internal struct Comment: Decodable {
+    
+    var comments: [MovieOneLineList]
+    var movieID: String
+    
+    // MARK: CountryType CodingKey
+    private enum CodingKeys: String, CodingKey {
+        case movieID = "movie_id"
+        
+        case comments
+    }
+}
+
 internal struct MovieList: Decodable {
     
     var grade:              Int

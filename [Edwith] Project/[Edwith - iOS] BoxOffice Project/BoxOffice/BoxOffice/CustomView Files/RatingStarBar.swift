@@ -11,12 +11,12 @@ import UIKit
 class RatingStarBar: UIStackView {
     
     // MARK: - Object Variables
-    private var ratingButtons: [UIButton]           = []
-    private var rating: Double                      = 5.98 {
+    internal var rating: Double                     = 0.0 {
         didSet { updateButtonSelectionStates() }
     }
-    private var starSize: CGSize     = CGSize(width: 32, height: 32)
-    private var starCount: Int       = 5
+    private var ratingButtons: [UIButton]           = []
+    private var starSize: CGSize                    = CGSize(width: 32, height: 32)
+    private var starCount: Int                      = 5
 
     // MARK: - Initialization
     override init(frame: CGRect) {
@@ -60,16 +60,14 @@ class RatingStarBar: UIStackView {
             self.addArrangedSubview(button)
         }
         
-        updateButtonSelectionStates()
+        //updateButtonSelectionStates()
     }
     private func updateButtonSelectionStates() {
         
-        let rate = self.rating / 2.0
-    
-        for (index, button) in ratingButtons.enumerated() {
-            // If the index of a button is less than the rating, that button should be selected.
-            
-            if index + 1 < Int(ceil(rate)) {
+        let rate: Double = self.rating / 2.0
+        
+        for (index, button) in self.ratingButtons.enumerated() {
+            if index + 1 < Int( ceil(rate) ) {
                 button.isSelected = true
                 continue
             }

@@ -12,16 +12,18 @@ class ParserMovieJSON: NSObject {
     
     // MARK: - Enum
     internal enum SubURI: String {
-        case movies = "/movies"
-        case movie  = "/movie"
+        case movies     = "/movies"
+        case movie      = "/movie"
+        case comment    = "/comments"
     }
     private enum HttpMethodType: String {
         case GET    = "GET"
         case POST   = "POST"
     }
     internal enum MovieParserType: Int {
-        case movies = 0
-        case movie  = 1
+        case movies     = 0
+        case movie      = 1
+        case comment    = 2
     }
     
     // MARK: - Object Variables
@@ -55,14 +57,18 @@ class ParserMovieJSON: NSObject {
                 guard let type = MovieParserType(rawValue: type) else { return }
                 
                 do {
-                    
                     switch type {
                         case .movies:
                             let result  = try JSONDecoder().decode(Movies.self, from: data)
                             NotificationCenter.default.post(name: NotificationName.moviesListNoti.name, object: nil, userInfo: [GET_KEY: result.movies])
+                        
                         case .movie:
                             let result  = try JSONDecoder().decode(MovieDetailInformation.self, from: data)
                             NotificationCenter.default.post(name: NotificationName.movieDetailNoti.name, object: nil, userInfo: [GET_KEY: result])
+                        
+                        case .comment:
+                            let result  = try JSONDecoder().decode(Comment.self, from: data)
+                            NotificationCenter.default.post(name: NotificationName.movieUserComment.name, object: nil, userInfo: [GET_KEY: result])
                     }
                     
                     // MARK: Hide Indicator
