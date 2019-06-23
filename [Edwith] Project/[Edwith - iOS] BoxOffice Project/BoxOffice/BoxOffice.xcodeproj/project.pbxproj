@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		0C50DC4C22A7E25300E3D72B /* MovieTableView.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0C50DC4B22A7E25300E3D72B /* MovieTableView.storyboard */; };
 		0C50DC4E22A7E27200E3D72B /* MovieCollectionView.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0C50DC4D22A7E27200E3D72B /* MovieCollectionView.storyboard */; };
+		0C7E62A422BF4F880056AA94 /* SizeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C7E62A322BF4F880056AA94 /* SizeTableViewCell.swift */; };
+		0C7E62A622BF59E90056AA94 /* UserCommentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C7E62A522BF59E90056AA94 /* UserCommentViewController.swift */; };
 		0CA1CBB122ABCFEB00EEE625 /* NotifyNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CA1CBB022ABCFEB00EEE625 /* NotifyNotification.swift */; };
 		0CED37C022AE7CFB00A141D2 /* ExtensionUIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CED37BF22AE7CFB00A141D2 /* ExtensionUIColor.swift */; };
 		0CED37C222AE80ED00A141D2 /* DetailMovie.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0CED37C122AE80ED00A141D2 /* DetailMovie.storyboard */; };
@@ -56,6 +58,8 @@
 /* Begin PBXFileReference section */
 		0C50DC4B22A7E25300E3D72B /* MovieTableView.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = MovieTableView.storyboard; sourceTree = "<group>"; };
 		0C50DC4D22A7E27200E3D72B /* MovieCollectionView.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = MovieCollectionView.storyboard; sourceTree = "<group>"; };
+		0C7E62A322BF4F880056AA94 /* SizeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SizeTableViewCell.swift; sourceTree = "<group>"; };
+		0C7E62A522BF59E90056AA94 /* UserCommentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCommentViewController.swift; sourceTree = "<group>"; };
 		0CA1CBB022ABCFEB00EEE625 /* NotifyNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotifyNotification.swift; sourceTree = "<group>"; };
 		0CED37BF22AE7CFB00A141D2 /* ExtensionUIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionUIColor.swift; sourceTree = "<group>"; };
 		0CED37C122AE80ED00A141D2 /* DetailMovie.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = DetailMovie.storyboard; sourceTree = "<group>"; };
@@ -145,6 +149,7 @@
 		0CF3881B22BA4B2100499604 /* TableView Files */ = {
 			isa = PBXGroup;
 			children = (
+				0C7E62A322BF4F880056AA94 /* SizeTableViewCell.swift */,
 				0CF7DAE822A9340C005EBCDF /* MovieTableViewCell.swift */,
 				0CF3881922BA4B1800499604 /* UserCommentTableViewCell.swift */,
 			);
@@ -240,6 +245,7 @@
 				0CF21B0922A8DD4E005B595D /* MovieTableViewController.swift */,
 				0CF21B0B22A8DD59005B595D /* MovieCollectionViewController.swift */,
 				0CF596F922B11B1900BE4D8F /* DetailMovieViewController.swift */,
+				0C7E62A522BF59E90056AA94 /* UserCommentViewController.swift */,
 			);
 			path = "Controller Files";
 			sourceTree = "<group>";
@@ -407,12 +413,14 @@
 				0CF21B0C22A8DD59005B595D /* MovieCollectionViewController.swift in Sources */,
 				0CF54BED22AC007C00AEC0AA /* IdentifyOrderType.swift in Sources */,
 				0CF3075822ACE88F0040A75F /* Common.swift in Sources */,
+				0C7E62A622BF59E90056AA94 /* UserCommentViewController.swift in Sources */,
 				0CF7DAED22A93957005EBCDF /* IdentifyID.swift in Sources */,
 				0CF7DAEB22A9341D005EBCDF /* MovieCollectionViewCell.swift in Sources */,
 				0CF9CE5F22A16FE6004DF5AA /* AppDelegate.swift in Sources */,
 				0CF3881A22BA4B1800499604 /* UserCommentTableViewCell.swift in Sources */,
 				0CF21B0A22A8DD4E005B595D /* MovieTableViewController.swift in Sources */,
 				0CA1CBB122ABCFEB00EEE625 /* NotifyNotification.swift in Sources */,
+				0C7E62A422BF4F880056AA94 /* SizeTableViewCell.swift in Sources */,
 				0CF596FA22B11B1900BE4D8F /* DetailMovieViewController.swift in Sources */,
 				0CF7DAF022A93DAB005EBCDF /* ParserMovieJSON.swift in Sources */,
 				0CED37C022AE7CFB00A141D2 /* ExtensionUIColor.swift in Sources */,

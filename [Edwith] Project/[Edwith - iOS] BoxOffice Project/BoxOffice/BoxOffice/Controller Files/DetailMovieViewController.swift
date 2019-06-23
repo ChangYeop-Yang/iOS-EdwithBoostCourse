@@ -28,8 +28,6 @@ class DetailMovieViewController: UIViewController {
     
     // MARK: - Object Variables
     internal var movieID: String?
-    
-    private let COMMNET_CELL_HEIGHT: CGFloat = 100
     private var detailMovieData: MovieDetailInformation?
     private var userCommentData: [MovieOneLineList] = []
     
@@ -47,13 +45,28 @@ class DetailMovieViewController: UIViewController {
             , object: nil)
         
         // MARK: Setting TableView Delegate and Datasource
-        self.movieUserCommentTableView.dataSource = self
-        self.movieUserCommentTableView.delegate = self
-        self.movieUserCommentTableView.estimatedRowHeight = 80
+        self.movieUserCommentTableView.delegate             = self
+        self.movieUserCommentTableView.dataSource           = self
+        self.movieUserCommentTableView.estimatedRowHeight   = SizeCellHeight.comment.rawValue
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        
+        guard let id = self.movieID else { return }
+        
+        ShowIndicator.shared.showLoadIndicator(self)
+        
+        // MARK: Fetch Movie Detail Information JSON
+        DispatchQueue.global(qos: .userInitiated).async {
+            ParserMovieJSON.shared.fetchMovieDataParser(type: ParserMovieJSON.MovieParserType.movie.rawValue
+                , subURI: ParserMovieJSON.SubURI.movie.rawValue
+                , parameter: "id=\(id)")
+        }
+    }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
         
         guard let id = self.movieID else { return }
         
@@ -127,14 +140,13 @@ class DetailMovieViewController: UIViewController {
         
         ShowIndicator.shared.hideLoadIndicator()
                 
-        let cellsOfHeight: CGFloat = CGFloat(result.comments.count) * 80
+        let cellsOfHeight: CGFloat = CGFloat(result.comments.count) * SizeCellHeight.comment.rawValue
         
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
 
             self.movieUserCommentTableView.reloadData()
-            print("QWEQWEQEWQWEQWEQW")
-            print(self.movieUserCommentTableView.rowHeight)
+
             let frame = CGRect(x: self.movieUserCommentTableView.frame.origin.x
                 , y:        self.movieUserCommentTableView.frame.origin.y
                 , width:    self.movieUserCommentTableView.frame.size.width
@@ -143,9 +155,8 @@ class DetailMovieViewController: UIViewController {
             self.movieUserCommentTableView.frame = frame
             
             // MARK: - Setting Dynamic TableView Height
-            self.movieContentsScrollView.contentSize = CGSize(width: self.view.frame.width, height: self.movieContentsScrollView.contentSize.height + cellsOfHeight)
-            self.movieUserCommentTableView.sizeToFit()
-            self.movieContentsScrollView.sizeToFit()
+            self.movieContentsScrollView.contentSize = CGSize(width: self.view.frame.width
+                , height: self.movieContentsScrollView.contentSize.height + cellsOfHeight)
         }
     }
     private func setNumberFormatter(number: Int) -> String? {
@@ -179,9 +190,10 @@ extension DetailMovieViewController: UITableViewDataSource {
     
 }
 
-// MARK: - E
+// MARK: - Extension UITableViewDelegate
 extension DetailMovieViewController: UITableViewDelegate {
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 80;
+        return SizeCellHeight.comment.rawValue;
     }
 }

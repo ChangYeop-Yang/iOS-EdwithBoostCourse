@@ -15,7 +15,7 @@ class RatingStarBar: UIStackView {
         didSet { updateButtonSelectionStates() }
     }
     private var ratingButtons: [UIButton]           = []
-    private var starSize: CGSize                    = CGSize(width: 32, height: 32)
+    private var starSize: CGSize                    = CGSize(width: 24, height: 24)
     private var starCount: Int                      = 5
 
     // MARK: - Initialization
@@ -33,7 +33,7 @@ class RatingStarBar: UIStackView {
         
         // Load Button Images
         let bundle          = Bundle(for: type(of: self))
-        let fullStarImage   = UIImage(named: "ic_star_label", in: bundle, compatibleWith: self.traitCollection)
+        let fullStarImage   = UIImage(named: "ic_star_large_full", in: bundle, compatibleWith: self.traitCollection)
         let emptyStarImage  = UIImage(named: "ic_star_large", in: bundle, compatibleWith: self.traitCollection)
         let halfStarImage   = UIImage(named: "ic_star_large_half", in: bundle, compatibleWith: self.traitCollection)
         

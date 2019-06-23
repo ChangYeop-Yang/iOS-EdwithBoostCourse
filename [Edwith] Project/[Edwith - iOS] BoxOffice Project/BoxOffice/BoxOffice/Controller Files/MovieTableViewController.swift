@@ -149,15 +149,14 @@ extension MovieTableViewController: UITableViewDataSource {
 
 // MARK: - Extension UITableViewDelegate
 extension MovieTableViewController: UITableViewDelegate {
-    
+
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 115;
+        return SizeCellHeight.movie.rawValue;
     }
 }
 
 // MARK: - Extension MovieTypeDelegate
 extension MovieTableViewController: MovieTypeDelegate {
-    
     func changeMovieTypeEvent() {
         // MARK: Fetch Movie List From JSON Server
         fetchTableMovieList(type: MOVIE_TYPE)

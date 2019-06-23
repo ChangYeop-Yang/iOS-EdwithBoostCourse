@@ -38,6 +38,5 @@ class UserCommentTableViewCell: UITableViewCell {
             
             self.userRatingStarBar.rating = data.rating
         }
-        
     }
 }
