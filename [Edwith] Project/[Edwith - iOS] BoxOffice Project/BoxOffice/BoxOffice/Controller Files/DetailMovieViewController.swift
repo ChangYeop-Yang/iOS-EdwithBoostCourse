@@ -80,7 +80,16 @@ class DetailMovieViewController: UIViewController {
         }
     }
     
-    // MARK: - User Methods
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        guard let controller = segue.destination as? UserCommentViewController else { return }
+        
+        guard let information = self.detailMovieData else { return }
+        
+        controller.informationMovie = (information.title, information.id, information.grade)
+    }
+    
+    // MARK: - User Method
     private func setDetailMovieInformation(data: MovieDetailInformation) {
         
         let group: DispatchGroup = DispatchGroup()
@@ -94,8 +103,6 @@ class DetailMovieViewController: UIViewController {
             self.title = data.title
             
             self.movieTitleLabel.text               = data.title
-            self.movieTitleLabel.sizeToFit()
-            
             self.movieLaunchLabel.text              = "\(data.date) 개봉"
             self.movieTypeLabel.text                = "\(data.genre) / \(data.duration)분"
             self.movieOutlineLabel.text             = data.synopsis
@@ -123,12 +130,24 @@ class DetailMovieViewController: UIViewController {
                 , parameter: "movie_id=\(id)")
         }
     }
+    private func setNumberFormatter(number: Int) -> String? {
+        
+        let numeric: NSNumber = NSNumber(value: number)
+        
+        let formatter: NumberFormatter  = NumberFormatter()
+        formatter.groupingSeparator     = ","
+        formatter.numberStyle           = .decimal
+        
+        if let result: String = formatter.string(from: numeric) { return result }
+        else { return nil }
+    }
     
     @objc private func didReciveDetailMovieNotification(_ noti: Notification) {
         
         guard let receive = noti.userInfo, let result = receive[GET_KEY] as? MovieDetailInformation else { return }
         
         // MARK: 상세 영화 정보를 설정한 후 사용자 댓글 JSON Parsing을 하는 메소드
+        self.detailMovieData = result
         setDetailMovieInformation(data: result)
     }
     @objc private func didReciveUserComment(_ noti: Notification) {
@@ -147,11 +166,8 @@ class DetailMovieViewController: UIViewController {
 
             self.movieUserCommentTableView.reloadData()
 
-            let frame = CGRect(x: self.movieUserCommentTableView.frame.origin.x
-                , y:        self.movieUserCommentTableView.frame.origin.y
-                , width:    self.movieUserCommentTableView.frame.size.width
-                , height:   self.movieUserCommentTableView.contentSize.height + cellsOfHeight)
-
+            var frame: CGRect = self.movieUserCommentTableView.frame
+            frame.size.height = self.movieUserCommentTableView.contentSize.height
             self.movieUserCommentTableView.frame = frame
             
             // MARK: - Setting Dynamic TableView Height
@@ -159,17 +175,15 @@ class DetailMovieViewController: UIViewController {
                 , height: self.movieContentsScrollView.contentSize.height + cellsOfHeight)
         }
     }
-    private func setNumberFormatter(number: Int) -> String? {
+    
+    // MARK: Action Method
+    @IBAction private func writeUserComment(_ sender: UIButton) {
+     
+        //let vc = self.storyboard?.instantiateViewController(withIdentifier: "CommentMovieVC") as! UserCommentViewController
         
-        let numeric: NSNumber = NSNumber(value: number)
-        
-        let formatter: NumberFormatter  = NumberFormatter()
-        formatter.groupingSeparator     = ","
-        formatter.numberStyle           = .decimal    
-        
-        if let result: String = formatter.string(from: numeric) { return result }
-        else { return nil }
+        //self.navigationController?.pushViewController(vc, animated: true)
     }
+    
 }
 
 // MARK: - Extension UITableViewDataSource
