@@ -43,13 +43,9 @@ class MovieTableViewController: UIViewController {
     // MARK: - System Method
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        guard let controller = segue.destination as? DetailMovieViewController else {
-            return
-        }
+        guard let controller = segue.destination as? DetailMovieViewController else { return }
         
-        guard let indexPath = self.movieListTableView.indexPathForSelectedRow else {
-            return
-        }
+        guard let indexPath = self.movieListTableView.indexPathForSelectedRow else { return }
         
         controller.movieID = self.fetchMovieDatas[indexPath.row].id
     }

@@ -22,7 +22,7 @@ class DetailMovieViewController: UIViewController {
     @IBOutlet private weak var movieReservationRateLabel:   UILabel!
     @IBOutlet private weak var movieScoreLabel:             UILabel!
     @IBOutlet private weak var movieWatchPeopleLabel:       UILabel!
-    @IBOutlet private weak var movieRatingView:             RatingStarBar!
+    @IBOutlet private weak var movieRatingView:             StarRatingBar!
     @IBOutlet private weak var movieUserCommentTableView:   UITableView!
     @IBOutlet private weak var movieContentsScrollView:     UIScrollView!
     
@@ -85,7 +85,7 @@ class DetailMovieViewController: UIViewController {
         guard let controller = segue.destination as? UserCommentViewController else { return }
         
         guard let information = self.detailMovieData else { return }
-        
+    
         controller.informationMovie = (information.title, information.id, information.grade)
     }
     
@@ -112,7 +112,7 @@ class DetailMovieViewController: UIViewController {
             self.movieScoreLabel.text               = String(format: "%.2f", data.userRating)
             self.movieWatchPeopleLabel.text         = audience
             
-            self.movieRatingView.rating             = data.userRating
+            self.movieRatingView.score              = CGFloat(data.userRating) / 2.0
             
             seperateAgeType(age: data.grade, imageView: self.movieAgeImageView)
             
@@ -166,24 +166,17 @@ class DetailMovieViewController: UIViewController {
 
             self.movieUserCommentTableView.reloadData()
 
+            // MARK: Setting Dynamic TableView Height
             var frame: CGRect = self.movieUserCommentTableView.frame
             frame.size.height = self.movieUserCommentTableView.contentSize.height
             self.movieUserCommentTableView.frame = frame
             
-            // MARK: - Setting Dynamic TableView Height
+            // MARK: SEtting Dynamic ScrollView Height
+            self.movieContentsScrollView.layoutIfNeeded()
             self.movieContentsScrollView.contentSize = CGSize(width: self.view.frame.width
                 , height: self.movieContentsScrollView.contentSize.height + cellsOfHeight)
         }
     }
-    
-    // MARK: Action Method
-    @IBAction private func writeUserComment(_ sender: UIButton) {
-     
-        //let vc = self.storyboard?.instantiateViewController(withIdentifier: "CommentMovieVC") as! UserCommentViewController
-        
-        //self.navigationController?.pushViewController(vc, animated: true)
-    }
-    
 }
 
 // MARK: - Extension UITableViewDataSource
@@ -206,7 +199,6 @@ extension DetailMovieViewController: UITableViewDataSource {
 
 // MARK: - Extension UITableViewDelegate
 extension DetailMovieViewController: UITableViewDelegate {
-    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return SizeCellHeight.comment.rawValue;
     }

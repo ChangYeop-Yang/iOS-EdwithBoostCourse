@@ -14,7 +14,7 @@ class UserCommentTableViewCell: UITableViewCell {
     @IBOutlet private weak var userNameLabel:           UILabel!
     @IBOutlet private weak var userCreateCommentDate:   UILabel!
     @IBOutlet private weak var userComment:             UILabel!
-    @IBOutlet private weak var userRatingStarBar: RatingStarBar!
+    @IBOutlet private weak var userRatingStarBar:       StarRatingBar!
     
     // MARK: - Object Variables
     internal var movieID: String?
@@ -36,7 +36,7 @@ class UserCommentTableViewCell: UITableViewCell {
             let date = Date(timeIntervalSince1970: data.timestamp)
             self.userCreateCommentDate.text = formatter.string(from: date)
             
-            self.userRatingStarBar.rating = data.rating
+            self.userRatingStarBar.score = CGFloat(data.rating) / 2.0
         }
     }
 }
