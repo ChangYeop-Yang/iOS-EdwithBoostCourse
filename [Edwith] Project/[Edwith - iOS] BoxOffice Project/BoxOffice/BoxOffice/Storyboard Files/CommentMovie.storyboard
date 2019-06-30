@@ -118,6 +118,7 @@
                         <outlet property="movieAgeImageView" destination="Ppy-wM-KYl" id="7ML-St-tG4"/>
                         <outlet property="movieNameLabel" destination="2fE-sJ-Bty" id="Xce-ED-i8M"/>
                         <outlet property="movieUserCommentTextView" destination="vGr-0O-lZS" id="veY-5h-p1k"/>
+                        <outlet property="movieUserName" destination="dlR-uj-c15" id="c0F-2x-5Sw"/>
                         <outlet property="movieUserRatingBar" destination="A3i-gz-5hh" id="Q05-WN-FXM"/>
                         <outlet property="movieUserRatingLabel" destination="16P-Rw-UWP" id="CQD-3D-Jpi"/>
                     </connections>

@@ -8,6 +8,8 @@
 
 import Foundation
 
+// MARK: - Decodable
+
 internal struct Movies: Decodable {
     var movies: [MovieList]
 }
@@ -20,7 +22,6 @@ internal struct Comment: Decodable {
     // MARK: CountryType CodingKey
     private enum CodingKeys: String, CodingKey {
         case movieID = "movie_id"
-        
         case comments
     }
 }
@@ -89,7 +90,23 @@ internal struct MovieOneLineList: Decodable {
     // MARK: - CountryType CodingKey
     private enum CodingKeys: String, CodingKey {
         case movieID = "movie_id"
-        
         case rating, timestamp, writer, contents
+    }
+}
+
+// MARK: - Codable
+
+internal struct UserComment: Codable {
+    
+    var rating:     Double
+    
+    var writer:     String
+    var movieID:    String
+    var contents:   String
+    
+    // MARK: - CountryType CodingKey
+    private enum CodingKeys: String, CodingKey {
+        case movieID = "movie_id"
+        case rating, writer, contents
     }
 }

@@ -16,7 +16,7 @@ class ParserMovieJSON: NSObject {
         case movie      = "/movie"
         case comment    = "/comments"
     }
-    private enum HttpMethodType: String {
+    private enum HTTPMethodType: String {
         case GET    = "GET"
         case POST   = "POST"
     }
@@ -30,6 +30,7 @@ class ParserMovieJSON: NSObject {
     internal static let shared: ParserMovieJSON = ParserMovieJSON()
     private let BASE_SERVER_URL: String = "http://connect-boxoffice.run.goorm.io"
     
+    // MARK: - Init
     private override init() {}
     
     // MARK: - User Method
@@ -40,7 +41,7 @@ class ParserMovieJSON: NSObject {
         guard let serverURL: URL = URL(string: parserAddress) else { return }
         
         var request: URLRequest = URLRequest(url: serverURL)
-        request.httpMethod      = HttpMethodType.GET.rawValue
+        request.httpMethod      = HTTPMethodType.GET.rawValue
         
         let session: URLSession = URLSession(configuration: .default)
         
@@ -80,5 +81,49 @@ class ParserMovieJSON: NSObject {
         }
         
         dataTask.resume()
+    }
+    internal func uploadMovieUserComment(type: Int, subURI: String, parameter: UserComment) {
+        
+        let uploadAddress = "\(BASE_SERVER_URL)\(subURI)"
+        
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            guard let url: URL = URL(string: uploadAddress) else { return }
+            guard let json = try? JSONEncoder().encode(parameter) else {
+                print("‼️ Error, JSON Encode to parameter.")
+                return
+            }
+
+            var request: URLRequest = URLRequest(url: url)
+            request.httpMethod      = HTTPMethodType.POST.rawValue
+            request.httpBody        = json
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            
+            let dataTask = URLSession.shared.dataTask(with: request) { data, response, error in
+                
+                // 데이터 수신 또는 한줄평 등록에 실패한 경우, 알림창을 통해 사용자에게 결과를 표시해야 합니다.
+                if let error = error {
+                    print ("error: \(error)")
+                    return
+                }
+                guard let response = response as? HTTPURLResponse,
+                    (200...299).contains(response.statusCode) else {
+                        print ("server error")
+                        return
+                }
+                if let mimeType = response.mimeType,
+                    mimeType == "application/json",
+                    let data = data,
+                    let dataString = String(data: data, encoding: .utf8) {
+                    print ("got data: \(dataString)")
+                }
+            }
+            
+            let upload = URLSession.shared.uploadTask(with: request, from: json)
+            upload.resume()
+            
+            dataTask.resume()
+        }
+        
+        
     }
 }

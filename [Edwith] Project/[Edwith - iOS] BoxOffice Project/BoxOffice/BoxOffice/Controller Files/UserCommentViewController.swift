@@ -22,10 +22,12 @@ class UserCommentViewController: UIViewController {
     @IBOutlet private weak var movieUserRatingLabel:        UILabel!
     @IBOutlet private weak var movieUserRatingBar:          StarRatingControl!
     @IBOutlet private weak var movieUserCommentTextView:    UITextView!
+    @IBOutlet private weak var movieUserName:               UITextField!
     
     // MARK: - Object Variables
     private let placeholder: String = "한줄평을 작성해주세요."
     internal var informationMovie: (name: String, id: String, age: Int)?
+    private let NICKNAME_USER_DEFAULT_KEY: String = "KEY_USER_NAME"
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,23 +37,33 @@ class UserCommentViewController: UIViewController {
         // MARK: Create NavigationBar left, right button.
         createNavigationItem()
         
-        // MARK: Setting TextView Layer and Delegate
+        // MARK: Setting TextView Layer and Delegate.
         setUserCommentTextView(radius: 10.0, width: 1.0)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self ,let information = self.informationMovie else { return }
-            
-            self.movieNameLabel.text = information.name
-            seperateAgeType(age: information.age, imageView: self.movieAgeImageView)
-        }
-        
+        // MARK: Show Movie Information and User NickName.
+        showMovieInformationAndUserName()
     }
     
     // MARK: - User Method
+    private func showMovieInformationAndUserName() {
+        
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self, let information = self.informationMovie else { return }
+            
+            // MARK: Setting Movie Name and Age.
+            self.movieNameLabel.text = information.name
+            seperateAgeType(age: information.age, imageView: self.movieAgeImageView)
+            
+            // MARK: Load User Nickname from UserDefault.
+            if let name: String = UserDefaults.standard.string(forKey: self.NICKNAME_USER_DEFAULT_KEY) {
+                self.movieUserName.text = name
+            }
+        }
+    }
     private func setUserCommentTextView(radius: CGFloat, width: CGFloat) {
         
         self.movieUserCommentTextView.delegate              = self
@@ -66,15 +78,15 @@ class UserCommentViewController: UIViewController {
         
         self.title = "한줄평 작성"
         self.navigationItem.setHidesBackButton(true, animated: false)
-        
-        // Left UIBarButton Item
+
+        // MARK: Left UIBarButton Item
         let left = UIBarButtonItem.init(title: "취소"
             , style: .done
             , target: self
             , action: #selector(actionNavigationItems(_:)) )
         left.tag = NavigationItemTag.left.rawValue
         
-        // Right UIBarButton Item
+        // MARK: Right UIBarButton Item
         let right = UIBarButtonItem.init(title: "완료"
             , style: .plain
             , target: self
@@ -84,15 +96,58 @@ class UserCommentViewController: UIViewController {
         self.navigationItem.leftBarButtonItem   = left
         self.navigationItem.rightBarButtonItem  = right
     }
+    private func uploadUserComment() {
+        
+        // MARK: Check User Comment TextView and User Nickname TextFiled.
+        guard checkWriteCondition() else { return }
+        
+        // 기존에 작성했던 닉네임이 있다면 화면3으로 새로 진입할 때 기존의 닉네임이 입력되어 있습니다.
+        UserDefaults.standard.set(self.movieUserName.text, forKey: self.NICKNAME_USER_DEFAULT_KEY)
+        
+        guard let writer:   String  = self.movieUserName.text
+            , let rating:   String  = self.movieUserRatingLabel.text
+            , let id:       String  = self.informationMovie?.id
+            , let content:  String  = self.movieUserCommentTextView.text
+        else { return }
+        
+        let comment: UserComment = UserComment(rating: Double(rating) as! Double, writer: writer, movieID: id, contents: content)
+        ParserMovieJSON.shared.uploadMovieUserComment(type: ParserMovieJSON.MovieParserType.comment.rawValue
+            , subURI: ParserMovieJSON.SubURI.comment.rawValue
+            , parameter: comment)
+    }
+    private func checkWriteCondition() -> Bool {
+        
+        // 사용자가 User Name을 작성하지 않은 경우
+        if self.movieUserName.text == "" || self.movieUserCommentTextView.text == self.placeholder {
+            // 닉네임 또는 한줄평이 모두 작성되지 않은 상태에서 '완료' 버튼을 누르면 경고 알림창이 뜹니다.
+            let comment = "닉네임 또는 사용자 코멘트를 입력하여주세요."
+            
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                
+                let alert: UIAlertController = UIAlertController(title: "‼️ ERROR, Input Contents", message: comment, preferredStyle: .alert)
+                alert.addAction( UIAlertAction(title: "확인", style: .cancel, handler: nil) )
+                
+                self.present(alert, animated: true, completion: nil)
+            }
+            
+            return false
+        }
+        
+        return true
+    }
     @objc private func actionNavigationItems(_ item: UIBarButtonItem) {
         
         guard let tag = NavigationItemTag(rawValue: item.tag) else { return }
         
         switch tag {
             case .left:
+                // '취소'버튼을 누르면 이전 화면으로 되돌아갑니다.
                 self.navigationController?.popViewController(animated: true)
+            
             case .right:
-                break
+                // 작성자의 닉네임과 한줄평을 작성하고 '완료' 버튼을 누르면 새로운 한줄평을 등록하고 등록에 성공하면 이전화면으로 되돌아오고, 새로운 한줄평이 업데이트됩니다.
+                uploadUserComment()
         }
     }
     
@@ -102,10 +157,11 @@ class UserCommentViewController: UIViewController {
     }
 }
 
-// MARK: - Extension UpdateStarRatingScore
+// MARK: - Extension UpdateStarRatingScore Delegate
 extension UserCommentViewController: UpdateStarRatingScore {
     
     func updateStarRating(score: CGFloat) {
+        // 선택된 별이 숫자로 환산돼 별 이미지 아래쪽에 보입니다.
         let value = score.rounded()
         self.movieUserRatingLabel.text = String(format: "%d", Int(value) )
     }
@@ -115,6 +171,21 @@ extension UserCommentViewController: UpdateStarRatingScore {
 extension UserCommentViewController: UITextViewDelegate {
     
     func textViewDidChange(_ textView: UITextView) {
-        textView.layer.borderColor = textView.text.isEmpty ? UIColor.red.cgColor : UIColor.lightGray.cgColor
+        if textView.text.isEmpty {
+            textView.text               = self.placeholder
+            textView.textColor          = UIColor.lightGray
+            textView.layer.borderColor  = UIColor.red.cgColor
+        } else {
+            textView.textColor          = UIColor.black
+            textView.layer.borderColor  = UIColor.lightGray.cgColor
+        }
+    }
+    
+    // https://developer.apple.com/documentation/uikit/uitextviewdelegate/1618630-textview
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        if textView.text == self.placeholder {
+            textView.text = String()
+        }
+        return true
     }
 }
