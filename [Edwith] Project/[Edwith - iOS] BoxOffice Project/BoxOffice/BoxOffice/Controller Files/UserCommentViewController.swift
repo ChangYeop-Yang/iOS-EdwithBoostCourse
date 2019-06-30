@@ -110,10 +110,12 @@ class UserCommentViewController: UIViewController {
             , let content:  String  = self.movieUserCommentTextView.text
         else { return }
         
-        let comment: UserComment = UserComment(rating: Double(rating) as! Double, writer: writer, movieID: id, contents: content)
-        ParserMovieJSON.shared.uploadMovieUserComment(type: ParserMovieJSON.MovieParserType.comment.rawValue
-            , subURI: ParserMovieJSON.SubURI.comment.rawValue
-            , parameter: comment)
+        DispatchQueue.global(qos: .userInitiated).async {
+            let comment: UserComment = UserComment(rating: Double(rating) as! Double, writer: writer, movieID: id, contents: content)
+            ParserMovieJSON.shared.uploadMovieUserComment(type: ParserMovieJSON.MovieParserType.comment.rawValue
+                , subURI: ParserMovieJSON.SubURI.comment.rawValue
+                , parameter: comment)
+        }
     }
     private func checkWriteCondition() -> Bool {
         

@@ -58,7 +58,6 @@ class ParserMovieJSON: NSObject {
                 guard let type = MovieParserType(rawValue: type) else { return }
                 
                 do {
-                    
                     switch type {
                         case .movies:
                             let result  = try JSONDecoder().decode(Movies.self, from: data)
@@ -72,7 +71,6 @@ class ParserMovieJSON: NSObject {
                             let result  = try JSONDecoder().decode(Comment.self, from: data)
                             NotificationCenter.default.post(name: NotificationName.movieUserComment.name, object: nil, userInfo: [GET_KEY: result])
                     }
-                    
                 } catch let error {
                     print(error.localizedDescription)
                 }
@@ -84,46 +82,36 @@ class ParserMovieJSON: NSObject {
     }
     internal func uploadMovieUserComment(type: Int, subURI: String, parameter: UserComment) {
         
-        let uploadAddress = "\(BASE_SERVER_URL)\(subURI)"
+        let uploadAddress = "\(BASE_SERVER_URL)/comment"
         
-        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             guard let url: URL = URL(string: uploadAddress) else { return }
+            
             guard let json = try? JSONEncoder().encode(parameter) else {
                 print("‼️ Error, JSON Encode to parameter.")
                 return
             }
-
+        
             var request: URLRequest = URLRequest(url: url)
             request.httpMethod      = HTTPMethodType.POST.rawValue
             request.httpBody        = json
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-            
+            request.setValue("application/json", forHTTPHeaderField: "Accept")
+        
+        
             let dataTask = URLSession.shared.dataTask(with: request) { data, response, error in
                 
                 // 데이터 수신 또는 한줄평 등록에 실패한 경우, 알림창을 통해 사용자에게 결과를 표시해야 합니다.
-                if let error = error {
-                    print ("error: \(error)")
+                guard let data = data, error == nil else {
+                    print(error?.localizedDescription ?? "No data")
                     return
                 }
-                guard let response = response as? HTTPURLResponse,
-                    (200...299).contains(response.statusCode) else {
-                        print ("server error")
-                        return
-                }
-                if let mimeType = response.mimeType,
-                    mimeType == "application/json",
-                    let data = data,
-                    let dataString = String(data: data, encoding: .utf8) {
-                    print ("got data: \(dataString)")
-                }
+                
+                print(String(data: data, encoding: .utf8))
+                let responseJSON = try? JSONSerialization.jsonObject(with: data, options: [])
+                print(responseJSON)
+                //let result = try! JSONDecoder().decode(Comment.self, from: data)
             }
-            
-            let upload = URLSession.shared.uploadTask(with: request, from: json)
-            upload.resume()
-            
+        
             dataTask.resume()
-        }
-        
-        
     }
 }
