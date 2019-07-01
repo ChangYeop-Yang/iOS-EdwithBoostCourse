@@ -15,6 +15,7 @@ internal enum NotificationName: String {
     case moviesListNoti         = "didReciveMovieListNotification"
     case movieDetailNoti        = "didReciveMovieDatilNotification"
     case movieUserComment       = "didReceiveMovieUserCommentNotification"
+    case movieUserUploadComment = "didReceiveMovieUserCommentUploadNitification"
     
     var name: Notification.Name {
         return Notification.Name(self.rawValue)

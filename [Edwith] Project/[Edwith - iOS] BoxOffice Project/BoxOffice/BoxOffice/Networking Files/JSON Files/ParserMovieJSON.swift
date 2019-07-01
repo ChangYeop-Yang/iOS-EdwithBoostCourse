@@ -15,6 +15,7 @@ class ParserMovieJSON: NSObject {
         case movies     = "/movies"
         case movie      = "/movie"
         case comment    = "/comments"
+        case upload     = "/comment"
     }
     private enum HTTPMethodType: String {
         case GET    = "GET"
@@ -42,7 +43,7 @@ class ParserMovieJSON: NSObject {
         
         var request: URLRequest = URLRequest(url: serverURL)
         request.httpMethod      = HTTPMethodType.GET.rawValue
-        
+    
         let session: URLSession = URLSession(configuration: .default)
         
         let dataTask: URLSessionDataTask = session.dataTask(with: request) { data, response, error in
@@ -82,36 +83,41 @@ class ParserMovieJSON: NSObject {
     }
     internal func uploadMovieUserComment(type: Int, subURI: String, parameter: UserComment) {
         
-        let uploadAddress = "\(BASE_SERVER_URL)/comment"
+        let uploadAddress = "\(BASE_SERVER_URL)\(subURI)"
         
+        let handler: (Data?, URLResponse?, Error?) -> Void = {  data, response, error in
+            
+            // 데이터 수신 또는 한줄평 등록에 실패한 경우, 알림창을 통해 사용자에게 결과를 표시해야 합니다.
+            guard error == nil else {
+                print("‼️ Error, Upload \(String(describing: error?.localizedDescription))")
+                return
+            }
+            
+            // Success Status Code : 200
+            guard let response = response as? HTTPURLResponse, response.statusCode == 200 else {
+                NotificationCenter.default.post(name: NotificationName.movieUserUploadComment.name, object: nil, userInfo: [GET_KEY: false])
+                return
+            }
+            
+            NotificationCenter.default.post(name: NotificationName.movieUserUploadComment.name, object: nil, userInfo: [GET_KEY: true])
+        }
+        
+        DispatchQueue.global(qos: .userInitiated).async {
             guard let url: URL = URL(string: uploadAddress) else { return }
             
             guard let json = try? JSONEncoder().encode(parameter) else {
                 print("‼️ Error, JSON Encode to parameter.")
                 return
             }
-        
+            
             var request: URLRequest = URLRequest(url: url)
             request.httpMethod      = HTTPMethodType.POST.rawValue
             request.httpBody        = json
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
             request.setValue("application/json", forHTTPHeaderField: "Accept")
-        
-        
-            let dataTask = URLSession.shared.dataTask(with: request) { data, response, error in
-                
-                // 데이터 수신 또는 한줄평 등록에 실패한 경우, 알림창을 통해 사용자에게 결과를 표시해야 합니다.
-                guard let data = data, error == nil else {
-                    print(error?.localizedDescription ?? "No data")
-                    return
-                }
-                
-                print(String(data: data, encoding: .utf8))
-                let responseJSON = try? JSONSerialization.jsonObject(with: data, options: [])
-                print(responseJSON)
-                //let result = try! JSONDecoder().decode(Comment.self, from: data)
-            }
-        
-            dataTask.resume()
+            
+            // https://developer.apple.com/documentation/foundation/url_loading_system/uploading_data_to_a_website
+            URLSession.shared.dataTask(with: request, completionHandler: handler).resume()
+        }
     }
 }

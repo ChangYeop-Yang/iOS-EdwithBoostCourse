@@ -25,13 +25,14 @@ class UserCommentViewController: UIViewController {
     @IBOutlet private weak var movieUserName:               UITextField!
     
     // MARK: - Object Variables
+    private var movieRating: CGFloat = 0.0
     private let placeholder: String = "한줄평을 작성해주세요."
     internal var informationMovie: (name: String, id: String, age: Int)?
     private let NICKNAME_USER_DEFAULT_KEY: String = "KEY_USER_NAME"
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         self.movieUserRatingBar.delegate = self
         
         // MARK: Create NavigationBar left, right button.
@@ -39,6 +40,12 @@ class UserCommentViewController: UIViewController {
         
         // MARK: Setting TextView Layer and Delegate.
         setUserCommentTextView(radius: 10.0, width: 1.0)
+        
+        // MARK: Register NotificationCenter
+        NotificationCenter.default.addObserver(self
+            , selector: #selector(didReceiveUploadResult)
+            , name: NotificationName.movieUserUploadComment.name
+            , object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -101,21 +108,21 @@ class UserCommentViewController: UIViewController {
         // MARK: Check User Comment TextView and User Nickname TextFiled.
         guard checkWriteCondition() else { return }
         
-        // 기존에 작성했던 닉네임이 있다면 화면3으로 새로 진입할 때 기존의 닉네임이 입력되어 있습니다.
-        UserDefaults.standard.set(self.movieUserName.text, forKey: self.NICKNAME_USER_DEFAULT_KEY)
-        
         guard let writer:   String  = self.movieUserName.text
             , let rating:   String  = self.movieUserRatingLabel.text
             , let id:       String  = self.informationMovie?.id
             , let content:  String  = self.movieUserCommentTextView.text
+            , let score:    Double  = Double(rating)
         else { return }
         
-        DispatchQueue.global(qos: .userInitiated).async {
-            let comment: UserComment = UserComment(rating: Double(rating) as! Double, writer: writer, movieID: id, contents: content)
-            ParserMovieJSON.shared.uploadMovieUserComment(type: ParserMovieJSON.MovieParserType.comment.rawValue
-                , subURI: ParserMovieJSON.SubURI.comment.rawValue
-                , parameter: comment)
-        }
+        // 기존에 작성했던 닉네임이 있다면 화면3으로 새로 진입할 때 기존의 닉네임이 입력되어 있습니다.
+        UserDefaults.standard.set(writer, forKey: self.NICKNAME_USER_DEFAULT_KEY)
+        
+        // 영화정보를 가져오거나 한줄평을 등록하는 과정은 첨부한 API 문서를 참고하여 URLSession을 활용하여 서버와 통신합니다.
+        let comment: UserComment = UserComment(rating: score, writer: writer, movieID: id, contents: content)
+        ParserMovieJSON.shared.uploadMovieUserComment(type: ParserMovieJSON.MovieParserType.comment.rawValue
+            , subURI: ParserMovieJSON.SubURI.upload.rawValue
+            , parameter: comment)
     }
     private func checkWriteCondition() -> Bool {
         
@@ -127,8 +134,8 @@ class UserCommentViewController: UIViewController {
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
                 
-                let alert: UIAlertController = UIAlertController(title: "‼️ ERROR, Input Contents", message: comment, preferredStyle: .alert)
-                alert.addAction( UIAlertAction(title: "확인", style: .cancel, handler: nil) )
+                let alert: UIAlertController = UIAlertController(title: "‼️ ERROR, Empty Contents (3477)", message: comment, preferredStyle: .alert)
+                alert.addAction( UIAlertAction(title: "✅ 확인", style: .default, handler: nil) )
                 
                 self.present(alert, animated: true, completion: nil)
             }
@@ -138,6 +145,29 @@ class UserCommentViewController: UIViewController {
         
         return true
     }
+    
+    // MARK: - Objective-C Method
+    @objc private func didReceiveUploadResult(_ noti: Notification) {
+        
+        guard let receive = noti.userInfo, let status = receive[GET_KEY] as? Bool else { return }
+        
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            
+            // 데이터 수신 또는 한줄평 등록에 실패한 경우, 알림창을 통해 사용자에게 결과를 표시해야 합니다.
+            if status == false || self.movieRating == 0.0 {
+                let alert = UIAlertController(title: "‼️ Error, Upload Fail (3478)"
+                    , message: "현재 서버에 응답이 없거나 영화 별점 점수를 매겨주세요."
+                    , preferredStyle: .alert)
+                alert.addAction( UIAlertAction(title: "✅ 확인", style: .default, handler: nil) )
+                
+                self.present(alert, animated: true, completion: nil)
+                return
+            }
+            
+            self.navigationController?.popViewController(animated: true)
+        }
+    }
     @objc private func actionNavigationItems(_ item: UIBarButtonItem) {
         
         guard let tag = NavigationItemTag(rawValue: item.tag) else { return }
@@ -145,7 +175,10 @@ class UserCommentViewController: UIViewController {
         switch tag {
             case .left:
                 // '취소'버튼을 누르면 이전 화면으로 되돌아갑니다.
-                self.navigationController?.popViewController(animated: true)
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+                    self.navigationController?.popViewController(animated: true)
+                }
             
             case .right:
                 // 작성자의 닉네임과 한줄평을 작성하고 '완료' 버튼을 누르면 새로운 한줄평을 등록하고 등록에 성공하면 이전화면으로 되돌아오고, 새로운 한줄평이 업데이트됩니다.
@@ -164,8 +197,8 @@ extension UserCommentViewController: UpdateStarRatingScore {
     
     func updateStarRating(score: CGFloat) {
         // 선택된 별이 숫자로 환산돼 별 이미지 아래쪽에 보입니다.
-        let value = score.rounded()
-        self.movieUserRatingLabel.text = String(format: "%d", Int(value) )
+        self.movieRating = score.rounded()
+        self.movieUserRatingLabel.text = String(format: "%d", Int(self.movieRating) )
     }
 }
 

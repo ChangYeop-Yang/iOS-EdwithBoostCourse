@@ -142,6 +142,14 @@
             </objects>
             <point key="canvasLocation" x="1442.0289855072465" y="-252.45535714285714"/>
         </scene>
+        <!--DetailMovieVC-->
+        <scene sceneID="ifJ-go-mDr">
+            <objects>
+                <viewControllerPlaceholder storyboardIdentifier="DetailMovieVC" storyboardName="DetailMovie" referencedIdentifier="DetailMovieVC" id="NeY-1U-mZP" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="pS4-ny-kw5" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2241" y="-252"/>
+        </scene>
     </scenes>
     <resources>
         <image name="ic_collection" width="25" height="25"/>
