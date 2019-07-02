@@ -31,3 +31,17 @@ internal func seperateAgeType(age: Int, imageView: UIImageView) {
             imageView.image = UIImage(named: "ic_19")
     }
 }
+internal func seperateAgeType(age: Int) -> UIImage? {
+    guard let type = WatchAge(rawValue: age) else { return nil }
+    
+    switch type {
+        case .all:
+            return UIImage(named: "ic_allages")
+        case .twelve:
+            return UIImage(named: "ic_12")
+        case .fifteen:
+            return UIImage(named: "ic_15")
+        case .nineteen:
+            return UIImage(named: "ic_19")
+    }
+}

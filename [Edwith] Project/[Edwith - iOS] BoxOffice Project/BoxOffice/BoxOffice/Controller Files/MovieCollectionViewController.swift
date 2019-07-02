@@ -99,6 +99,8 @@ class MovieCollectionViewController: UIViewController {
     }
 }
 
+// MARK: - Extension MovieCollectionViewController
+
 // MARK: - Extension UICollectionView Data Source
 extension MovieCollectionViewController: UICollectionViewDataSource {
     

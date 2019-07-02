@@ -10,13 +10,14 @@ import UIKit
 
 class MovieTableViewController: UIViewController {
     
-    // MARK: - Outlet Variables
+    // MARK: - Outlet Propertise
     @IBOutlet private weak var movieListTableView: UITableView!
     
-    // MARK: - Object Variables
-    private var refreshControl:     UIRefreshControl    = UIRefreshControl()
-    private var fetchMovieDatas:    [MovieList]         = []
+    // MARK: - Object Propertise
+    private var fetchMovieDatas: [MovieList] = []
+    private var refreshControl: UIRefreshControl = UIRefreshControl()
     
+    // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -31,6 +32,14 @@ class MovieTableViewController: UIViewController {
         
         // MARK: Setting TableView
         setTableView()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        // MARK: Dynamic TableView Cell Height.
+        self.movieListTableView.rowHeight = UITableView.automaticDimension
+        self.movieListTableView.estimatedRowHeight = UITableView.automaticDimension
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -49,16 +58,16 @@ class MovieTableViewController: UIViewController {
         
         controller.movieID = self.fetchMovieDatas[indexPath.row].id
     }
+}
+
+// MARK: - MovieTableViewController
+private extension MovieTableViewController {
     
-    // MARK: - User Method
     private func setTableView() {
         
         // MARK: Setting TableView DataSource and Delegate
         self.movieListTableView.delegate    = self
         self.movieListTableView.dataSource  = self
-                
-        self.movieListTableView.estimatedRowHeight = 110
-        self.movieListTableView.rowHeight = UITableView.automaticDimension
         
         // MARK: https://developer.apple.com/documentation/uikit/uirefreshcontrol
         if #available(iOS 6.0, *) {
@@ -95,14 +104,13 @@ class MovieTableViewController: UIViewController {
             ParserMovieJSON.shared.fetchMovieDataParser(type: ParserMovieJSON.MovieParserType.movies.rawValue, subURI: ParserMovieJSON.SubURI.movies.rawValue, parameter: "order_type=\(type)")
         }
     }
+    
     @objc private func refreshTableViewDatas() {
         
         fetchTableMovieList(type: MOVIE_TYPE)
         
         DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            
-            self.refreshControl.endRefreshing()
+            self?.refreshControl.endRefreshing()
         }
     }
     @objc private func didReciveMovieDatasNotification(_ noti: Notification) {
@@ -113,9 +121,7 @@ class MovieTableViewController: UIViewController {
         ShowIndicator.shared.hideLoadIndicator()
         
         DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            
-            self.movieListTableView.reloadData()
+            self?.movieListTableView.reloadData()
         }
     }
     @objc private func showMovieTypeMenu() {
@@ -140,14 +146,13 @@ extension MovieTableViewController: UITableViewDataSource {
         
         return cell
     }
-    
 }
 
 // MARK: - Extension UITableViewDelegate
 extension MovieTableViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return SizeCellHeight.movie.rawValue;
+        return SizeCellHeight.movie.rawValue
     }
 }
 

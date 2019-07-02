@@ -13,7 +13,7 @@ class UserCommentTableViewCell: UITableViewCell {
     // MARK: - Outlet Variables
     @IBOutlet private weak var userNameLabel:           UILabel!
     @IBOutlet private weak var userCreateCommentDate:   UILabel!
-    @IBOutlet private weak var userComment:             UILabel!
+    @IBOutlet private weak var userCommentLabel:        UILabel!
     @IBOutlet private weak var userRatingStarBar:       StarRatingBar!
     
     // MARK: - Object Variables
@@ -27,9 +27,10 @@ class UserCommentTableViewCell: UITableViewCell {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             
-            self.userNameLabel.text         = data.writer
-            self.userComment.text           = data.contents
-            
+            self.userNameLabel.text = data.writer
+            self.userCommentLabel.text = data.contents
+            self.userCommentLabel.sizeToFit()
+
             let formatter = DateFormatter()
             formatter.dateFormat = "YYYY-MM-dd hh:mm:ss"
             

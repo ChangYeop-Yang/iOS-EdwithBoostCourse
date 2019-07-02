@@ -21,6 +21,7 @@
 		0CF21B1022A8DE74005B595D /* MovieJsonDecode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CF21B0F22A8DE74005B595D /* MovieJsonDecode.swift */; };
 		0CF3075522ACDB7C0040A75F /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CF3075422ACDB7C0040A75F /* Networking.swift */; };
 		0CF3075822ACE88F0040A75F /* Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CF3075722ACE88F0040A75F /* Common.swift */; };
+		0CF338BB22CB7E2B001ECAE0 /* NSMutableAttributedString+Append.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CF338BA22CB7E2B001ECAE0 /* NSMutableAttributedString+Append.swift */; };
 		0CF3881A22BA4B1800499604 /* UserCommentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CF3881922BA4B1800499604 /* UserCommentTableViewCell.swift */; };
 		0CF479CC22AFCB9700FA211A /* CommentMovie.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0CF479CB22AFCB9700FA211A /* CommentMovie.storyboard */; };
 		0CF54BED22AC007C00AEC0AA /* IdentifyOrderType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CF54BEC22AC007C00AEC0AA /* IdentifyOrderType.swift */; };
@@ -71,6 +72,7 @@
 		0CF21B0F22A8DE74005B595D /* MovieJsonDecode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieJsonDecode.swift; sourceTree = "<group>"; };
 		0CF3075422ACDB7C0040A75F /* Networking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Networking.swift; sourceTree = "<group>"; };
 		0CF3075722ACE88F0040A75F /* Common.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Common.swift; sourceTree = "<group>"; };
+		0CF338BA22CB7E2B001ECAE0 /* NSMutableAttributedString+Append.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSMutableAttributedString+Append.swift"; sourceTree = "<group>"; };
 		0CF3881922BA4B1800499604 /* UserCommentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCommentTableViewCell.swift; sourceTree = "<group>"; };
 		0CF479CB22AFCB9700FA211A /* CommentMovie.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = CommentMovie.storyboard; sourceTree = "<group>"; };
 		0CF54BEC22AC007C00AEC0AA /* IdentifyOrderType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentifyOrderType.swift; sourceTree = "<group>"; };
@@ -157,6 +159,14 @@
 			path = "Common Files";
 			sourceTree = "<group>";
 		};
+		0CF338B922CB7E16001ECAE0 /* Extension Files */ = {
+			isa = PBXGroup;
+			children = (
+				0CF338BA22CB7E2B001ECAE0 /* NSMutableAttributedString+Append.swift */,
+			);
+			path = "Extension Files";
+			sourceTree = "<group>";
+		};
 		0CF3881B22BA4B2100499604 /* TableView Files */ = {
 			isa = PBXGroup;
 			children = (
@@ -220,6 +230,7 @@
 		0CF9CE5D22A16FE6004DF5AA /* BoxOffice */ = {
 			isa = PBXGroup;
 			children = (
+				0CF338B922CB7E16001ECAE0 /* Extension Files */,
 				0CF54BEB22ABFFFB00AEC0AA /* Action Files */,
 				0CF7DAE722A933E7005EBCDF /* CustomView Files */,
 				0CF21B0D22A8DE2D005B595D /* Networking Files */,
@@ -435,6 +446,7 @@
 				0CA1CBB122ABCFEB00EEE625 /* NotifyNotification.swift in Sources */,
 				0C7E62A422BF4F880056AA94 /* SizeTableViewCell.swift in Sources */,
 				0CF596FA22B11B1900BE4D8F /* DetailMovieViewController.swift in Sources */,
+				0CF338BB22CB7E2B001ECAE0 /* NSMutableAttributedString+Append.swift in Sources */,
 				0CF7DAF022A93DAB005EBCDF /* ParserMovieJSON.swift in Sources */,
 				0CED37C022AE7CFB00A141D2 /* ExtensionUIColor.swift in Sources */,
 				0CF7DAF222A93E3B005EBCDF /* TargetAction.swift in Sources */,
