@@ -52,6 +52,7 @@ class MovieTableViewController: UIViewController {
     // MARK: - System Method
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
+        // 테이블뷰/컬렉션뷰의 셀을 누르면 해당 영화의 상세 정보를 보여주는 화면 2로 전환합니다.
         guard let controller = segue.destination as? DetailMovieViewController else { return }
         
         guard let indexPath = self.movieListTableView.indexPathForSelectedRow else { return }

@@ -106,6 +106,7 @@
                                                     <outlet property="moviePosterImageView" destination="Cbk-cx-udy" id="PWA-Bt-vR7"/>
                                                     <outlet property="movieRatingLabel" destination="ytj-72-RkN" id="hLD-cl-tjF"/>
                                                     <outlet property="movieTitleLabel" destination="YxK-3G-csL" id="X5I-W3-tpv"/>
+                                                    <segue destination="NeY-1U-mZP" kind="show" id="VEp-hG-OgP"/>
                                                 </connections>
                                             </collectionViewCell>
                                         </cells>

@@ -67,6 +67,7 @@ class UserCommentViewController: UIViewController {
             
             // MARK: Load User Nickname from UserDefault.
             if let name: String = UserDefaults.standard.string(forKey: self.NICKNAME_USER_DEFAULT_KEY) {
+                // 기존에 작성했던 닉네임이 있다면 화면3으로 새로 진입할 때 기존의 닉네임이 입력되어 있습니다.
                 self.movieUserName.text = name
             }
         }

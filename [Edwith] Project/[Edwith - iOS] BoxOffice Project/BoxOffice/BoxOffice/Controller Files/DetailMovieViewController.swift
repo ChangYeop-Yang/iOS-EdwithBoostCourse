@@ -53,7 +53,6 @@ class DetailMovieViewController: UIViewController {
         // MARK: UITapGestureRecognizer
         let gesture = UITapGestureRecognizer(target: self, action: #selector(touchMoviePoster(_:)))
         self.moviePosterImageView.addGestureRecognizer(gesture)
-        self.movieContentsScrollView.addGestureRecognizer(gesture)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -164,28 +163,48 @@ private extension DetailMovieViewController {
         if let result: String = formatter.string(from: numeric) { return result }
         else { return nil }
     }
-    
-    @objc private func touchMoviePoster(_ gesture: UITapGestureRecognizer) {
+    private func showMoviePosterFullScreen() {
         
-        // 영화 포스터를 터치하면 포스터를 전체화면에서 볼 수 있습니다.
-        if self.fullScreenMoviePoster == nil {
-            DispatchQueue.main.async { [weak self] in
-                guard let self = self else { return }
-                // https://zeddios.tistory.com/309
-                let imageView = UIImageView(image: self.moviePosterImageView.image)
-                imageView.frame = self.view.bounds
-                imageView.contentMode = .scaleToFill
-                imageView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-
-                self.view.addSubview(imageView)
-                self.fullScreenMoviePoster = imageView
+        // 영화 포스트가 전체 화면인 경우에는 포스트를 제거한다.
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self, self.fullScreenMoviePoster == nil else {
+                return
             }
-        } else {
+            
+            // 영화 포스터를 터치하면 포스터를 전체화면에서 볼 수 있습니다.
+            let imageView = UIImageView(image: self.moviePosterImageView.image)
+            imageView.frame = self.view.bounds
+            imageView.contentMode = .scaleToFill
+            imageView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+            
+            self.view.addSubview(imageView)
+            self.fullScreenMoviePoster = imageView
+            
+            // 영화 포스터 종료 네비게이션 버튼
+            let close = UIBarButtonItem.init(title: "닫기"
+                , style: .plain
+                , target: self
+                , action: #selector(self.closeMoviePosterScreen))
+            self.navigationItem.rightBarButtonItem = close
+        }
+    }
+    
+    @objc private func closeMoviePosterScreen() {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self, self.fullScreenMoviePoster != nil else { return }
+            
             // https://stackoverflow.com/questions/26028455/gesturerecognizer-not-responding-to-tap
             self.fullScreenMoviePoster?.removeFromSuperview()
             self.fullScreenMoviePoster = nil
+            
+            self.navigationItem.rightBarButtonItem = nil
         }
+    }
+    @objc private func touchMoviePoster(_ gesture: UITapGestureRecognizer) {
         
+        if self.fullScreenMoviePoster == nil {
+            showMoviePosterFullScreen()
+        }
     }
     @objc private func didReciveDetailMovieNotification(_ noti: Notification) {
         

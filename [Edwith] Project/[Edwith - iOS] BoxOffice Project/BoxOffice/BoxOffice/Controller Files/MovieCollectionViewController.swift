@@ -17,6 +17,7 @@ class MovieCollectionViewController: UIViewController {
     private var fetchMovieDatas:    [MovieList]         = []
     private var refreshControl:     UIRefreshControl    = UIRefreshControl()
     
+    // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -26,12 +27,26 @@ class MovieCollectionViewController: UIViewController {
         // MARK: Setting UICollectionView
         setCollectionView()
     }
-    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
         fetchMovieCollectionList(type: MOVIE_TYPE)
     }
+    
+    // MARK: - System Method
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        // 테이블뷰/컬렉션뷰의 셀을 누르면 해당 영화의 상세 정보를 보여주는 화면 2로 전환합니다.
+        guard let controller = segue.destination as? DetailMovieViewController else { return }
+        // https://stackoverflow.com/questions/39239825/what-is-the-collectionview-form-of-indexpathforselectedrow
+        guard let indexPath = self.movieCollectionView.indexPathsForSelectedItems?.first else { return }
+        
+        controller.movieID = self.fetchMovieDatas[indexPath.row].id
+    }
+}
+
+// MARK: - Extension MovieCollectionViewController
+private extension MovieCollectionViewController {
     
     private func setCollectionView() {
         
@@ -53,7 +68,7 @@ class MovieCollectionViewController: UIViewController {
         
         self.refreshControl.addTarget(self, action: #selector(refreshCollectionView), for: .valueChanged)
         
-        // MARK: Setting Flowlayout 
+        // MARK: Setting Flowlayout
         if let layout = self.movieCollectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             let value: (divide: CGFloat, span: CGFloat, revision: CGFloat) = (2, 20, 100)
             let width: CGFloat = (self.view.frame.width - value.span) / value.divide
@@ -73,10 +88,12 @@ class MovieCollectionViewController: UIViewController {
             ParserMovieJSON.shared.fetchMovieDataParser(type: ParserMovieJSON.MovieParserType.movies.rawValue, subURI: ParserMovieJSON.SubURI.movies.rawValue, parameter: "order_type=\(type)")
         }
     }
+    
     @objc private func refreshCollectionView() {
         
         fetchMovieCollectionList(type: MOVIE_TYPE)
         
+        // 테이블뷰와 컬렉션뷰를 아래쪽으로 잡아당기면 새로고침됩니다.
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             
@@ -98,8 +115,6 @@ class MovieCollectionViewController: UIViewController {
         }
     }
 }
-
-// MARK: - Extension MovieCollectionViewController
 
 // MARK: - Extension UICollectionView Data Source
 extension MovieCollectionViewController: UICollectionViewDataSource {
