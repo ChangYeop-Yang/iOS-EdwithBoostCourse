@@ -48,10 +48,12 @@ class DetailMovieViewController: UIViewController {
         // MARK: UITableView Delegate And DataSource.
         self.movieUserCommentTableView.delegate = self
         self.movieUserCommentTableView.dataSource = self
+        self.view.isUserInteractionEnabled = true
         
         // MARK: UITapGestureRecognizer
         let gesture = UITapGestureRecognizer(target: self, action: #selector(touchMoviePoster(_:)))
         self.moviePosterImageView.addGestureRecognizer(gesture)
+        self.movieContentsScrollView.addGestureRecognizer(gesture)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -59,7 +61,7 @@ class DetailMovieViewController: UIViewController {
         
         // MARK: Dynamic UITableView Cell Height.
         self.movieUserCommentTableView.rowHeight = UITableView.automaticDimension
-        self.movieUserCommentTableView.estimatedRowHeight = UITableView.automaticDimension
+        self.movieUserCommentTableView.estimatedRowHeight = 150
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -169,20 +171,21 @@ private extension DetailMovieViewController {
         if self.fullScreenMoviePoster == nil {
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
-                
-                // https://stackoverflow.com/questions/26028455/gesturerecognizer-not-responding-to-tap
-                let imageVIew = UIImageView(image: self.moviePosterImageView.image)
-                imageVIew.contentMode = .scaleToFill
-                imageVIew.frame = self.view.bounds
-                imageVIew.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-                
-                self.view.addSubview(imageVIew)
-                self.fullScreenMoviePoster = imageVIew
+                // https://zeddios.tistory.com/309
+                let imageView = UIImageView(image: self.moviePosterImageView.image)
+                imageView.frame = self.view.bounds
+                imageView.contentMode = .scaleToFill
+                imageView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+
+                self.view.addSubview(imageView)
+                self.fullScreenMoviePoster = imageView
             }
         } else {
+            // https://stackoverflow.com/questions/26028455/gesturerecognizer-not-responding-to-tap
             self.fullScreenMoviePoster?.removeFromSuperview()
             self.fullScreenMoviePoster = nil
         }
+        
     }
     @objc private func didReciveDetailMovieNotification(_ noti: Notification) {
         
