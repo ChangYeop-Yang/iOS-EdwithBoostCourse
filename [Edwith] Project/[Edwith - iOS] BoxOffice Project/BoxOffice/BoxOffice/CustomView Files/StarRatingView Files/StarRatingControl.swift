@@ -16,7 +16,7 @@ internal protocol UpdateStarRatingScore {
 class StarRatingControl: UIStackView {
     
     // MARK: - Private Object Propertise
-    private var starCount: (float: CGFloat, int: Int) = (5.0, 0)
+    private var starCount: (float: CGFloat, int: Int) = (5.0, 5)
     private var starImageView: [UIImageView] = []
     private var imageStars: (empty: UIImage?, half: UIImage?, full: UIImage?) = (
         UIImage(named: "ic_star_large"),
@@ -127,8 +127,8 @@ private extension StarRatingControl {
         let rating: CGFloat = gesture.location(in: self).x / (self.frame.size.width / self.starCount.float)
         
         // MARK: - Under MaxStarRating Score
-        let front: Int = Int(rating)
-        let rear: Float = Float(rating) - Float(front)
+        let front = Int(rating)
+        let rear = Float(rating) - Float(front)
         
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
@@ -136,15 +136,14 @@ private extension StarRatingControl {
             // Change All ImageView Empty Star.
             self.changeEmptyStarImage()
             
-            score = 0.0
-            for (index, view) in self.starImageView.enumerated() where index < front {
-                score += 1.0
-                view.image = self.imageStars.full
-            }
-            
             if rear > 0.3 && front < self.starCount.int {
                 score += 0.5
                 self.starImageView[front].image = self.imageStars.half
+            }
+            
+            for (index, view) in self.starImageView.enumerated() where index < front {
+                score += 1.0
+                view.image = self.imageStars.full
             }
             
             self.delegate?.updateStarRating(score: score * 2)

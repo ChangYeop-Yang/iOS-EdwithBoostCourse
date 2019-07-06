@@ -125,8 +125,8 @@
 		0C9CEE2422C639CC0066B560 /* StarRatingView Files */ = {
 			isa = PBXGroup;
 			children = (
-				0C61DDD122C4E266003EED9A /* StarRatingControl.swift */,
 				0C9CEE2522C639FF0066B560 /* StarRatingBar.swift */,
+				0C61DDD122C4E266003EED9A /* StarRatingControl.swift */,
 			);
 			path = "StarRatingView Files";
 			sourceTree = "<group>";

@@ -15,7 +15,7 @@ class DetailMovieViewController: UIViewController {
     @IBOutlet private weak var movieTitleLabel:             UILabel!
     @IBOutlet private weak var movieLaunchLabel:            UILabel!
     @IBOutlet private weak var movieTypeLabel:              UILabel!
-    @IBOutlet private weak var movieOutlineLabel:           UILabel!
+    @IBOutlet private weak var movieOutlineTextView:        UITextView!
     @IBOutlet private weak var movieActorLable:             UILabel!
     @IBOutlet private weak var movieDirectorLabel:          UILabel!
     @IBOutlet private weak var movieReservationRateLabel:   UILabel!
@@ -48,7 +48,6 @@ class DetailMovieViewController: UIViewController {
         // MARK: UITableView Delegate And DataSource.
         self.movieUserCommentTableView.delegate = self
         self.movieUserCommentTableView.dataSource = self
-        self.view.isUserInteractionEnabled = true
         
         // MARK: UITapGestureRecognizer
         let gesture = UITapGestureRecognizer(target: self, action: #selector(touchMoviePoster(_:)))
@@ -60,7 +59,7 @@ class DetailMovieViewController: UIViewController {
         
         // MARK: Dynamic UITableView Cell Height.
         self.movieUserCommentTableView.rowHeight = UITableView.automaticDimension
-        self.movieUserCommentTableView.estimatedRowHeight = 150
+        self.movieUserCommentTableView.estimatedRowHeight = 600
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -129,7 +128,8 @@ private extension DetailMovieViewController {
             
             self.movieLaunchLabel.text              = "\(data.date) 개봉"
             self.movieTypeLabel.text                = "\(data.genre) / \(data.duration)분"
-            self.movieOutlineLabel.text             = data.synopsis
+            self.movieOutlineTextView.text          = data.synopsis
+            self.movieOutlineTextView.sizeToFit()
             self.movieDirectorLabel.text            = data.director
             self.movieActorLable.text               = data.actor
             self.movieReservationRateLabel.text     = String(format: "%d위 %.2f%%", data.reservationGrade ,data.reservationRate)
@@ -229,16 +229,19 @@ private extension DetailMovieViewController {
             guard let self = self else { return }
             
             self.movieUserCommentTableView.reloadData()
-            
+            self.movieUserCommentTableView.updateConstraints()
+
             // MARK: Setting Dynamic TableView Height
             var frame: CGRect = self.movieUserCommentTableView.frame
             frame.size.height = self.movieUserCommentTableView.contentSize.height
             self.movieUserCommentTableView.frame = frame
             
             // MARK: SEtting Dynamic ScrollView Height
+            self.movieContentsScrollView.sizeToFit()
             self.movieContentsScrollView.layoutIfNeeded()
             self.movieContentsScrollView.contentSize = CGSize(width: self.view.frame.width
                 , height: self.movieContentsScrollView.contentSize.height + cellsOfHeight)
+            
         }
     }
 }
