@@ -27,8 +27,11 @@ class StarRatingBar: UIStackView {
         UIImage(named: "ic_star_large_half"),
         UIImage(named: "ic_star_large_full")
     )
+}
+
+// MARK: - Extension
+private extension StarRatingBar {
     
-    // MARK: - User Method
     private func createStarImageView(count: Int) {
         
         // Clear All Subviews on StackView (초기화 부분)
