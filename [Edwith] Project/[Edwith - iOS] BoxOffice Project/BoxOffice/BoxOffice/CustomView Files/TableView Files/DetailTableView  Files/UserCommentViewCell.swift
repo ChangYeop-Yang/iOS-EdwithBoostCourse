@@ -8,7 +8,7 @@
 
 import UIKit
 
-class UserCommentTableViewCell: UITableViewCell {
+class UserCommentViewCell: UITableViewCell {
 
     // MARK: - Outlet Variables
     @IBOutlet private weak var userNameLabel:           UILabel!
@@ -29,7 +29,6 @@ class UserCommentTableViewCell: UITableViewCell {
             
             self.userNameLabel.text = data.writer
             self.userCommentLabel.text = data.contents
-            self.userCommentLabel.sizeToFit()
 
             let formatter = DateFormatter()
             formatter.dateFormat = "YYYY-MM-dd hh:mm:ss"

@@ -5,28 +5,22 @@
 //  Created by 양창엽 on 12/06/2019.
 //  Copyright © 2019 양창엽. All rights reserved.
 //
-
 import UIKit
 
-class DetailMovieViewController: UIViewController {
-
-    // MARK: - Outlet Propertise
-    @IBOutlet private weak var moviePosterImageView:        UIImageView!
-    @IBOutlet private weak var movieTitleLabel:             UILabel!
-    @IBOutlet private weak var movieLaunchLabel:            UILabel!
-    @IBOutlet private weak var movieTypeLabel:              UILabel!
-    @IBOutlet private weak var movieOutlineTextView:        UITextView!
-    @IBOutlet private weak var movieActorLable:             UILabel!
-    @IBOutlet private weak var movieDirectorLabel:          UILabel!
-    @IBOutlet private weak var movieReservationRateLabel:   UILabel!
-    @IBOutlet private weak var movieScoreLabel:             UILabel!
-    @IBOutlet private weak var movieWatchPeopleLabel:       UILabel!
-    @IBOutlet private weak var movieRatingView:             StarRatingBar!
-    @IBOutlet private weak var movieUserCommentTableView:   UITableView!
-    @IBOutlet private weak var movieContentsScrollView:     UIScrollView!
+class DetailMovieViewController: UITableViewController {
+    
+    // MARK: - Enum
+    private enum SectionIndexPath: Int {
+        case detail     = 0
+        case outline    = 1
+        case people     = 2
+        case write      = 3
+        case comment    = 4
+    }
     
     // MARK: - Object Propertise
     internal var movieID: String?
+    private var moviePosterImage: UIImage?
     private var fullScreenMoviePoster: UIImageView?
     private var detailMovieData: MovieDetailInformation?
     private var userCommentData: [MovieOneLineList] = []
@@ -34,7 +28,7 @@ class DetailMovieViewController: UIViewController {
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // MARK: Register NotificationCenter
         NotificationCenter.default.addObserver(self
             , selector: #selector(didReciveDetailMovieNotification)
@@ -44,22 +38,14 @@ class DetailMovieViewController: UIViewController {
             , selector: #selector(didReciveUserComment)
             , name: NotificationName.movieUserComment.name
             , object: nil)
-        
-        // MARK: UITableView Delegate And DataSource.
-        self.movieUserCommentTableView.delegate = self
-        self.movieUserCommentTableView.dataSource = self
-        
-        // MARK: UITapGestureRecognizer
-        let gesture = UITapGestureRecognizer(target: self, action: #selector(touchMoviePoster(_:)))
-        self.moviePosterImageView.addGestureRecognizer(gesture)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        // MARK: Dynamic UITableView Cell Height.
-        self.movieUserCommentTableView.rowHeight = UITableView.automaticDimension
-        self.movieUserCommentTableView.estimatedRowHeight = 600
+        // MARK: Dynamic UITableViewController Static Cell Height.
+        self.tableView.rowHeight = UITableView.automaticDimension
+        self.tableView.estimatedRowHeight = UITableView.automaticDimension
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -91,79 +77,96 @@ class DetailMovieViewController: UIViewController {
                 , parameter: "id=\(id)")
         }
     }
-
+    
     // MARK: - System Method
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         guard let controller = segue.destination as? UserCommentViewController else { return }
         
         guard let information = self.detailMovieData else { return }
-    
+        
         controller.informationMovie = (information.title, information.id, information.grade)
+    }
+    
+    // MARK: - UITableView Delegate
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableView.automaticDimension
+    }
+    
+    override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableView.automaticDimension
+    }
+    
+    // MARK: - UITableView Datasource
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return 5
+    }
+    
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        
+        if section == SectionIndexPath.detail.rawValue || section == SectionIndexPath.comment.rawValue {
+            return nil
+        } else {
+            return " "
+        }
+        
+    }
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return section == SectionIndexPath.comment.rawValue ? self.userCommentData.count : 1
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        let basicCell = UITableViewCell()
+        
+        guard let section = SectionIndexPath(rawValue: indexPath.section), let data = self.detailMovieData else {
+            return basicCell
+        }
+        
+        switch section {
+            
+            case .detail:
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: "DetailTopTableViewCell", for: indexPath) as? DetailTopTableViewCell else { return basicCell }
+                cell.setMovieDetailViews(data)
+                
+                // MARK: UITapGestureRecognizer
+                let gesture = UITapGestureRecognizer(target: self, action: #selector(touchMoviePoster(_:)))
+                cell.posterImageView.addGestureRecognizer(gesture)
+                
+                self.moviePosterImage = cell.posterImageView.image
+                
+                return cell
+            
+            case .outline:
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: "DetailOutlineCell", for: indexPath) as? DetailOutlineCell else { return basicCell }
+                cell.setMovieOutlineView(data.synopsis)
+                return cell
+            
+            case .people:
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: "DetailActorAndDirectorCell", for: indexPath) as? DetailActorAndDirectorCell else { return basicCell }
+                cell.setActorAndDirectorView(actor: data.actor, director: data.director)
+                return cell
+            
+            case .write:
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: "DetailWriteCell", for: indexPath) as? DetailWriteCell else { return basicCell }
+                return cell
+            
+            case .comment:
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: "UserCommentViewCell", for: indexPath) as? UserCommentViewCell else { return basicCell }
+                
+                cell.movieID = data.id
+                cell.setUserComment(self.userCommentData[indexPath.row])
+                
+                return cell
+        }
     }
 }
 
 // MARK: - Extension DetailMovieViewController
 private extension DetailMovieViewController {
     
-    private func setDetailMovieInformation(data: MovieDetailInformation) {
-        
-        let group: DispatchGroup = DispatchGroup()
-        
-        group.enter()
-        DispatchQueue.main.async(group: group) { [weak self] in
-            
-            guard let self = self, let audience = self.setNumberFormatter(number: data.audience) else { return }
-            
-            // MARK: Setting Navigation Bar Title
-            self.title = data.title
-            
-            if let image = seperateAgeType(age: data.grade) {
-                let title = NSMutableAttributedString(string: "\(data.title) ")
-                title.appendImage(image)
-                
-                self.movieTitleLabel.attributedText = title
-                self.movieTitleLabel.sizeToFit()
-            }
-            
-            self.movieLaunchLabel.text              = "\(data.date) 개봉"
-            self.movieTypeLabel.text                = "\(data.genre) / \(data.duration)분"
-            self.movieOutlineTextView.text          = data.synopsis
-            self.movieOutlineTextView.sizeToFit()
-            self.movieDirectorLabel.text            = data.director
-            self.movieActorLable.text               = data.actor
-            self.movieReservationRateLabel.text     = String(format: "%d위 %.2f%%", data.reservationGrade ,data.reservationRate)
-            self.movieScoreLabel.text               = String(format: "%.2f", data.userRating)
-            self.movieWatchPeopleLabel.text         = audience
-            
-            self.movieRatingView.score              = CGFloat(data.userRating) / 2.0
-            
-            group.leave()
-        }
-        
-        let imageGroup: DispatchGroup = DispatchGroup()
-        Networking.shared.downloadImage(url: data.image, group: imageGroup, imageView: self.moviePosterImageView)
-        
-        group.notify(queue: .global(qos: .userInitiated)) { [weak self] in
-            guard let self = self, let id = self.movieID else { return }
-            
-            ParserMovieJSON.shared.fetchMovieDataParser(type: ParserMovieJSON.MovieParserType.comment.rawValue
-                , subURI: ParserMovieJSON.SubURI.comment.rawValue
-                , parameter: "movie_id=\(id)")
-        }
-    }
-    private func setNumberFormatter(number: Int) -> String? {
-        
-        let numeric: NSNumber = NSNumber(value: number)
-        
-        let formatter: NumberFormatter  = NumberFormatter()
-        formatter.groupingSeparator     = ","
-        formatter.numberStyle           = .decimal
-        
-        if let result: String = formatter.string(from: numeric) { return result }
-        else { return nil }
-    }
-    private func showMoviePosterFullScreen() {
+    func showMoviePosterFullScreen() {
         
         // 영화 포스트가 전체 화면인 경우에는 포스트를 제거한다.
         DispatchQueue.main.async { [weak self] in
@@ -172,7 +175,7 @@ private extension DetailMovieViewController {
             }
             
             // 영화 포스터를 터치하면 포스터를 전체화면에서 볼 수 있습니다.
-            let imageView = UIImageView(image: self.moviePosterImageView.image)
+            let imageView = UIImageView(image: self.moviePosterImage)
             imageView.frame = self.view.bounds
             imageView.contentMode = .scaleToFill
             imageView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
@@ -188,85 +191,54 @@ private extension DetailMovieViewController {
             self.navigationItem.rightBarButtonItem = close
         }
     }
-    
-    @objc private func closeMoviePosterScreen() {
+    @objc func closeMoviePosterScreen() {
         DispatchQueue.main.async { [weak self] in
             guard let self = self, self.fullScreenMoviePoster != nil else { return }
-            
+
             // https://stackoverflow.com/questions/26028455/gesturerecognizer-not-responding-to-tap
             self.fullScreenMoviePoster?.removeFromSuperview()
             self.fullScreenMoviePoster = nil
-            
+
             self.navigationItem.rightBarButtonItem = nil
         }
     }
-    @objc private func touchMoviePoster(_ gesture: UITapGestureRecognizer) {
-        
+    @objc func touchMoviePoster(_ gesture: UITapGestureRecognizer) {
+
         if self.fullScreenMoviePoster == nil {
             showMoviePosterFullScreen()
         }
     }
-    @objc private func didReciveDetailMovieNotification(_ noti: Notification) {
+    @objc func didReciveDetailMovieNotification(_ noti: Notification) {
         
         guard let receive = noti.userInfo, let result = receive[GET_KEY] as? MovieDetailInformation else { return }
         
         // MARK: 상세 영화 정보를 설정한 후 사용자 댓글 JSON Parsing을 하는 메소드
         self.detailMovieData = result
-        setDetailMovieInformation(data: result)
+        
+        DispatchQueue.global(qos: .userInitiated).async {
+            ParserMovieJSON.shared.fetchMovieDataParser(type: ParserMovieJSON.MovieParserType.comment.rawValue
+                , subURI: ParserMovieJSON.SubURI.comment.rawValue
+                , parameter: "movie_id=\(result.id)")
+        }
+        
+        DispatchQueue.main.async { [weak self] in
+            self?.title = result.title
+            self?.tableView.reloadData()
+        }
     }
-    @objc private func didReciveUserComment(_ noti: Notification) {
+    @objc func didReciveUserComment(_ noti: Notification) {
         
         guard let receive = noti.userInfo, let result = receive[GET_KEY] as? Comment else { return }
         
-        self.userCommentData.removeAll()
-        self.userCommentData = result.comments
-        
         ShowIndicator.shared.hideLoadIndicator()
         
-        let cellsOfHeight: CGFloat = CGFloat(result.comments.count) * SizeCellHeight.comment.rawValue
+        self.userCommentData.removeAll(keepingCapacity: false)
+        self.userCommentData = result.comments
         
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             
-            self.movieUserCommentTableView.reloadData()
-            self.movieUserCommentTableView.updateConstraints()
-
-            // MARK: Setting Dynamic TableView Height
-            var frame: CGRect = self.movieUserCommentTableView.frame
-            frame.size.height = self.movieUserCommentTableView.contentSize.height
-            self.movieUserCommentTableView.frame = frame
-            
-            // MARK: SEtting Dynamic ScrollView Height
-            self.movieContentsScrollView.sizeToFit()
-            self.movieContentsScrollView.layoutIfNeeded()
-            self.movieContentsScrollView.contentSize = CGSize(width: self.view.frame.width
-                , height: self.movieContentsScrollView.contentSize.height + cellsOfHeight)
-            
+            self.tableView.reloadData()
         }
-    }
-}
-
-// MARK: - Extension UITableViewDataSource
-extension DetailMovieViewController: UITableViewDataSource {
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.userCommentData.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: IdentifyCell.movieUserCommentCell.rawValue, for: indexPath) as? UserCommentTableViewCell else { return UITableViewCell() }
-        
-        cell.setUserComment(self.userCommentData[indexPath.row])
-    
-        return cell
-    }
-}
-
-// MARK: - Extension UITableViewDelegate
-extension DetailMovieViewController: UITableViewDelegate {
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableView.automaticDimension
     }
 }
