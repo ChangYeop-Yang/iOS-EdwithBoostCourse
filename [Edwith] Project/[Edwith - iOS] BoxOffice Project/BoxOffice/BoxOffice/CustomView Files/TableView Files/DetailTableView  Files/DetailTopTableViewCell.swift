@@ -8,10 +8,15 @@
 
 import UIKit
 
+// MARK: - Protocol
+internal protocol FullScreenPosterGesture {
+    func showFullScreenMoviePoster(imageView: UIImageView)
+}
+
 class DetailTopTableViewCell: UITableViewCell {
 
     // MARK: - Outlet Propertise
-    @IBOutlet internal weak var posterImageView:       UIImageView!
+    @IBOutlet private weak var posterImageView:        UIImageView!
     @IBOutlet private weak var titleLabel:             UILabel!
     @IBOutlet private weak var launchLabel:            UILabel!
     @IBOutlet private weak var typeLabel:              UILabel!
@@ -20,6 +25,8 @@ class DetailTopTableViewCell: UITableViewCell {
     @IBOutlet private weak var watchPeopleLabel:       UILabel!
     @IBOutlet private weak var ratingView:             StarRatingBar!
     
+    // MARK: - Object Propertise
+    internal var delegate: FullScreenPosterGesture?
 }
 
 // MARK: - Private DetailTopTableViewCell Method
@@ -36,12 +43,21 @@ private extension DetailTopTableViewCell {
         if let result: String = formatter.string(from: numeric) { return result }
         else { return nil }
     }
+    
+    @objc func showFullScreenMoviePoster() {
+        self.delegate?.showFullScreenMoviePoster(imageView: self.posterImageView)
+    }
 }
 
 // MARK: - Internal DetailTopTableViewCell Method
 internal extension DetailTopTableViewCell {
     
     func setMovieDetailViews(_ data: MovieDetailInformation) {
+        
+        // MARK: UITapGestureRecognizer
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(showFullScreenMoviePoster))
+        posterImageView.isUserInteractionEnabled = true
+        posterImageView.addGestureRecognizer(gesture)
         
         DispatchQueue.main.async { [weak self] in
             guard let self = self, let audience = self.setNumberFormatter(number: data.audience) else { return }
@@ -61,7 +77,6 @@ internal extension DetailTopTableViewCell {
             self.ratingView.score              = CGFloat(data.userRating) / 2.0
         }
         
-        let imageGroup: DispatchGroup = DispatchGroup()
-        Networking.shared.downloadImage(url: data.image, group: imageGroup, imageView: self.posterImageView)
+        Networking.shared.downloadImage(url: data.image, group: DispatchGroup(), imageView: self.posterImageView)
     }
 }

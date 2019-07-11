@@ -8,6 +8,8 @@
 
 import UIKit
 
+
+
 class UserCommentViewCell: UITableViewCell {
 
     // MARK: - Outlet Variables
@@ -19,6 +21,7 @@ class UserCommentViewCell: UITableViewCell {
     // MARK: - Object Variables
     internal var movieID: String?
     
+    // MARK: - System Method
     override func prepareForReuse() {
         super.prepareForReuse()
         
@@ -28,7 +31,7 @@ class UserCommentViewCell: UITableViewCell {
         self.userRatingStarBar.score = 0.0
     }
     
-    // MARK: - User Methods
+    // MARK: - User Method
     internal func setUserComment(_ data: MovieOneLineList) {
         
         self.movieID = data.movieID
