@@ -19,6 +19,15 @@ class UserCommentViewCell: UITableViewCell {
     // MARK: - Object Variables
     internal var movieID: String?
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        self.userNameLabel.text = ""
+        self.userCreateCommentDate.text = ""
+        self.userCommentLabel.text = ""
+        self.userRatingStarBar.score = 0.0
+    }
+    
     // MARK: - User Methods
     internal func setUserComment(_ data: MovieOneLineList) {
         

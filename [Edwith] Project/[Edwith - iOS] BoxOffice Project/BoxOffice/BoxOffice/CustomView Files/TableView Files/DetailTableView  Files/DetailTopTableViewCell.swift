@@ -19,6 +19,7 @@ class DetailTopTableViewCell: UITableViewCell {
     @IBOutlet private weak var scoreLabel:             UILabel!
     @IBOutlet private weak var watchPeopleLabel:       UILabel!
     @IBOutlet private weak var ratingView:             StarRatingBar!
+    
 }
 
 // MARK: - Private DetailTopTableViewCell Method
