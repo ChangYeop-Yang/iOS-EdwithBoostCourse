@@ -133,15 +133,15 @@ private extension DetailMovieViewController {
         // MARK: 상세 영화 정보를 설정한 후 사용자 댓글 JSON Parsing을 하는 메소드
         self.detailMovieData = result
         
-        DispatchQueue.global(qos: .userInitiated).async {
+        OperationQueue.main.addOperation { [weak self] in
+            self?.title = result.title
+            self?.tableView.reloadData()
+        }
+        
+        DispatchQueue.global(qos: .userInteractive).async {
             ParserMovieJSON.shared.fetchMovieDataParser(type: ParserMovieJSON.MovieParserType.comment.rawValue
                 , subURI: ParserMovieJSON.SubURI.comment.rawValue
                 , parameter: "movie_id=\(result.id)")
-        }
-        
-        DispatchQueue.main.async { [weak self] in
-            self?.title = result.title
-            self?.tableView.reloadData()
         }
     }
     @objc func didReciveUserComment(_ noti: Notification) {
@@ -154,9 +154,7 @@ private extension DetailMovieViewController {
         self.userCommentData = result.comments
         
         DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            
-            self.tableView.reloadData()
+            self?.tableView.reloadData()
         }
     }
 }
@@ -166,10 +164,6 @@ internal extension DetailMovieViewController {
     
     // MARK: - UITableView Delegate
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableView.automaticDimension
-    }
-    
-    override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableView.automaticDimension
     }
     
@@ -202,35 +196,38 @@ internal extension DetailMovieViewController {
         
         switch section {
             
-        case .detail:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "DetailTopTableViewCell", for: indexPath) as? DetailTopTableViewCell else { return basicCell }
-            
-            cell.delegate = self
-            cell.setMovieDetailViews(data)
-            
-            return cell
-            
-        case .outline:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "DetailOutlineCell", for: indexPath) as? DetailOutlineCell else { return basicCell }
-            cell.setMovieOutlineView(data.synopsis)
-            return cell
-            
-        case .people:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "DetailActorAndDirectorCell", for: indexPath) as? DetailActorAndDirectorCell else { return basicCell }
-            cell.setActorAndDirectorView(actor: data.actor, director: data.director)
-            return cell
-            
-        case .write:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "DetailWriteCell", for: indexPath) as? DetailWriteCell else { return basicCell }
-            return cell
-            
-        case .comment:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "UserCommentViewCell", for: indexPath) as? UserCommentViewCell else { return basicCell }
-            
-            cell.movieID = data.id
-            cell.setUserComment(self.userCommentData[indexPath.row])
-            
-            return cell
+            case .detail:
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: "DetailTopTableViewCell", for: indexPath) as? DetailTopTableViewCell else { return basicCell }
+                
+                cell.delegate = self
+                cell.setMovieDetailViews(data)
+                return cell
+                
+            case .outline:
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: "DetailOutlineCell", for: indexPath) as? DetailOutlineCell else { return basicCell }
+                
+                cell.setMovieOutlineView(data.synopsis)
+                return cell
+                
+            case .people:
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: "DetailActorAndDirectorCell", for: indexPath) as? DetailActorAndDirectorCell else { return basicCell }
+                
+                cell.setActorAndDirectorView(actor: data.actor, director: data.director)
+                return cell
+                
+            case .write:
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: "DetailWriteCell", for: indexPath) as? DetailWriteCell else { return basicCell }
+                return cell
+                
+            case .comment:
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: "UserCommentViewCell", for: indexPath) as? UserCommentViewCell else { return basicCell }
+                
+                if !self.userCommentData.isEmpty {
+                    cell.movieID = data.id
+                    cell.setUserComment(self.userCommentData[indexPath.row])
+                }
+                
+                return cell
         }
     }
 }
