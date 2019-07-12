@@ -8,8 +8,6 @@
 
 import UIKit
 
-
-
 class UserCommentViewCell: UITableViewCell {
 
     // MARK: - Outlet Variables
@@ -43,6 +41,17 @@ internal extension UserCommentViewCell {
             self.userCreateCommentDate.text = formatter.string(from: date)
             
             self.userRatingStarBar.score = CGFloat(data.rating) / 2.0
+            
+            self.layoutIfNeeded()
         }
+    }
+    func clearCellSubview() {
+        self.userNameLabel.text = nil
+        self.userCommentLabel.text = nil
+        self.userCreateCommentDate.text = nil
+        
+        self.userRatingStarBar.score = 0.0
+        
+        self.layoutIfNeeded()
     }
 }

@@ -32,6 +32,11 @@ class MovieCollectionViewController: UIViewController {
         
         fetchMovieCollectionList(type: MOVIE_TYPE)
     }
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        setFlowLayout()
+    }
     
     // MARK: - System Method
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -48,7 +53,7 @@ class MovieCollectionViewController: UIViewController {
 // MARK: - Extension MovieCollectionViewController
 private extension MovieCollectionViewController {
     
-    private func setCollectionView() {
+    func setCollectionView() {
         
         // MARK: Setting UICollectionView Datasouce
         self.movieCollectionView.dataSource = self
@@ -69,14 +74,9 @@ private extension MovieCollectionViewController {
         self.refreshControl.addTarget(self, action: #selector(refreshCollectionView), for: .valueChanged)
         
         // MARK: Setting Flowlayout
-        if let layout = self.movieCollectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-            let value: (divide: CGFloat, span: CGFloat, revision: CGFloat) = (2, 20, 100)
-            let width: CGFloat = (self.view.frame.width - value.span) / value.divide
-            
-            layout.itemSize = CGSize(width: width, height: width + value.revision)
-        }
+        setFlowLayout()
     }
-    private func fetchMovieCollectionList(type: Int) {
+    func fetchMovieCollectionList(type: Int) {
         
         self.fetchMovieDatas.removeAll()
         self.movieCollectionView.reloadData()
@@ -88,8 +88,18 @@ private extension MovieCollectionViewController {
             ParserMovieJSON.shared.fetchMovieDataParser(type: ParserMovieJSON.MovieParserType.movies.rawValue, subURI: ParserMovieJSON.SubURI.movies.rawValue, parameter: "order_type=\(type)")
         }
     }
+    func setFlowLayout() {
+        
+        // MARK: Setting Flowlayout
+        if let layout = self.movieCollectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+            let value: (divide: CGFloat, span: CGFloat, revision: CGFloat) = (2, 20, 100)
+            let width: CGFloat = (self.view.frame.width - value.span) / value.divide
+            
+            layout.itemSize = CGSize(width: width, height: width + value.revision)
+        }
+    }
     
-    @objc private func refreshCollectionView() {
+    @objc func refreshCollectionView() {
         
         fetchMovieCollectionList(type: MOVIE_TYPE)
         
@@ -100,7 +110,7 @@ private extension MovieCollectionViewController {
             self.refreshControl.endRefreshing()
         }
     }
-    @objc private func didReciveMovieDatasNotification(_ noti: Notification) {
+    @objc func didReciveMovieDatasNotification(_ noti: Notification) {
         
         guard let result = noti.userInfo![GET_KEY] as? [MovieList] else { return }
         
