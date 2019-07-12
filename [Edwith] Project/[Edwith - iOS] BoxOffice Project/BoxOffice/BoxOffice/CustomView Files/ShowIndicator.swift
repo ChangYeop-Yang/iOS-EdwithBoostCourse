@@ -22,6 +22,7 @@ class ShowIndicator: NSObject {
         
         let message: String = "Just a moment..."
         
+        // 네트워킹 동작중(로딩/새로고침)에는 상태표시줄(status bar)와 화면에 인디케이터를 사용해 사용자에게 네트워킹 중임을 정확히 표시해야 합니다.
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             

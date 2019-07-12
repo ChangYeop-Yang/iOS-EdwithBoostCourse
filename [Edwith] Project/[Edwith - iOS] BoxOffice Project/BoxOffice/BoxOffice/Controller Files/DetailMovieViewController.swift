@@ -38,6 +38,8 @@ class DetailMovieViewController: UITableViewController {
             , selector: #selector(didReciveUserComment)
             , name: NotificationName.movieUserComment.name
             , object: nil)
+        
+        self.navigationItem.rightBarButtonItem = createReloadNavigationItem()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -108,12 +110,39 @@ private extension DetailMovieViewController {
             self.fullScreenMoviePoster = imageView
             
             // 영화 포스터 종료 네비게이션 버튼
+            self.navigationItem.rightBarButtonItem = nil
             let close = UIBarButtonItem.init(title: "닫기"
                 , style: .plain
                 , target: self
                 , action: #selector(self.closeMoviePosterScreen))
             self.navigationItem.rightBarButtonItem = close
         }
+    }
+    func createReloadNavigationItem() -> UIBarButtonItem {
+        
+        let reload = UIBarButtonItem.init(title: "새로고침"
+            , style: .plain
+            , target: self
+            , action: #selector(self.reloadMovieUserComment))
+        
+        return reload
+    }
+    func fetchMovieUserComments() {
+        
+        guard let result = self.detailMovieData else { return }
+        
+        DispatchQueue.global().async {
+            ParserMovieJSON.shared.fetchMovieDataParser(type: ParserMovieJSON.MovieParserType.comment.rawValue
+                , subURI: ParserMovieJSON.SubURI.comment.rawValue
+                , parameter: "movie_id=\(result.id)")
+        }
+    }
+    
+    @objc func reloadMovieUserComment() {
+        
+        ShowIndicator.shared.showLoadIndicator(self)
+        
+        fetchMovieUserComments()
     }
     @objc func closeMoviePosterScreen() {
         DispatchQueue.main.async { [weak self] in
@@ -124,6 +153,7 @@ private extension DetailMovieViewController {
             self.fullScreenMoviePoster = nil
 
             self.navigationItem.rightBarButtonItem = nil
+            self.navigationItem.rightBarButtonItem = self.createReloadNavigationItem()
         }
     }
     @objc func didReciveDetailMovieNotification(_ noti: Notification) {
@@ -133,28 +163,28 @@ private extension DetailMovieViewController {
         // MARK: 상세 영화 정보를 설정한 후 사용자 댓글 JSON Parsing을 하는 메소드
         self.detailMovieData = result
         
-        OperationQueue.main.addOperation { [weak self] in
+        DispatchQueue.main.async { [weak self] in
             self?.title = result.title
             self?.tableView.reloadData()
         }
         
-        DispatchQueue.global(qos: .userInteractive).async {
-            ParserMovieJSON.shared.fetchMovieDataParser(type: ParserMovieJSON.MovieParserType.comment.rawValue
-                , subURI: ParserMovieJSON.SubURI.comment.rawValue
-                , parameter: "movie_id=\(result.id)")
-        }
+        fetchMovieUserComments()
     }
     @objc func didReciveUserComment(_ noti: Notification) {
         
         guard let receive = noti.userInfo, let result = receive[GET_KEY] as? Comment else { return }
         
         ShowIndicator.shared.hideLoadIndicator()
-        
+    
         self.userCommentData.removeAll(keepingCapacity: false)
         self.userCommentData = result.comments
         
         DispatchQueue.main.async { [weak self] in
             self?.tableView.reloadData()
+            
+            // MARK: https://gogorchg.tistory.com/entry/iOS-UITableView-scroll-to-top
+            let indexPath = IndexPath(row: NSNotFound, section: 0)
+            self?.tableView.scrollToRow(at: indexPath, at: .top, animated: true)
         }
     }
 }

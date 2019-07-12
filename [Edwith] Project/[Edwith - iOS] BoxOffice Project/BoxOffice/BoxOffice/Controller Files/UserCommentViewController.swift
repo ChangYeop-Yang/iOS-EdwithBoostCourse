@@ -55,24 +55,33 @@ class UserCommentViewController: UIViewController {
         showMovieInformationAndUserName()
     }
     
+    // MARK: - Event Method
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+}
+
+// MARK: - Extension UserCommentViewController
+private extension UserCommentViewController {
+    
     // MARK: - User Method
-    private func showMovieInformationAndUserName() {
+    func showMovieInformationAndUserName() {
+    
+    DispatchQueue.main.async { [weak self] in
+        guard let self = self, let information = self.informationMovie else { return }
         
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self, let information = self.informationMovie else { return }
-            
-            // MARK: Setting Movie Name and Age.
-            self.movieNameLabel.text = information.name
-            seperateAgeType(age: information.age, imageView: self.movieAgeImageView)
-            
-            // MARK: Load User Nickname from UserDefault.
-            if let name: String = UserDefaults.standard.string(forKey: self.NICKNAME_USER_DEFAULT_KEY) {
-                // 기존에 작성했던 닉네임이 있다면 화면3으로 새로 진입할 때 기존의 닉네임이 입력되어 있습니다.
-                self.movieUserName.text = name
-            }
+        // MARK: Setting Movie Name and Age.
+        self.movieNameLabel.text = information.name
+        seperateAgeType(age: information.age, imageView: self.movieAgeImageView)
+        
+        // MARK: Load User Nickname from UserDefault.
+        if let name: String = UserDefaults.standard.string(forKey: self.NICKNAME_USER_DEFAULT_KEY) {
+            // 기존에 작성했던 닉네임이 있다면 화면3으로 새로 진입할 때 기존의 닉네임이 입력되어 있습니다.
+            self.movieUserName.text = name
         }
     }
-    private func setUserCommentTextView(radius: CGFloat, width: CGFloat) {
+}
+    func setUserCommentTextView(radius: CGFloat, width: CGFloat) {
         
         self.movieUserCommentTextView.delegate              = self
         self.movieUserCommentTextView.layer.borderWidth     = width
@@ -82,11 +91,11 @@ class UserCommentViewController: UIViewController {
         self.movieUserCommentTextView.text      = "한줄평을 작성해주세요."
         self.movieUserCommentTextView.textColor = UIColor.lightGray
     }
-    private func createNavigationItem() {
+    func createNavigationItem() {
         
         self.title = "한줄평 작성"
         self.navigationItem.setHidesBackButton(true, animated: false)
-
+        
         // MARK: Left UIBarButton Item
         let left = UIBarButtonItem.init(title: "취소"
             , style: .done
@@ -104,7 +113,7 @@ class UserCommentViewController: UIViewController {
         self.navigationItem.leftBarButtonItem   = left
         self.navigationItem.rightBarButtonItem  = right
     }
-    private func uploadUserComment() {
+    func uploadUserComment() {
         
         // MARK: Check User Comment TextView and User Nickname TextFiled.
         guard checkWriteCondition() else { return }
@@ -114,7 +123,7 @@ class UserCommentViewController: UIViewController {
             , let id:       String  = self.informationMovie?.id
             , let content:  String  = self.movieUserCommentTextView.text
             , let score:    Double  = Double(rating)
-        else { return }
+            else { return }
         
         // 기존에 작성했던 닉네임이 있다면 화면3으로 새로 진입할 때 기존의 닉네임이 입력되어 있습니다.
         UserDefaults.standard.set(writer, forKey: self.NICKNAME_USER_DEFAULT_KEY)
@@ -125,7 +134,7 @@ class UserCommentViewController: UIViewController {
             , subURI: ParserMovieJSON.SubURI.upload.rawValue
             , parameter: comment)
     }
-    private func checkWriteCondition() -> Bool {
+    func checkWriteCondition() -> Bool {
         
         // 사용자가 User Name을 작성하지 않은 경우
         if self.movieUserName.text == "" || self.movieUserCommentTextView.text == self.placeholder {
@@ -148,7 +157,7 @@ class UserCommentViewController: UIViewController {
     }
     
     // MARK: - Objective-C Method
-    @objc private func didReceiveUploadResult(_ noti: Notification) {
+    @objc func didReceiveUploadResult(_ noti: Notification) {
         
         guard let receive = noti.userInfo, let status = receive[GET_KEY] as? Bool else { return }
         
@@ -169,27 +178,22 @@ class UserCommentViewController: UIViewController {
             self.navigationController?.popViewController(animated: true)
         }
     }
-    @objc private func actionNavigationItems(_ item: UIBarButtonItem) {
+    @objc func actionNavigationItems(_ item: UIBarButtonItem) {
         
         guard let tag = NavigationItemTag(rawValue: item.tag) else { return }
         
         switch tag {
-            case .left:
-                // '취소'버튼을 누르면 이전 화면으로 되돌아갑니다.
-                DispatchQueue.main.async { [weak self] in
-                    guard let self = self else { return }
-                    self.navigationController?.popViewController(animated: true)
-                }
+        case .left:
+            // '취소'버튼을 누르면 이전 화면으로 되돌아갑니다.
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                self.navigationController?.popViewController(animated: true)
+            }
             
-            case .right:
-                // 작성자의 닉네임과 한줄평을 작성하고 '완료' 버튼을 누르면 새로운 한줄평을 등록하고 등록에 성공하면 이전화면으로 되돌아오고, 새로운 한줄평이 업데이트됩니다.
-                uploadUserComment()
+        case .right:
+            // 작성자의 닉네임과 한줄평을 작성하고 '완료' 버튼을 누르면 새로운 한줄평을 등록하고 등록에 성공하면 이전화면으로 되돌아오고, 새로운 한줄평이 업데이트됩니다.
+            uploadUserComment()
         }
-    }
-    
-    // MARK: - Event Method
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
     }
 }
 
