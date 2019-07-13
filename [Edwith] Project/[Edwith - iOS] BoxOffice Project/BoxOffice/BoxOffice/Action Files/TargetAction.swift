@@ -14,10 +14,31 @@ class TargetAction: NSObject {
     internal var delegate: MovieTypeDelegate?
     internal static let shared: TargetAction = TargetAction()
     
+    // MARK: - Init
     private override init() {}
+}
+
+// MARK: - Private Extension TargetAction
+private extension TargetAction {
+    
+    func getTopMostViewController() -> UIViewController? {
+        
+        // https://stackoverflow.com/questions/54209766/swift-4-attempt-to-present-viewcontroller-whose-view-is-not-in-the-window-hierar
+        var topMostViewController = UIApplication.shared.keyWindow?.rootViewController
+        
+        while let presentedViewController = topMostViewController?.presentedViewController {
+            topMostViewController = presentedViewController
+        }
+        
+        return topMostViewController
+    }
+}
+
+// MARK: - Internal Extension TargetAction
+internal extension TargetAction {
     
     // MARK: - User Methods
-    internal func showMovieTypeActionSheet(_ controller: UIViewController) {
+    func showMovieTypeActionSheet(_ controller: UIViewController) {
         
         DispatchQueue.main.async {
             
@@ -29,17 +50,17 @@ class TargetAction: NSObject {
                 
                 DispatchQueue.main.async {
                     switch movieType {
-                        case .reservation:
-                            MOVIE_TYPE                  = 0
-                            controller.parent?.title    = MovieFetchType.reservation.rawValue
-                        case .curation:
-                            MOVIE_TYPE                  = 1
-                            controller.parent?.title    = MovieFetchType.curation.rawValue
-                        case .launch:
-                            MOVIE_TYPE                  = 2
-                            controller.parent?.title    = MovieFetchType.launch.rawValue
+                    case .reservation:
+                        MOVIE_TYPE                  = 0
+                        controller.parent?.title    = MovieFetchType.reservation.rawValue
+                    case .curation:
+                        MOVIE_TYPE                  = 1
+                        controller.parent?.title    = MovieFetchType.curation.rawValue
+                    case .launch:
+                        MOVIE_TYPE                  = 2
+                        controller.parent?.title    = MovieFetchType.launch.rawValue
                     }
-
+                    
                     self.delegate?.changeMovieTypeEvent()
                 }
             }
@@ -57,6 +78,20 @@ class TargetAction: NSObject {
             actionSheet.addAction(actionCancel)
             
             controller.present(actionSheet, animated: true, completion: nil)
+        }
+    }
+    func showErrorAlert(_ controller: UIViewController, message: String) {
+        
+        // MARK: Hide Load Data Indicator.
+        ShowIndicator.shared.hideLoadIndicator()
+        
+        DispatchQueue.main.async {
+            let alert = UIAlertController(title: "‼️ System Error Alert", message: message, preferredStyle: .alert)
+            
+            let confirm = UIAlertAction(title: "✅ 확인", style: .default, handler: nil)
+            alert.addAction(confirm)
+            
+            self.getTopMostViewController()?.present(alert, animated: true, completion: nil)
         }
     }
 }

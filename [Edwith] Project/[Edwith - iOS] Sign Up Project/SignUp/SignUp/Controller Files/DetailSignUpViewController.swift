@@ -17,8 +17,8 @@ class DetailSignUpViewController: UIViewController {
     @IBOutlet private weak var userTel:         UITextField!
     
     // MARK: - Variables
-    private var dateFormatter                           = DateFormatter()
-    private var isEnabled: (first: Bool, second: Bool)  = (false, false)
+    private var dateFormatter = DateFormatter()
+    private var isEnabled: (first: Bool, second: Bool) = (false, false)
     
     override func viewDidLoad() {
         super.viewDidLoad()

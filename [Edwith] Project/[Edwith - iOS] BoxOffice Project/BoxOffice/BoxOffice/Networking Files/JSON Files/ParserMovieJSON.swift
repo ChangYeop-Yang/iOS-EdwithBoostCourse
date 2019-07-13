@@ -6,20 +6,20 @@
 //  Copyright © 2019 양창엽. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 class ParserMovieJSON: NSObject {
     
     // MARK: - Enum
+    private enum HTTPMethodType: String {
+        case GET    = "GET"
+        case POST   = "POST"
+    }
     internal enum SubURI: String {
         case movies     = "/movies"
         case movie      = "/movie"
         case comment    = "/comments"
         case upload     = "/comment"
-    }
-    private enum HTTPMethodType: String {
-        case GET    = "GET"
-        case POST   = "POST"
     }
     internal enum MovieParserType: Int {
         case movies     = 0
@@ -30,12 +30,26 @@ class ParserMovieJSON: NSObject {
     // MARK: - Object Variables
     internal static let shared: ParserMovieJSON = ParserMovieJSON()
     private let BASE_SERVER_URL: String = "http://connect-boxoffice.run.goorm.io"
+    private let SUCCESS_HTTP_CODE: Int = 200
     
     // MARK: - Init
     private override init() {}
+}
+
+// MARK: - Private Extension ParserMovieJSON
+private extension ParserMovieJSON {
     
-    // MARK: - User Method
-    internal func fetchMovieDataParser(type: Int, subURI: String, parameter: String) {
+    func showNetworkErrorAlert(message: String, code: Int, controller: UIViewController) {
+        let message = "Error, Could't URLSeesionDataTask - \(message). \(code)"
+        
+        TargetAction.shared.showErrorAlert(controller, message: message)
+    }
+}
+
+// MARK: - Internal Extension ParserMovieJSON
+internal extension ParserMovieJSON {
+    
+    func fetchMovieDataParser(type: Int, subURI: String, parameter: String, _ controller: UIViewController) {
         
         let parserAddress = "\(BASE_SERVER_URL)\(subURI)?\(parameter)"
         
@@ -43,18 +57,22 @@ class ParserMovieJSON: NSObject {
         
         var request: URLRequest = URLRequest(url: serverURL)
         request.httpMethod      = HTTPMethodType.GET.rawValue
-    
+        
         let session: URLSession = URLSession(configuration: .default)
         
-        let dataTask: URLSessionDataTask = session.dataTask(with: request) { data, response, error in
+        let dataTask: URLSessionDataTask = session.dataTask(with: request) { [weak self] data, response, error in
             
-            guard error == nil else {
-                print("‼️ Error, Could't URLSeesionDataTask. \(String(describing: error))")
+            // https://ko.wikipedia.org/wiki/HTTP_상태_코드
+            guard let response = response as? HTTPURLResponse, let self = self else { return }
+            
+            // 데이터 수신 또는 한줄평 등록에 실패한 경우, 알림창을 통해 사용자에게 결과를 표시해야 합니다.
+            guard error == nil, response.statusCode == self.SUCCESS_HTTP_CODE else {
+                self.showNetworkErrorAlert(message: error.debugDescription, code: response.statusCode, controller: controller)
                 return
             }
             
             // MARK: https://www.raywenderlich.com/567-urlsession-tutorial-getting-started
-            if let data = data, let response = response as? HTTPURLResponse, response.statusCode == 200 {
+            if let data = data, response.statusCode == self.SUCCESS_HTTP_CODE {
                 
                 guard let type = MovieParserType(rawValue: type) else { return }
                 
@@ -73,28 +91,21 @@ class ParserMovieJSON: NSObject {
                             NotificationCenter.default.post(name: NotificationName.movieUserComment.name, object: nil, userInfo: [GET_KEY: result])
                     }
                 } catch let error {
-                    print(error.localizedDescription)
+                    TargetAction.shared.showErrorAlert(controller, message: error.localizedDescription)
                 }
             }
-
         }
         
         dataTask.resume()
     }
-    internal func uploadMovieUserComment(type: Int, subURI: String, parameter: UserComment) {
+    func uploadMovieUserComment(type: Int, subURI: String, parameter: UserComment, _ controller: UIViewController) {
         
         let uploadAddress = "\(BASE_SERVER_URL)\(subURI)"
         
-        let handler: (Data?, URLResponse?, Error?) -> Void = {  data, response, error in
+        let handler: (Data?, URLResponse?, Error?) -> Void = { data, response, error in
             
             // 데이터 수신 또는 한줄평 등록에 실패한 경우, 알림창을 통해 사용자에게 결과를 표시해야 합니다.
-            guard error == nil else {
-                print("‼️ Error, Upload \(String(describing: error?.localizedDescription))")
-                return
-            }
-            
-            // Success Status Code : 200
-            guard let response = response as? HTTPURLResponse, response.statusCode == 200 else {
+            guard let response = response as? HTTPURLResponse, response.statusCode == self.SUCCESS_HTTP_CODE else {
                 NotificationCenter.default.post(name: NotificationName.movieUserUploadComment.name, object: nil, userInfo: [GET_KEY: false])
                 return
             }
@@ -106,7 +117,7 @@ class ParserMovieJSON: NSObject {
             guard let url: URL = URL(string: uploadAddress) else { return }
             
             guard let json = try? JSONEncoder().encode(parameter) else {
-                print("‼️ Error, JSON Encode to parameter.")
+                NotificationCenter.default.post(name: NotificationName.movieUserUploadComment.name, object: nil, userInfo: [GET_KEY: false])
                 return
             }
             

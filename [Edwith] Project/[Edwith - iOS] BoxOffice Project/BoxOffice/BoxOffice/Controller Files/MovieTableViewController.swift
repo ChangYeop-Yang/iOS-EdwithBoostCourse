@@ -102,7 +102,7 @@ private extension MovieTableViewController {
         
         // MARK: Fetch Movie List Datas from Server
         DispatchQueue.global(qos: .userInitiated).async {
-            ParserMovieJSON.shared.fetchMovieDataParser(type: ParserMovieJSON.MovieParserType.movies.rawValue, subURI: ParserMovieJSON.SubURI.movies.rawValue, parameter: "order_type=\(type)")
+            ParserMovieJSON.shared.fetchMovieDataParser(type: ParserMovieJSON.MovieParserType.movies.rawValue, subURI: ParserMovieJSON.SubURI.movies.rawValue, parameter: "order_type=\(type)", self)
         }
     }
     
