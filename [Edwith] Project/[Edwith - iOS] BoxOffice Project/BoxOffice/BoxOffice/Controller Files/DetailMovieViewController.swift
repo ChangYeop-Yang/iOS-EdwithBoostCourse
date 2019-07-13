@@ -61,7 +61,7 @@ class DetailMovieViewController: UITableViewController {
         DispatchQueue.global(qos: .userInitiated).async {
             ParserMovieJSON.shared.fetchMovieDataParser(type: ParserMovieJSON.MovieParserType.movie.rawValue
                 , subURI: ParserMovieJSON.SubURI.movie.rawValue
-                , parameter: "id=\(id)", self)
+                , parameter: "id=\(id)")
         }
     }
     
@@ -76,7 +76,7 @@ class DetailMovieViewController: UITableViewController {
         DispatchQueue.global(qos: .userInitiated).async {
             ParserMovieJSON.shared.fetchMovieDataParser(type: ParserMovieJSON.MovieParserType.movie.rawValue
                 , subURI: ParserMovieJSON.SubURI.movie.rawValue
-                , parameter: "id=\(id)", self)
+                , parameter: "id=\(id)")
         }
     }
     
@@ -134,7 +134,7 @@ private extension DetailMovieViewController {
         DispatchQueue.global().async {
             ParserMovieJSON.shared.fetchMovieDataParser(type: ParserMovieJSON.MovieParserType.comment.rawValue
                 , subURI: ParserMovieJSON.SubURI.comment.rawValue
-                , parameter: "movie_id=\(result.id)", self)
+                , parameter: "movie_id=\(result.id)")
         }
     }
     

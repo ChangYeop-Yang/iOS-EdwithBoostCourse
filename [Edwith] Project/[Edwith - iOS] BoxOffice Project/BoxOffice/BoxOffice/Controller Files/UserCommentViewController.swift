@@ -132,7 +132,7 @@ private extension UserCommentViewController {
         let comment: UserComment = UserComment(rating: score, writer: writer, movieID: id, contents: content)
         ParserMovieJSON.shared.uploadMovieUserComment(type: ParserMovieJSON.MovieParserType.comment.rawValue
             , subURI: ParserMovieJSON.SubURI.upload.rawValue
-            , parameter: comment, self)
+            , parameter: comment)
     }
     func checkWriteCondition() -> Bool {
         

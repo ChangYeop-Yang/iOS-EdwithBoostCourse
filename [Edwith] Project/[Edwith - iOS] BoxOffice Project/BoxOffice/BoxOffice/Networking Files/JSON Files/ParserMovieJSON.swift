@@ -30,6 +30,7 @@ class ParserMovieJSON: NSObject {
     // MARK: - Object Variables
     internal static let shared: ParserMovieJSON = ParserMovieJSON()
     private let BASE_SERVER_URL: String = "http://connect-boxoffice.run.goorm.io"
+    
     private let SUCCESS_HTTP_CODE: Int = 200
     
     // MARK: - Init
@@ -39,17 +40,17 @@ class ParserMovieJSON: NSObject {
 // MARK: - Private Extension ParserMovieJSON
 private extension ParserMovieJSON {
     
-    func showNetworkErrorAlert(message: String, code: Int, controller: UIViewController) {
+    func showNetworkErrorAlert(message: String, code: Int) {
         let message = "Error, Could't URLSeesionDataTask - \(message). \(code)"
         
-        TargetAction.shared.showErrorAlert(controller, message: message)
+        TargetAction.shared.showErrorAlert(message: message)
     }
 }
 
 // MARK: - Internal Extension ParserMovieJSON
 internal extension ParserMovieJSON {
     
-    func fetchMovieDataParser(type: Int, subURI: String, parameter: String, _ controller: UIViewController) {
+    func fetchMovieDataParser(type: Int, subURI: String, parameter: String) {
         
         let parserAddress = "\(BASE_SERVER_URL)\(subURI)?\(parameter)"
         
@@ -67,7 +68,7 @@ internal extension ParserMovieJSON {
             
             // 데이터 수신 또는 한줄평 등록에 실패한 경우, 알림창을 통해 사용자에게 결과를 표시해야 합니다.
             guard error == nil, response.statusCode == self.SUCCESS_HTTP_CODE else {
-                self.showNetworkErrorAlert(message: error.debugDescription, code: response.statusCode, controller: controller)
+                self.showNetworkErrorAlert(message: error.debugDescription, code: response.statusCode)
                 return
             }
             
@@ -91,14 +92,14 @@ internal extension ParserMovieJSON {
                             NotificationCenter.default.post(name: NotificationName.movieUserComment.name, object: nil, userInfo: [GET_KEY: result])
                     }
                 } catch let error {
-                    TargetAction.shared.showErrorAlert(controller, message: error.localizedDescription)
+                    TargetAction.shared.showErrorAlert(message: error.localizedDescription)
                 }
             }
         }
         
         dataTask.resume()
     }
-    func uploadMovieUserComment(type: Int, subURI: String, parameter: UserComment, _ controller: UIViewController) {
+    func uploadMovieUserComment(type: Int, subURI: String, parameter: UserComment) {
         
         let uploadAddress = "\(BASE_SERVER_URL)\(subURI)"
         

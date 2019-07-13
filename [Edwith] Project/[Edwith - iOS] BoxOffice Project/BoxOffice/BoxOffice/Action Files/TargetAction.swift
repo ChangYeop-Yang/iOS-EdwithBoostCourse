@@ -80,7 +80,7 @@ internal extension TargetAction {
             controller.present(actionSheet, animated: true, completion: nil)
         }
     }
-    func showErrorAlert(_ controller: UIViewController, message: String) {
+    func showErrorAlert(message: String) {
         
         // MARK: Hide Load Data Indicator.
         ShowIndicator.shared.hideLoadIndicator()
