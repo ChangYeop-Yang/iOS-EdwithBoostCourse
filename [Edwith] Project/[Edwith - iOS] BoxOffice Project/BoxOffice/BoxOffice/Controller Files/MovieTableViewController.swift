@@ -159,6 +159,7 @@ extension MovieTableViewController: UITableViewDelegate {
 
 // MARK: - Extension MovieTypeDelegate
 extension MovieTableViewController: MovieTypeDelegate {
+    
     func changeMovieTypeEvent() {
         // MARK: Fetch Movie List From JSON Server
         fetchTableMovieList(type: MOVIE_TYPE)

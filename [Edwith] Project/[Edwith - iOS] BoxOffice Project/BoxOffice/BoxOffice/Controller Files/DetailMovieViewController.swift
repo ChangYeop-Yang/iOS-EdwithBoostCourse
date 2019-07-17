@@ -131,7 +131,8 @@ private extension DetailMovieViewController {
         
         guard let result = self.detailMovieData else { return }
         
-        DispatchQueue.global().async {
+        // https://www.hackingwithswift.com/articles/117/the-ultimate-guide-to-timer
+        DispatchQueue.global(qos: .userInteractive).asyncAfter(deadline: .now() + 1.5) {
             ParserMovieJSON.shared.fetchMovieDataParser(type: ParserMovieJSON.MovieParserType.comment.rawValue
                 , subURI: ParserMovieJSON.SubURI.comment.rawValue
                 , parameter: "movie_id=\(result.id)")
@@ -164,8 +165,10 @@ private extension DetailMovieViewController {
         self.detailMovieData = result
         
         DispatchQueue.main.async { [weak self] in
-            self?.title = result.title
-            self?.tableView.reloadData()
+            guard let self = self else { return }
+            
+            self.title = result.title
+            self.tableView.reloadData()
         }
         
         fetchMovieUserComments()

@@ -14,7 +14,9 @@
             <objects>
                 <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="G0V-9f-VSf" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationItem key="navigationItem" id="ZZH-ly-paS"/>
+                    <navigationItem key="navigationItem" id="ZZH-ly-paS">
+                        <barButtonItem key="backBarButtonItem" title="영화목록" id="5cy-4p-tKk"/>
+                    </navigationItem>
                     <nil key="simulatedTopBarMetrics"/>
                     <nil key="simulatedBottomBarMetrics"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="Vgi-dg-hao">
