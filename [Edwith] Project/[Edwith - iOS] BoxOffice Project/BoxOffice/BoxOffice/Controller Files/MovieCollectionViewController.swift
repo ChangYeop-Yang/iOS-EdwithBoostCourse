@@ -112,7 +112,8 @@ private extension MovieCollectionViewController {
     }
     @objc func didReciveMovieDatasNotification(_ noti: Notification) {
         
-        guard let result = noti.userInfo![GET_KEY] as? [MovieList] else { return }
+        guard let getNoti = noti.userInfo?[GET_KEY],
+            let result = getNoti as? [MovieList] else { return }
         
         self.fetchMovieDatas = result
         

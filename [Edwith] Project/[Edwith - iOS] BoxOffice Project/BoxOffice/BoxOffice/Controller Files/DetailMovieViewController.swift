@@ -20,8 +20,6 @@ class DetailMovieViewController: UITableViewController {
     
     // MARK: - Object Propertise
     internal var movieID: String?
-    private var moviePosterImage: UIImage?
-    private var fullScreenMoviePoster: UIImageView?
     private var detailMovieData: MovieDetailInformation?
     private var userCommentData: [MovieOneLineList] = []
     
@@ -65,21 +63,6 @@ class DetailMovieViewController: UITableViewController {
         }
     }
     
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        super.viewWillTransition(to: size, with: coordinator)
-        
-        guard let id = self.movieID else { return }
-        
-        ShowIndicator.shared.showLoadIndicator(self)
-        
-        // MARK: Fetch Movie Detail Information JSON
-        DispatchQueue.global(qos: .userInitiated).async {
-            ParserMovieJSON.shared.fetchMovieDataParser(type: ParserMovieJSON.MovieParserType.movie.rawValue
-                , subURI: ParserMovieJSON.SubURI.movie.rawValue
-                , parameter: "id=\(id)")
-        }
-    }
-    
     // MARK: - System Method
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
@@ -96,26 +79,18 @@ private extension DetailMovieViewController {
     
     func showMoviePosterFullScreen(image: UIImage) {
         
-        // 영화 포스트가 전체 화면인 경우에는 포스트를 제거한다.
         DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
         
-            // 영화 포스터를 터치하면 포스터를 전체화면에서 볼 수 있습니다.
-            let imageView = UIImageView(image: image)
-            imageView.frame = self.view.bounds
-            imageView.contentMode = .scaleToFill
-            imageView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+            // 영화 포스터를 터치하면 포스터를 전체화면에서 볼 수 있습니다.            
+            let storyboard = UIStoryboard(name: "ModalMoviePoster", bundle: nil)
             
-            self.view.addSubview(imageView)
-            self.fullScreenMoviePoster = imageView
+            // 😃 생각해보기: 유저의 입장에서는 영화 포스터를 터치하여 크게 보는 기능은 은 작품 상세 화면이 아닌 또다른 화면을 모달형식으로 노출하는 보편적인 UI를 생각할 것 같습니다 (Edwith - jiyeonpark)
+            guard let controller = storyboard.instantiateViewController(withIdentifier: "ModalMoviePosterVC") as? FullMoviePosterViewController else { return }
             
-            // 영화 포스터 종료 네비게이션 버튼
-            self.navigationItem.rightBarButtonItem = nil
-            let close = UIBarButtonItem.init(title: "닫기"
-                , style: .plain
-                , target: self
-                , action: #selector(self.closeMoviePosterScreen))
-            self.navigationItem.rightBarButtonItem = close
+            controller.modalPresentationStyle = .fullScreen
+            controller.image = image
+
+            self?.present(controller, animated: true, completion: nil)
         }
     }
     func createReloadNavigationItem() -> UIBarButtonItem {
@@ -145,18 +120,6 @@ private extension DetailMovieViewController {
         
         fetchMovieUserComments()
     }
-    @objc func closeMoviePosterScreen() {
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self, self.fullScreenMoviePoster != nil else { return }
-
-            // https://stackoverflow.com/questions/26028455/gesturerecognizer-not-responding-to-tap
-            self.fullScreenMoviePoster?.removeFromSuperview()
-            self.fullScreenMoviePoster = nil
-
-            self.navigationItem.rightBarButtonItem = nil
-            self.navigationItem.rightBarButtonItem = self.createReloadNavigationItem()
-        }
-    }
     @objc func didReciveDetailMovieNotification(_ noti: Notification) {
         
         guard let receive = noti.userInfo, let result = receive[GET_KEY] as? MovieDetailInformation else { return }
@@ -167,7 +130,8 @@ private extension DetailMovieViewController {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             
-            self.title = result.title
+            // 😀 생각해 보기: 프로젝트 구성이 아래와같이 설계되었기 때문에 네비게이션 바에 타이틀과 버튼을 넣기 위해 self.parent?.title이 아닌 self.navigationItem.title 을 사용하여야합니다. (Edwith - jiyeonpark)
+            self.navigationItem.title = result.title
             self.tableView.reloadData()
         }
         
@@ -185,7 +149,7 @@ private extension DetailMovieViewController {
         DispatchQueue.main.async { [weak self] in
             self?.tableView.reloadData()
             
-            // MARK: https://gogorchg.tistory.com/entry/iOS-UITableView-scroll-to-top
+            // https://gogorchg.tistory.com/entry/iOS-UITableView-scroll-to-top
             let indexPath = IndexPath(row: NSNotFound, section: 0)
             self?.tableView.scrollToRow(at: indexPath, at: .top, animated: true)
         }
@@ -270,7 +234,7 @@ internal extension DetailMovieViewController {
 extension DetailMovieViewController: FullScreenPosterGesture {
     
     func showFullScreenMoviePoster(imageView: UIImageView) {
-        guard let image = imageView.image, self.fullScreenMoviePoster == nil else { return }
+        guard let image = imageView.image else { return }
         
         showMoviePosterFullScreen(image: image)
     }

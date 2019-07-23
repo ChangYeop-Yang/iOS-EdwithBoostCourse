@@ -22,7 +22,7 @@ class Networking: NSObject {
         var image: UIImage?
         
         group.enter()
-        DispatchQueue.global(qos: .userInitiated).async(group: group) {
+        DispatchQueue.global(qos: .userInteractive).async(group: group) {
             
             guard let imageURL: URL = URL(string: url) else {
                 group.leave()

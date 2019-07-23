@@ -59,6 +59,8 @@ internal extension DetailTopTableViewCell {
         posterImageView.isUserInteractionEnabled = true
         posterImageView.addGestureRecognizer(gesture)
         
+        Networking.shared.downloadImage(url: data.image, group: DispatchGroup(), imageView: self.posterImageView)
+        
         DispatchQueue.main.async { [weak self] in
             guard let self = self, let audience = self.setNumberFormatter(number: data.audience) else { return }
             
@@ -76,7 +78,5 @@ internal extension DetailTopTableViewCell {
             self.watchPeopleLabel.text         = audience
             self.ratingView.score              = CGFloat(data.userRating) / 2.0
         }
-        
-        Networking.shared.downloadImage(url: data.image, group: DispatchGroup(), imageView: self.posterImageView)
     }
 }

@@ -85,7 +85,8 @@ private extension MovieTableViewController {
     }
     private func setNavigationBar() {
         
-        self.parent?.title = MovieFetchType.reservation.rawValue
+        // 😀 생각해 보기: 프로젝트 구성이 아래와같이 설계되었기 때문에 네비게이션 바에 타이틀과 버튼을 넣기 위해 self.parent?.title이 아닌 self.parent?.navigationItem.title 을 사용하여야합니다. (Edwith - jiyeonpark)
+        self.parent?.navigationItem.title = MovieFetchType.reservation.rawValue
         
         let icon = UIImage(named: "ic_settings")
         

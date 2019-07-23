@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="ZNd-gJ-AQ6">
+    <device id="retina6_1" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Full Movie Poster View Controller-->
+        <scene sceneID="gwG-IN-580">
+            <objects>
+                <viewController storyboardIdentifier="ModalMoviePosterVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="ZNd-gJ-AQ6" customClass="FullMoviePosterViewController" customModule="BoxOffice" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="T4Q-qA-hIZ">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="H1U-E4-ubc">
+                                <rect key="frame" x="188.5" y="429.5" width="37" height="37"/>
+                            </activityIndicatorView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="suG-0l-tOj">
+                                <rect key="frame" x="0.0" y="44" width="414" height="776"/>
+                            </imageView>
+                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nDL-aw-H9J">
+                                <rect key="frame" x="0.0" y="820" width="414" height="42"/>
+                                <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="42" id="jXx-D9-ZWf"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                                <state key="normal" title="Close">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="closeViewController:" destination="ZNd-gJ-AQ6" eventType="touchUpInside" id="P4I-5a-F11"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="yoQ-CA-tO2" firstAttribute="bottom" secondItem="nDL-aw-H9J" secondAttribute="bottom" id="1M3-cQ-O3c"/>
+                            <constraint firstItem="nDL-aw-H9J" firstAttribute="top" secondItem="suG-0l-tOj" secondAttribute="bottom" id="3Mq-SR-mgn"/>
+                            <constraint firstItem="suG-0l-tOj" firstAttribute="trailing" secondItem="yoQ-CA-tO2" secondAttribute="trailing" id="CoP-iC-TDK"/>
+                            <constraint firstItem="H1U-E4-ubc" firstAttribute="centerY" secondItem="T4Q-qA-hIZ" secondAttribute="centerY" id="Mtr-xR-vQg"/>
+                            <constraint firstItem="suG-0l-tOj" firstAttribute="top" secondItem="yoQ-CA-tO2" secondAttribute="top" id="YTI-Td-pmF"/>
+                            <constraint firstItem="suG-0l-tOj" firstAttribute="leading" secondItem="yoQ-CA-tO2" secondAttribute="leading" id="aCf-YG-JjO"/>
+                            <constraint firstItem="H1U-E4-ubc" firstAttribute="centerX" secondItem="T4Q-qA-hIZ" secondAttribute="centerX" id="eyC-KC-znT"/>
+                            <constraint firstItem="nDL-aw-H9J" firstAttribute="leading" secondItem="yoQ-CA-tO2" secondAttribute="leading" id="qSD-sD-mOx"/>
+                            <constraint firstItem="yoQ-CA-tO2" firstAttribute="trailing" secondItem="nDL-aw-H9J" secondAttribute="trailing" id="txM-6f-vNQ"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="yoQ-CA-tO2"/>
+                    </view>
+                    <connections>
+                        <outlet property="closeModalButton" destination="nDL-aw-H9J" id="bjS-1g-8O8"/>
+                        <outlet property="fullMoviePosterImageView" destination="suG-0l-tOj" id="AtN-zD-WqA"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="UNX-1K-8Ah" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="147.82608695652175" y="121.875"/>
+        </scene>
+    </scenes>
+</document>
