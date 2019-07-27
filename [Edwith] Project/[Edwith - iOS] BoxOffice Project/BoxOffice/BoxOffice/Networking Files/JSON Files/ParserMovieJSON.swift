@@ -78,6 +78,7 @@ internal extension ParserMovieJSON {
                 guard let type = MovieParserType(rawValue: type) else { return }
                 
                 do {
+                    
                     switch type {
                         case .movies:
                             let result  = try JSONDecoder().decode(Movies.self, from: data)
@@ -91,6 +92,7 @@ internal extension ParserMovieJSON {
                             let result  = try JSONDecoder().decode(Comment.self, from: data)
                             NotificationCenter.default.post(name: NotificationName.movieUserComment.name, object: nil, userInfo: [GET_KEY: result])
                     }
+                    
                 } catch let error {
                     TargetAction.shared.showErrorAlert(message: error.localizedDescription)
                 }
@@ -117,6 +119,7 @@ internal extension ParserMovieJSON {
         DispatchQueue.global(qos: .userInitiated).async {
             guard let url: URL = URL(string: uploadAddress) else { return }
             
+            // 😅 API를 통해 한줄평 등록을 완료 한 후 Notification으로 응답을 처리하고 있습니다. Notification 이외의 값을 던져줄 방법이 있는지 궁금합니다! 오류의 값!
             guard let json = try? JSONEncoder().encode(parameter) else {
                 NotificationCenter.default.post(name: NotificationName.movieUserUploadComment.name, object: nil, userInfo: [GET_KEY: false])
                 return

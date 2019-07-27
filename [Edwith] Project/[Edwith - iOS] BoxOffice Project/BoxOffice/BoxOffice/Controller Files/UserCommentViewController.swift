@@ -17,12 +17,13 @@ class UserCommentViewController: UIViewController {
     }
     
     // MARK: - Outlet Variables
-    @IBOutlet private weak var movieNameLabel:              UILabel!
-    @IBOutlet private weak var movieAgeImageView:           UIImageView!
-    @IBOutlet private weak var movieUserRatingLabel:        UILabel!
-    @IBOutlet private weak var movieUserRatingBar:          StarRatingControl!
-    @IBOutlet private weak var movieUserCommentTextView:    UITextView!
-    @IBOutlet private weak var movieUserName:               UITextField!
+    @IBOutlet private weak var movieNameLabel: UILabel!
+    @IBOutlet private weak var movieAgeImageView: UIImageView!
+    @IBOutlet private weak var movieUserRatingLabel: UILabel!
+    @IBOutlet private weak var movieUserRatingBar: StarRatingControl!
+    @IBOutlet private weak var movieUserCommentTextView: UITextView!
+    @IBOutlet private weak var movieUserName: UITextField!
+    @IBOutlet private weak var movieScrollView: UIScrollView!
     
     // MARK: - Object Variables
     private var movieRating: CGFloat = 0.0
@@ -46,6 +47,13 @@ class UserCommentViewController: UIViewController {
             , selector: #selector(didReceiveUploadResult)
             , name: NotificationName.movieUserUploadComment.name
             , object: nil)
+        
+        // MARK: Setting Tap Gesture on ScrollView.
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(onScrollViewTapGesture))
+        tapGesture.numberOfTapsRequired = 1
+        tapGesture.isEnabled = true
+        tapGesture.cancelsTouchesInView = false
+        self.movieScrollView.addGestureRecognizer(tapGesture)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -53,11 +61,6 @@ class UserCommentViewController: UIViewController {
         
         // MARK: Show Movie Information and User NickName.
         showMovieInformationAndUserName()
-    }
-    
-    // MARK: - Event Method
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
     }
 }
 
@@ -67,20 +70,20 @@ private extension UserCommentViewController {
     // MARK: - User Method
     func showMovieInformationAndUserName() {
     
-    DispatchQueue.main.async { [weak self] in
-        guard let self = self, let information = self.informationMovie else { return }
-        
-        // MARK: Setting Movie Name and Age.
-        self.movieNameLabel.text = information.name
-        seperateAgeType(age: information.age, imageView: self.movieAgeImageView)
-        
-        // MARK: Load User Nickname from UserDefault.
-        if let name: String = UserDefaults.standard.string(forKey: self.NICKNAME_USER_DEFAULT_KEY) {
-            // 기존에 작성했던 닉네임이 있다면 화면3으로 새로 진입할 때 기존의 닉네임이 입력되어 있습니다.
-            self.movieUserName.text = name
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self, let information = self.informationMovie else { return }
+            
+            // MARK: Setting Movie Name and Age.
+            self.movieNameLabel.text = information.name
+            seperateAgeType(age: information.age, imageView: self.movieAgeImageView)
+            
+            // MARK: Load User Nickname from UserDefault.
+            if let name: String = UserDefaults.standard.string(forKey: self.NICKNAME_USER_DEFAULT_KEY) {
+                // 기존에 작성했던 닉네임이 있다면 화면3으로 새로 진입할 때 기존의 닉네임이 입력되어 있습니다.
+                self.movieUserName.text = name
+            }
         }
     }
-}
     func setUserCommentTextView(radius: CGFloat, width: CGFloat) {
         
         self.movieUserCommentTextView.delegate              = self
@@ -157,6 +160,9 @@ private extension UserCommentViewController {
     }
     
     // MARK: - Objective-C Method
+    @objc func onScrollViewTapGesture(_ sender: UITapGestureRecognizer) {
+        self.view.endEditing(true)
+    }
     @objc func didReceiveUploadResult(_ noti: Notification) {
         
         guard let receive = noti.userInfo, let status = receive[GET_KEY] as? Bool else { return }
@@ -183,16 +189,16 @@ private extension UserCommentViewController {
         guard let tag = NavigationItemTag(rawValue: item.tag) else { return }
         
         switch tag {
-        case .left:
-            // '취소'버튼을 누르면 이전 화면으로 되돌아갑니다.
-            DispatchQueue.main.async { [weak self] in
-                guard let self = self else { return }
-                self.navigationController?.popViewController(animated: true)
-            }
+            case .left:
+                // '취소'버튼을 누르면 이전 화면으로 되돌아갑니다.
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+                    self.navigationController?.popViewController(animated: true)
+                }
             
-        case .right:
-            // 작성자의 닉네임과 한줄평을 작성하고 '완료' 버튼을 누르면 새로운 한줄평을 등록하고 등록에 성공하면 이전화면으로 되돌아오고, 새로운 한줄평이 업데이트됩니다.
-            uploadUserComment()
+            case .right:
+                // 작성자의 닉네임과 한줄평을 작성하고 '완료' 버튼을 누르면 새로운 한줄평을 등록하고 등록에 성공하면 이전화면으로 되돌아오고, 새로운 한줄평이 업데이트됩니다.
+                uploadUserComment()
         }
     }
 }
@@ -207,7 +213,7 @@ extension UserCommentViewController: UpdateStarRatingScore {
     }
 }
 
-// MARK: - Extension UITextViewDelegate
+// MARK: - Extension UITextView Delegate
 extension UserCommentViewController: UITextViewDelegate {
     
     func textViewDidChange(_ textView: UITextView) {
@@ -223,9 +229,21 @@ extension UserCommentViewController: UITextViewDelegate {
     
     // https://developer.apple.com/documentation/uikit/uitextviewdelegate/1618630-textview
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        
         if textView.text == self.placeholder {
             textView.text = String()
         }
+        
         return true
+    }
+}
+
+// MARK: - Extension UIScrollView Delegate
+extension UserCommentViewController: UIScrollViewDelegate {
+    
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        
+        // https://zeddios.tistory.com/309
+        self.view.endEditing(true)
     }
 }

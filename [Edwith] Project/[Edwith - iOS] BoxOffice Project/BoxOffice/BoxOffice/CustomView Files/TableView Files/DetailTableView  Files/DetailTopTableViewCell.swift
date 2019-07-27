@@ -54,12 +54,12 @@ internal extension DetailTopTableViewCell {
     
     func setMovieDetailViews(_ data: MovieDetailInformation) {
         
+        Networking.shared.downloadImage(url: data.image, group: DispatchGroup(), imageView: self.posterImageView)
+        
         // MARK: UITapGestureRecognizer
         let gesture = UITapGestureRecognizer(target: self, action: #selector(showFullScreenMoviePoster))
         posterImageView.isUserInteractionEnabled = true
         posterImageView.addGestureRecognizer(gesture)
-        
-        Networking.shared.downloadImage(url: data.image, group: DispatchGroup(), imageView: self.posterImageView)
         
         DispatchQueue.main.async { [weak self] in
             guard let self = self, let audience = self.setNumberFormatter(number: data.audience) else { return }

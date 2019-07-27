@@ -10,14 +10,21 @@ import UIKit
 
 class UserCommentViewCell: UITableViewCell {
 
-    // MARK: - Outlet Variables
-    @IBOutlet private weak var userNameLabel:           UILabel!
-    @IBOutlet private weak var userCreateCommentDate:   UILabel!
-    @IBOutlet private weak var userCommentLabel:        UILabel!
-    @IBOutlet private weak var userRatingStarBar:       StarRatingBar!
+    // MARK: - Outlet Propertise
+    @IBOutlet private weak var userNameLabel: UILabel!
+    @IBOutlet private weak var userCreateCommentDate: UILabel!
+    @IBOutlet private weak var userCommentLabel: UILabel!
+    @IBOutlet private weak var userRatingStarBar: StarRatingBar!
     
-    // MARK: - Object Variables
+    // MARK: - Object Propertise
     internal var movieID: String?
+    
+    // MARK: - System Method
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        clearCellSubview()
+    }
 }
 
 // MARK: - Extension UserCommentViewCell Delegate
@@ -51,7 +58,5 @@ internal extension UserCommentViewCell {
         self.userCreateCommentDate.text = nil
         
         self.userRatingStarBar.score = 0.0
-        
-        self.layoutIfNeeded()
     }
 }

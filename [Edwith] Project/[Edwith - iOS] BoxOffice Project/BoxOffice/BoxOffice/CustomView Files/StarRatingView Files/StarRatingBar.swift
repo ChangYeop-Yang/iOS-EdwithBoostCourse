@@ -13,6 +13,7 @@ class StarRatingBar: UIStackView {
     // MARK: - Object Variables
     @IBInspectable internal var score: CGFloat = 0.0 {
         willSet (newVal) {
+            createStarImageView(count: self.countStar)
             updateStarImageView(score: newVal)
         }
     }
@@ -32,51 +33,39 @@ class StarRatingBar: UIStackView {
 // MARK: - Extension
 private extension StarRatingBar {
     
-    private func createStarImageView(count: Int) {
+    func createStarImageView(count: Int) {
         
         // Clear All Subviews on StackView (초기화 부분)
         clearSubviewsOnStackView()
         
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
+        for _ in 0..<count {
+            let view: UIImageView = UIImageView(image: self.imageStars.empty)
+            view.contentMode = .scaleAspectFit
             
-            for _ in 0..<count {
-                let view: UIImageView = UIImageView(image: self.imageStars.empty)
-                view.contentMode = .scaleAspectFit
-                
-                self.starImageViews.append(view)
-                self.addArrangedSubview(view)
-            }
+            self.starImageViews.append(view)
+            self.addArrangedSubview(view)
         }
     }
-    private func updateStarImageView(score: CGFloat) {
+    func updateStarImageView(score: CGFloat) {
         
         let front: Int = Int(score)
         let rear: CGFloat = score - CGFloat(front)
         
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            
-            for (index, view) in self.starImageViews.enumerated() where index < front {
-                view.image = self.imageStars.full
-            }
-            
-            if rear > 0 {
-                self.starImageViews[front].image = self.imageStars.half
-            }
+        for (index, view) in self.starImageViews.enumerated() where index < front {
+            view.image = self.imageStars.full
+        }
+        
+        if rear > 0.0 {
+            self.starImageViews[front].image = self.imageStars.half
         }
     }
-    private func clearSubviewsOnStackView() {
+    func clearSubviewsOnStackView() {
         
         self.starImageViews.removeAll(keepingCapacity: false)
         
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            
-            // MARK: https://stackoverflow.com/questions/24312760/how-to-remove-all-subviews-of-a-view-in-swift
-            self.subviews.forEach {
-                $0.removeFromSuperview()
-            }
+        // MARK: https://stackoverflow.com/questions/24312760/how-to-remove-all-subviews-of-a-view-in-swift
+        self.subviews.forEach {
+            $0.removeFromSuperview()
         }
     }
 }

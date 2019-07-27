@@ -114,6 +114,9 @@
                                     <constraint firstItem="oac-IZ-0i8" firstAttribute="top" secondItem="I7A-FA-hbw" secondAttribute="top" id="mLd-VR-4hd"/>
                                     <constraint firstAttribute="trailing" secondItem="oac-IZ-0i8" secondAttribute="trailing" id="rUH-EP-2rc"/>
                                 </constraints>
+                                <connections>
+                                    <outlet property="delegate" destination="dqK-WY-82N" id="hnn-GZ-6FW"/>
+                                </connections>
                             </scrollView>
                         </subviews>
                         <color key="backgroundColor" red="0.93725490570000003" green="0.93725490570000003" blue="0.95686274770000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -130,6 +133,7 @@
                     <connections>
                         <outlet property="movieAgeImageView" destination="s45-eT-txA" id="0ku-bz-xkt"/>
                         <outlet property="movieNameLabel" destination="5Ud-Nj-TSW" id="1zQ-sO-FNb"/>
+                        <outlet property="movieScrollView" destination="I7A-FA-hbw" id="nF9-XL-jzf"/>
                         <outlet property="movieUserCommentTextView" destination="r8B-X2-WTV" id="JVw-RI-gV6"/>
                         <outlet property="movieUserName" destination="iHu-ab-wlj" id="UQX-W3-F1Q"/>
                         <outlet property="movieUserRatingBar" destination="aLg-by-hsT" id="qtv-89-2mX"/>

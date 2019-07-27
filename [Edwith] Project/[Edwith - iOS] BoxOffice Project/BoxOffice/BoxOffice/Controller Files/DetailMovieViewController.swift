@@ -219,7 +219,7 @@ internal extension DetailMovieViewController {
             case .comment:
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: "UserCommentViewCell", for: indexPath) as? UserCommentViewCell else { return basicCell }
                
-                cell.clearCellSubview()
+                //cell.clearCellSubview()
                 if self.userCommentData.isEmpty == false {
                     cell.movieID = data.id
                     cell.setUserComment(self.userCommentData[indexPath.row])

@@ -45,12 +45,12 @@ class StarRatingControl: UIStackView {
 // MARK: - Extension
 private extension StarRatingControl {
     
-    private func changeEmptyStarImage() {
+    func changeEmptyStarImage() {
         self.starImageView.forEach { view in
             view.image = self.imageStars.empty
         }
     }
-    private func setStackView() {
+    func setStackView() {
         
         self.distribution = .fillEqually
         self.isUserInteractionEnabled = true
@@ -62,7 +62,7 @@ private extension StarRatingControl {
         let gestureTap = UITapGestureRecognizer(target: self, action: #selector(setTapGestureRecognizer(_:)))
         self.addGestureRecognizer(gestureTap)
     }
-    private func createStarImageView(size: Int) {
+    func createStarImageView(size: Int) {
         
         self.starImageView.removeAll(keepingCapacity: false)
         
