@@ -2,7 +2,7 @@
 
 * 네이버에서 설립한 커넥트재단은 교육을 통해 개인의 지속적인 성장과 발전을 돕고, 원하는 곳 어디든 배움의 기회가 열리는 세상을 만들기 위해 노력합니다. 부스트코스는 커리어 역량을 강화할 수 있도록, 커넥트재단에서 기획하고 운영하는 실무형 온라인 교육 프로그램입니다.
 
-|Korea Certificate 001|English Certificate 001|
+|Korea Certificate 001|English Certificate 002|
 |:-------------------:|:---------------------:|
 |![](https://user-images.githubusercontent.com/20036523/62191190-fb662400-b3ad-11e9-9bf6-277a4a38390b.jpg)|![](https://user-images.githubusercontent.com/20036523/69492819-b2048c00-0eea-11ea-8c26-dcdc1a9282ac.jpg)|
 
